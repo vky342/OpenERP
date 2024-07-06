@@ -90,7 +90,7 @@ data class Receipt(
 
 )
 
-@Entity(tableName = "Ledgers", foreignKeys = [ForeignKey(entity = Account::class, parentColumns = ["name"], childColumns = ["accountNameFk"])])
+@Entity(tableName = "Ledgers", foreignKeys = [ForeignKey(entity = Account::class, parentColumns = ["name"], childColumns = ["accountNameFk"], onDelete = ForeignKey.CASCADE)])
 data class Ledger(
     @PrimaryKey(autoGenerate = true)
     val ledgerId : Int,
