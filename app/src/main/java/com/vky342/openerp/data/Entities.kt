@@ -10,10 +10,11 @@ data class Account(
     val name : String,
     val address : String,
     val contact : Int,
+    val netBalance : Int
     )
 
 @Entity(
-    tableName = "BILLS",
+    tableName = "Bills",
     foreignKeys = [
         ForeignKey(entity = Account::class, parentColumns = ["name"], childColumns = ["accountNameFk"])
     ]
@@ -32,12 +33,12 @@ data class Bill(
 
 @Entity(
     tableName = "BillEntries",
-    primaryKeys = ["entryId"],
     foreignKeys = [
         ForeignKey(entity = Bill::class, parentColumns = ["BillId"], childColumns = ["BillIdFk"], onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE),
-        ForeignKey(entity = ItemInventory::class, parentColumns = ["itemName"], childColumns = ["itemNameFk"], onDelete = ForeignKey.RESTRICT, onUpdate = ForeignKey.CASCADE)
+        ForeignKey(entity = Item::class, parentColumns = ["itemName"], childColumns = ["itemNameFk"], onDelete = ForeignKey.RESTRICT, onUpdate = ForeignKey.CASCADE)
     ])
-data class BillEntries(
+data class BillEntry(
+    @PrimaryKey
     val entryId : Int,
     val entryQuantity : Int,
     val discount : Int = 0,
@@ -50,7 +51,7 @@ data class BillEntries(
 )
 
 @Entity(tableName = "ItemInventory")
-data class ItemInventory(
+data class Item(
     @PrimaryKey
     val itemName : String,
     val itemListPrice : Int,
