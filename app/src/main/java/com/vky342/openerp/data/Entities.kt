@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "Accounts", foreignKeys = [ForeignKey(entity = Ledger::class, parentColumns = ["ledgerId"], childColumns = ["ledgerId"])])
+@Entity(tableName = "Accounts")
 data class Account(
     @PrimaryKey
     val name : String,
@@ -14,7 +14,6 @@ data class Account(
 
     // Foreign key
 
-    val ledgerId: Int
     )
 
 @Entity(
@@ -24,7 +23,7 @@ data class Account(
     ]
 )
 data class Bill(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val billId : Int,
     val billDate : Int,
     val billAmount : Int = 0,
@@ -42,7 +41,7 @@ data class Bill(
         ForeignKey(entity = Item::class, parentColumns = ["itemName"], childColumns = ["itemNameFk"], onDelete = ForeignKey.RESTRICT, onUpdate = ForeignKey.CASCADE)
     ])
 data class BillEntry(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val entryId : Int,
     val entryQuantity : Int,
     val discount : Int = 0,
@@ -65,7 +64,7 @@ data class Item(
 
 @Entity(tableName = "Payments", foreignKeys = [ForeignKey(entity = Ledger::class, parentColumns = ["ledgerId"], childColumns = ["accountLedgerId"], onDelete = ForeignKey.CASCADE)])
 data class Payment(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val paymentId : Int,
     val paymentDate : Int,
     val paymentAmount : Int,
@@ -79,7 +78,7 @@ data class Payment(
 
 @Entity(tableName = "Receipts", foreignKeys = [ForeignKey(entity = Ledger::class, parentColumns = ["ledgerId"], childColumns = ["accountLedgerId"], onDelete = ForeignKey.CASCADE)])
 data class Receipt(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val receiptId : Int,
     val receiptDate : Int,
     val receiptAmount : Int,
@@ -93,7 +92,7 @@ data class Receipt(
 
 @Entity(tableName = "Ledgers", foreignKeys = [ForeignKey(entity = Account::class, parentColumns = ["name"], childColumns = ["accountNameFk"])])
 data class Ledger(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val ledgerId : Int,
     val ledgerNetBalance: Int,
 
