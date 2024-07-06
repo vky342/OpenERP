@@ -8,6 +8,12 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * This file contains All the Dao for entities
+ */
+
+
+
 @Dao
 interface accountsDao {
 
