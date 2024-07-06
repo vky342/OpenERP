@@ -4,13 +4,17 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "Accounts")
+@Entity(tableName = "Accounts", foreignKeys = [ForeignKey(entity = Ledger::class, parentColumns = ["ledgerId"], childColumns = ["ledgerId"])])
 data class Account(
     @PrimaryKey
     val name : String,
     val address : String,
     val contact : Int,
-    val netBalance : Int
+    val netBalance : Int,
+
+    // Foreign key
+
+    val ledgerId: Int
     )
 
 @Entity(
@@ -24,7 +28,7 @@ data class Bill(
     val billId : Int,
     val billDate : Int,
     val billAmount : Int = 0,
-    val billType : Int, /// either sale(1) or purchase(0)
+    val ledgerType: Int, /// either sale(0) or purchase(1)
 
 //foreign keys
     val accountNameFk : String
@@ -57,4 +61,43 @@ data class Item(
     val itemListPrice : Int,
     val itemPurchasePrice : Int,
     val itemQuantity : Int,
+)
+
+@Entity(tableName = "Payments", foreignKeys = [ForeignKey(entity = Ledger::class, parentColumns = ["ledgerId"], childColumns = ["accountLedgerId"], onDelete = ForeignKey.CASCADE)])
+data class Payment(
+    @PrimaryKey
+    val paymentId : Int,
+    val paymentDate : Int,
+    val paymentAmount : Int,
+    val ledgerType : Int = 1,
+
+    // Foreign keys
+
+    val accountLedgerId : Int
+
+)
+
+@Entity(tableName = "Receipts", foreignKeys = [ForeignKey(entity = Ledger::class, parentColumns = ["ledgerId"], childColumns = ["accountLedgerId"], onDelete = ForeignKey.CASCADE)])
+data class Receipt(
+    @PrimaryKey
+    val receiptId : Int,
+    val receiptDate : Int,
+    val receiptAmount : Int,
+    val ledgerType : Int = 0,
+
+    // Foreign Keys
+
+    val accountLedgerId: Int
+
+)
+
+@Entity(tableName = "Ledgers", foreignKeys = [ForeignKey(entity = Account::class, parentColumns = ["name"], childColumns = ["accountNameFk"])])
+data class Ledger(
+    @PrimaryKey
+    val ledgerId : Int,
+    val ledgerNetBalance: Int,
+
+    // Foreign Keys
+
+    val accountNameFk : String,
 )
