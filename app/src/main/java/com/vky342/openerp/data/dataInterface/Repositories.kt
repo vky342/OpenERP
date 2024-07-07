@@ -21,3 +21,4 @@ interface accountScreeningRepository {
     suspend fun getAccountByName(name : String) : Flow<Account>
 
 }
+
