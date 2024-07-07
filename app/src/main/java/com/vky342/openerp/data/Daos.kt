@@ -56,7 +56,7 @@ interface billsDao {
     @Query("SELECT * FROM bills WHERE billDate = :date")
     fun getBillsByDate(date : Int) : Flow<List<Bill>>
 
-    @Query("SELECT * FROM bills WHERE billType = :type")
+    @Query("SELECT * FROM bills WHERE ledgerType = :type")
     fun getBillsByType(type : Int) : Flow<List<Bill>>
 
     @Query("SELECT * FROM Bills WHERE accountNameFk = :name")
@@ -105,3 +105,4 @@ interface itemInventoryDao {
     @Query("SELECT * FROM iteminventory WHERE itemName = :name")
     fun getItemByName(name : String) : Flow<Item>
 }
+
