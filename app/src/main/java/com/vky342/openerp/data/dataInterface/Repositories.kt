@@ -8,17 +8,5 @@ import kotlinx.coroutines.flow.Flow
  */
 
 
-interface accountScreeningRepository {
-
-    suspend fun insert(account: Account)
-
-    suspend fun update(account: Account)
-
-    suspend fun delete(account: Account)
-
-    suspend fun getAllAccounts() : Flow<List<Account>>
-
-    suspend fun getAccountByName(name : String) : Flow<Account>
-
-}
+//// This file will be added later
 
