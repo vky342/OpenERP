@@ -1,4 +1,4 @@
-package com.vky342.openerp.data
+package com.vky342.openerp.data.dataInterface
 
 import androidx.room.Entity
 import androidx.room.ForeignKey

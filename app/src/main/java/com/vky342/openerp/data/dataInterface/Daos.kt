@@ -1,4 +1,4 @@
-package com.vky342.openerp.data
+package com.vky342.openerp.data.dataInterface
 
 import androidx.room.Dao
 import androidx.room.Delete
