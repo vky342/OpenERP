@@ -106,3 +106,72 @@ interface itemInventoryDao {
     fun getItemByName(name : String) : Flow<Item>
 }
 
+@Dao
+interface paymentsDao {
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(payment: Payment)
+
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun update(payment: Payment)
+
+    @Delete
+    suspend fun delete(payment: Payment)
+
+    // Function for screening
+
+    @Query("SELECT * FROM Payments")
+    fun getAllPayments() : Flow<List<Payment>>
+
+    @Query("SELECT * FROM Payments WHERE paymentDate = :date")
+    fun getAllPaymentOnDate(date: Int) : Flow<List<Payment>>
+
+    @Query("SELECT * FROM Payments WHERE accountLedgerId = :ledgerId")
+    fun getAllPaymentsInLedger(ledgerId : Int) : Flow<List<Payment>>
+}
+
+@Dao
+interface receiptDao {
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(receipt: Receipt)
+
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun update(receipt: Receipt)
+
+    @Delete
+    suspend fun delete(receipt: Receipt)
+
+    // Function for screening
+
+    @Query("SELECT * FROM Receipts")
+    fun getAllPayments() : Flow<List<Receipt>>
+
+    @Query("SELECT * FROM Receipts WHERE receiptDate = :date")
+    fun getAllPaymentOnDate(date: Int) : Flow<List<Receipt>>
+
+    @Query("SELECT * FROM Receipts WHERE accountLedgerId = :ledgerId")
+    fun getAllPaymentsInLedger(ledgerId : Int) : Flow<List<Receipt>>
+}
+
+@Dao
+interface ledgerDao{
+
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    suspend fun insert(ledger: Ledger)
+
+    @Update(onConflict = OnConflictStrategy.ABORT)
+    suspend fun update(ledger: Ledger)
+
+    @Delete
+    suspend fun delete(ledger: Ledger)
+
+    // Function for Screening
+
+    @Query("SELECT * FROM ledgers")
+    fun getAllLedger() : Flow<List<Ledger>>
+
+    @Query("SELECT * FROM ledgers WHERE accountNameFk = :name")
+    fun getLedgerByAccountName(name : String) : Flow<Ledger>
+
+}

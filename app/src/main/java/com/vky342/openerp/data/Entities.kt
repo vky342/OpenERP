@@ -19,7 +19,8 @@ data class Account(
 @Entity(
     tableName = "Bills",
     foreignKeys = [
-        ForeignKey(entity = Account::class, parentColumns = ["name"], childColumns = ["accountNameFk"])
+        ForeignKey(entity = Account::class, parentColumns = ["name"], childColumns = ["accountNameFk"], onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE),
+        ForeignKey(entity = Ledger::class, parentColumns = ["ledgerId"], childColumns = ["ledgerIdFk"], onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE)
     ]
 )
 data class Bill(
@@ -29,8 +30,9 @@ data class Bill(
     val billAmount : Int = 0,
     val ledgerType: Int, /// either sale(0) or purchase(1)
 
-//foreign keys
-    val accountNameFk : String
+    //foreign keys
+    val accountNameFk : String,
+    val ledgerIdFk: Int
 
 )
 
