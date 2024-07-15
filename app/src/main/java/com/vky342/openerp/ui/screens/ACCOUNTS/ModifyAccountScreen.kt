@@ -74,10 +74,6 @@ fun ModifyAccountScreen(){
                 modifier = Modifier.clickable {
 
                     // CALL back for Account to ViewModel
-                    newname = "kunal"
-                    newaddress = "sai vihar colony"
-                    newcontact = "3259285543"
-                    newstartingbalance = "100"
 
                 })}
         )
