@@ -45,7 +45,9 @@ fun RootScreen(navController: NavHostController = rememberNavController()){
 
 @Composable
 fun BottomBar(navController: NavHostController){
-    BottomAppBar(){
+    val height = LocalConfiguration.current.run { screenHeightDp.dp }
+    val topPadding = height.value * 0.1
+    BottomAppBar(modifier = Modifier.height(topPadding.dp)){
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
 
             Row (modifier = Modifier.wrapContentSize()){

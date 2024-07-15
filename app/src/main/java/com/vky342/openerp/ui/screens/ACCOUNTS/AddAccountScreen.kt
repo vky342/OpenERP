@@ -2,7 +2,6 @@ package com.vky342.openerp.ui.screens.ACCOUNTS
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -28,7 +27,7 @@ import androidx.compose.ui.unit.sp
 @Preview
 @Composable
 fun AddA_Account_Screen(){
-    val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
+    val height = LocalConfiguration.current.run { screenHeightDp.dp }
     val topPadding = height.value * 0.1
     var name by remember {
         mutableStateOf("")
