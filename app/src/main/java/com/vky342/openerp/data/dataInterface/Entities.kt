@@ -46,8 +46,9 @@ data class BillEntry(
     @PrimaryKey(autoGenerate = true)
     val entryId : Int,
     val entryQuantity : Int,
-    val discount : Int = 0,
-    val finalPrice : Int,
+    val entryPrice : Double,
+    val discount : Double = 0.0,
+    val finalPrice : Double?,
 
     //Foreign keys
 

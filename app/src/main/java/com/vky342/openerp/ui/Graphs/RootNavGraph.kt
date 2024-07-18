@@ -10,6 +10,7 @@ fun RootNavigationGraph(navController: NavHostController, paddingValues: Padding
     NavHost(navController = navController, startDestination = Graph.HOME, route = Graph.ROOT){
         HomeNavigationGraph(navController = navController)
         AccountNavigationGraph(navController = navController)
+        TransactionNavGraph(navController = navController)
     }
 }
 
