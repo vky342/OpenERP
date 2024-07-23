@@ -56,6 +56,7 @@ import com.vky342.openerp.ui.Graphs.TransactionScreen
 import com.vky342.openerp.ui.theme.Greye
 import com.vky342.openerp.ui.theme.Purple40
 import kotlinx.coroutines.launch
+import kotlin.math.round
 
 
 @Composable
@@ -73,16 +74,16 @@ fun AddSaleScreen(navController: NavHostController){
         mutableStateOf(false)
     }
 
-    //// To be Saved
+    // To be Saved
 
-    var listofbillid : List<Int> = listOf(2,3,5,6,7) /// // to be provided by Bills Database
+    val listofbillid : List<Int> = listOf(2,3,5,6,7) // to be provided by Bills Database
 
-    var billId = remember {
+    val billId = remember {
         mutableStateOf(listofbillid.last() + 1)
-    } //// to be provided by Bills Database
+    } // to be provided by Bills Database
 
     var billdate by remember {
-        mutableStateOf("08/06/24") /// to be provided by Date provider
+        mutableStateOf("08/06/24") // to be provided by Date provider
     }
 
     var accountName by remember {
@@ -365,8 +366,8 @@ fun AddSaleScreen(navController: NavHostController){
             .align(Alignment.CenterHorizontally),
             colors = ButtonColors(contentColor = Greye, containerColor = Color.LightGray, disabledContentColor = Color.White, disabledContainerColor = Purple40),
             onClick = {
-                ///// save Bill first
-                //// then run a loop for saving every billEntry
+                // save Bill first
+                // then run a loop for saving every billEntry
                 Log.d("SAVING", "Saved BIll - $billId")
 
                 Log.d("STATUS OF BillEntries", "$BillEntries")
@@ -386,7 +387,6 @@ fun AddSaleScreen(navController: NavHostController){
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
-//@Preview
 @Composable
 fun ItemEntryRow(billId : Int, index : Int,
                  addNewItemEntryRow : () -> Unit,
@@ -588,6 +588,8 @@ fun ItemEntryRow(billId : Int, index : Int,
                         val finaldiscamnt : Double = upperfract / 100
 
                         item_total_price = itemno * itemtempprice * finaldiscamnt
+
+                        item_total_price = round(item_total_price!! * 100) / 100
 
                         val tempBillEntry = BillEntry(entryId = 0, entryQuantity = itemno, entryPrice = itemtempprice, discount = discountamnt, finalPrice = item_total_price, billIdFk = billId, itemNameFk = item_name)
 

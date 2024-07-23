@@ -24,15 +24,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.vky342.openerp.ui.Graphs.AccountScreens
 import com.vky342.openerp.ui.Graphs.TransactionScreen
+import com.vky342.openerp.ui.theme.Greye
 
-//@Preview
+
 @Composable
 fun AllTransactionOptionsScreen(navController: NavHostController){
     val height = LocalConfiguration.current.run { screenHeightDp.dp}
@@ -40,7 +38,7 @@ fun AllTransactionOptionsScreen(navController: NavHostController){
     val cardheight = topPadding/1.3
 
     Column(modifier = Modifier
-        .background(color = Color.White)
+        .background(color = Greye)
         .fillMaxSize()
         .padding(top = topPadding.dp, bottom = topPadding.dp)
     ) {

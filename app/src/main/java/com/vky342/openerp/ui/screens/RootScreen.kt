@@ -61,7 +61,7 @@ import com.vky342.openerp.ui.theme.Greye
 @Preview
 @Composable
 fun RootScreen(navController: NavHostController = rememberNavController()){
-    Scaffold (topBar = { topAppBar() },
+    Scaffold (topBar = { topAppBar() }, containerColor = Greye,
         bottomBar = { BottomBar(navController = navController) }
     ){
         RootNavigationGraph(navController = navController, paddingValues = it)
@@ -168,11 +168,10 @@ fun BottomBar(navController: NavHostController){
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun topAppBar(){
-    val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
+    val height = LocalConfiguration.current.run { screenHeightDp.dp}
     val topPadding = height.value * 0.1
     val statusBar = topPadding * 0.3
     Box(modifier = Modifier
@@ -185,9 +184,3 @@ fun topAppBar(){
     }
 
 }
-
-//@Preview
-//@Composable
-//fun prevec(){
-//    RootScreen()
-//}

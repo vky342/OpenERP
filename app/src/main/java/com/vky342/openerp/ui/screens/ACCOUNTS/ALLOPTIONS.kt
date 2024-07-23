@@ -29,8 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.vky342.openerp.ui.Graphs.AccountScreens
+import com.vky342.openerp.ui.theme.Greye
 
-//@Preview
+
 @Composable
 fun AllOptionsScreen(
     navController: NavHostController
@@ -40,10 +41,10 @@ fun AllOptionsScreen(
     val cardheight = topPadding / 1.3
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(color = Color.White)
+        .background(color = Greye)
         .padding(top = topPadding.dp)) {
 
-        Text(fontSize = 26.sp,text = "ACCOUNT", modifier = Modifier.align(Alignment.CenterHorizontally))
+        Text(color = Color.LightGray,fontSize = 26.sp,text = "ACCOUNT", modifier = Modifier.align(Alignment.CenterHorizontally))
 
         Card(modifier = Modifier
             .fillMaxWidth()

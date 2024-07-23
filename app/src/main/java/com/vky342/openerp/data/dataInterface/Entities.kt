@@ -26,13 +26,13 @@ data class Account(
 data class Bill(
     @PrimaryKey(autoGenerate = true)
     val billId : Int,
-    val billDate : Int,
-    val billAmount : Int = 0,
-    val ledgerType: Int, /// either sale(0) or purchase(1)
+    var billDate : Int,
+    var billAmount : Double = 0.0,
+    var ledgerType: Int, /// either sale(0) or purchase(1)
 
     //foreign keys
-    val accountNameFk : String,
-    val ledgerIdFk: Int
+    var accountNameFk : String,
+    var ledgerIdFk: Int
 
 )
 
@@ -44,16 +44,16 @@ data class Bill(
     ])
 data class BillEntry(
     @PrimaryKey(autoGenerate = true)
-    val entryId : Int,
-    val entryQuantity : Int,
-    val entryPrice : Double,
-    val discount : Double = 0.0,
-    val finalPrice : Double?,
+    var entryId : Int,
+    var entryQuantity : Int,
+    var entryPrice : Double,
+    var discount : Double = 0.0,
+    var finalPrice : Double?,
 
     //Foreign keys
 
-    val billIdFk : Int,
-    val itemNameFk : String,
+    var billIdFk : Int,
+    var itemNameFk : String,
 )
 
 @Entity(tableName = "ItemInventory")

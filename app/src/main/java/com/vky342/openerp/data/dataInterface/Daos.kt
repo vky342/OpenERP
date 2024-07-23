@@ -61,6 +61,9 @@ interface billsDao {
 
     @Query("SELECT * FROM Bills WHERE accountNameFk = :name")
     fun getBillsByAccountName(name : String) : Flow<List<Bill>>
+
+    @Query("SELECT billId FROM bills")
+    fun getListOfBillId() : Flow<List<Int>>
 }
 
 @Dao

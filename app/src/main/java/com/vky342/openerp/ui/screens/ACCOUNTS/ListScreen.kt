@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vky342.openerp.data.dataInterface.Account
+import com.vky342.openerp.ui.theme.Greye
 
 @Preview
 @Composable
@@ -84,20 +85,20 @@ fun ListAllAccountsScreen(){
         )
 
     Column(modifier = Modifier
-        .background(color = Color.White)
+        .background(color = Greye)
         .fillMaxSize()
-        .padding(top = topPadding.dp, bottom = topPadding.dp)
+        .padding(top = topPadding.dp, bottom = topPadding.dp, end = 8.dp, start = 8.dp)
     ) {
 
         Row (modifier = Modifier
             .fillMaxWidth()
             .height(heightval.dp)
-            .background(color = Color.White)){
+            .background(color = Color.LightGray)){
             Box(modifier = Modifier
                 .fillMaxHeight()
                 .weight(weight = 0.1f)
                 .border(width = 1.dp, color = Color.Black)){ // index
-                Text(text = "index", modifier = Modifier
+                Text(color = Greye,text = "index", modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(), fontSize = 11.sp)
             }
@@ -106,7 +107,8 @@ fun ListAllAccountsScreen(){
                 .weight(weight = .25f)
                 .border(width = 1.dp, color = Color.Black)){ // name
 
-                Text(text = "name", modifier = Modifier
+                Text(color = Greye,
+                    text = "name", modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(), fontSize = 11.sp)
 
@@ -116,7 +118,7 @@ fun ListAllAccountsScreen(){
                 .weight(weight = .3f)
                 .border(width = 1.dp, color = Color.Black)){ // address
 
-                Text(text = "address", modifier = Modifier
+                Text(color = Greye,text = "address", modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(), fontSize = 11.sp)
 
@@ -126,7 +128,7 @@ fun ListAllAccountsScreen(){
                 .weight(weight = .2f)
                 .border(width = 1.dp, color = Color.Black)){ // contact
 
-                Text(text = "contact", modifier = Modifier
+                Text(color = Greye,text = "contact", modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(), fontSize = 11.sp)
 
@@ -136,7 +138,7 @@ fun ListAllAccountsScreen(){
                 .weight(weight = .15f)
                 .border(width = 1.dp, color = Color.Black)){ // net balance
 
-                Text(text = "balance", modifier = Modifier
+                Text(color = Greye,text = "balance", modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(), fontSize = 11.sp)
 
@@ -147,7 +149,6 @@ fun ListAllAccountsScreen(){
         LazyColumn (modifier = Modifier
             .background(color = Color.White)
             .fillMaxSize()
-            //.padding(top = topPadding.dp, bottom = topPadding.dp)
         ) {
             itemsIndexed(items = AllAccount){ index : Int, item: Account ->
                     AccountListItem(index = index, account = item)
@@ -159,7 +160,6 @@ fun ListAllAccountsScreen(){
 
 }
 
-//@Preview
 @Composable
 fun AccountListItem(index : Int, account: Account){
     val height = LocalConfiguration.current.run { screenHeightDp.dp }
@@ -169,12 +169,13 @@ fun AccountListItem(index : Int, account: Account){
     Row (modifier = Modifier
         .fillMaxWidth()
         .height(heightval2.dp)
-        .background(color = Color.White)){
+        .padding(horizontal = 8.dp)
+        .background(color = Color.LightGray)){
         Box(modifier = Modifier
             .fillMaxHeight()
             .weight(weight = 0.1f)
             .border(width = 1.dp, color = Color.Black)){ // index
-            Text(text = index.toString(), modifier = Modifier
+            Text(color = Greye,text = index.toString(), modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(), fontSize = 11.sp)
         }
@@ -183,7 +184,7 @@ fun AccountListItem(index : Int, account: Account){
             .weight(weight = .25f)
             .border(width = 1.dp, color = Color.Black)){ // name
 
-            Text(text = account.name, modifier = Modifier
+            Text(color = Greye,text = account.name, modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(), fontSize = 11.sp)
 
@@ -193,7 +194,7 @@ fun AccountListItem(index : Int, account: Account){
             .weight(weight = .3f)
             .border(width = 1.dp, color = Color.Black)){ // address
 
-            Text(text = account.address, modifier = Modifier
+            Text(color = Greye,text = account.address, modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(), fontSize = 11.sp)
 
@@ -203,7 +204,7 @@ fun AccountListItem(index : Int, account: Account){
             .weight(weight = .2f)
             .border(width = 1.dp, color = Color.Black)){ // contact
 
-            Text(text = account.contact.toString(), modifier = Modifier
+            Text(color = Greye,text = account.contact.toString(), modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(), fontSize = 11.sp)
 
@@ -213,7 +214,7 @@ fun AccountListItem(index : Int, account: Account){
             .weight(weight = .15f)
             .border(width = 1.dp, color = Color.Black)){ // net balance
 
-            Text(text = account.netBalance.toString(), modifier = Modifier
+            Text(color = Greye,text = account.netBalance.toString(), modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(), fontSize = 11.sp)
 

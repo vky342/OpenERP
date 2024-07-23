@@ -29,11 +29,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vky342.openerp.ui.theme.Greye
 
 @Preview
 @Composable
 fun ModifyAccountScreen(){
-    val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
+    val height = LocalConfiguration.current.run { screenHeightDp.dp  }
     val topPadding = height.value * 0.1
 
     var name by remember {
@@ -59,12 +60,12 @@ fun ModifyAccountScreen(){
     val scrollState  = rememberScrollState()
 
     Column(modifier = Modifier
-        .background(color = Color.White)
+        .background(color = Greye)
         .fillMaxSize()
         .padding(top = topPadding.dp, bottom = topPadding.dp)
         .verticalScroll(scrollState)
     ) {
-        Text(text = "Modify Account", modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 26.sp)
+        Text(color = Color.LightGray,text = "Modify Account", modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 26.sp)
 
         TextField(modifier = Modifier
             .padding(25.dp)
@@ -78,7 +79,7 @@ fun ModifyAccountScreen(){
                 })}
         )
 
-        Text(text = "New Values", modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 22.sp)
+        Text(color = Color.LightGray,text = "New Values", modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 22.sp)
 
         TextField(modifier = Modifier
             .padding(25.dp)

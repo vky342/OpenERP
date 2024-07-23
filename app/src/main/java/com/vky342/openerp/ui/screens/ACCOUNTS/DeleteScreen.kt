@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vky342.openerp.ui.theme.Greye
 
 @Preview
 @Composable
@@ -33,11 +34,11 @@ fun DeleteScreen(){
     }
 
     Column(modifier = Modifier
-        .background(color = Color.White)
+        .background(color = Greye)
         .fillMaxSize()
         .padding(top = topPadding.dp)
     ) {
-        Text(fontSize = 26.sp,text = "Delete Account", modifier = Modifier.align(Alignment.CenterHorizontally))
+        Text(color = Color.LightGray,fontSize = 26.sp,text = "Delete Account", modifier = Modifier.align(Alignment.CenterHorizontally))
         TextField(modifier = Modifier
             .padding(25.dp)
             .align(Alignment.CenterHorizontally),
