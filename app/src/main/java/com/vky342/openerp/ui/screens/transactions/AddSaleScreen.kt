@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -64,6 +65,8 @@ fun AddSaleScreen(navController: NavHostController){
 
     val height = LocalConfiguration.current.run { screenHeightDp.dp}
     val topPadding = height.value * 0.1
+    val newTopseperator = topPadding + 10
+    val sidePadding = 8.dp
     val RowHeight = topPadding/2.4
 
     val bottompadding = height.value * .35
@@ -73,6 +76,7 @@ fun AddSaleScreen(navController: NavHostController){
     var accountNameExpander by remember {
         mutableStateOf(false)
     }
+
 
     // To be Saved
 
@@ -103,7 +107,7 @@ fun AddSaleScreen(navController: NavHostController){
         "Fees",
         "Others")
 
-    val categories = listOf( /// item names
+    val list_of_all_items = listOf( /// item names
         "Food",
         "Beverages",
         "Sports",
@@ -126,7 +130,7 @@ fun AddSaleScreen(navController: NavHostController){
     Column(modifier = Modifier
         .background(color = Greye)
         .fillMaxSize()
-        .padding(top = topPadding.dp, bottom = bottompadding.dp)
+        .padding(top = newTopseperator.dp, bottom = bottompadding.dp, end = sidePadding, start = sidePadding)
     ) {
 
         val scrollState = rememberScrollState()
@@ -136,9 +140,9 @@ fun AddSaleScreen(navController: NavHostController){
             .height(RowHeight.dp)){
             Box (modifier = Modifier
                 .fillMaxHeight()
-                .weight(weight = .33f)
+                .weight(weight = .3f)
                 .background(color = Color.White)
-                .border(width = 1.dp, color = Color.Black)){
+                .border(width = .3.dp, color = Greye)){
 
                 Text(fontSize = 16.sp,text = "id : ${billId.value}", color = Color.Black, modifier = Modifier
                     .wrapContentSize()
@@ -146,9 +150,9 @@ fun AddSaleScreen(navController: NavHostController){
             }
             Box (modifier = Modifier
                 .fillMaxHeight()
-                .weight(weight = .33f)
+                .weight(weight = .35f)
                 .background(color = Color.White)
-                .border(width = 1.dp, color = Color.Black)){
+                .border(width = 0.3.dp, color = Greye)){
 
                 Row (modifier = Modifier
                     .wrapContentSize()
@@ -171,9 +175,9 @@ fun AddSaleScreen(navController: NavHostController){
             }
             Box (modifier = Modifier
                 .fillMaxHeight()
-                .weight(weight = .33f)
+                .weight(weight = .35f)
                 .background(color = Color.White)
-                .border(width = 1.dp, color = Color.Black)){
+                .border(width = 0.3.dp, color = Greye)){
 
                 Text(fontSize = 16.sp,text = "type : Sale", color = Color.Black, modifier = Modifier
                     .wrapContentSize()
@@ -189,7 +193,7 @@ fun AddSaleScreen(navController: NavHostController){
                 .fillMaxSize()
                 .background(color = Color.White)
                 .weight(weight = 1f)
-                .border(width = 1.dp, color = Color.Black)){
+                .border(width = 0.3.dp, color = Greye)){
 
                 Row (modifier = Modifier
                     .wrapContentSize()
@@ -201,7 +205,8 @@ fun AddSaleScreen(navController: NavHostController){
                         .wrapContentHeight()
                         .align(Alignment.CenterVertically))
 
-                    BasicTextField(value = accountName, onValueChange = {accountName = it}, modifier = Modifier
+                    BasicTextField(value = accountName, onValueChange = {accountName = it
+                                                                        accountNameExpander = true}, modifier = Modifier
                         .wrapContentSize()
                         .align(Alignment.CenterVertically)
                         .padding(horizontal = 2.dp))
@@ -217,7 +222,7 @@ fun AddSaleScreen(navController: NavHostController){
                 .fillMaxHeight()
                 .weight(weight = .07f)
                 .background(color = Color.Red)
-                .border(width = 1.dp, color = Color.Black)){
+                .border(width = 0.3.dp, color = Greye)){
 
                 Text(fontSize = 13.sp,text = "Sn.", color = Color.White, modifier = Modifier
                     .wrapContentSize()
@@ -227,7 +232,7 @@ fun AddSaleScreen(navController: NavHostController){
                 .fillMaxHeight()
                 .weight(weight = .33f)
                 .background(color = Color.LightGray)
-                .border(width = 1.dp, color = Color.Black)){
+                .border(width = 0.3.dp, color = Greye)){
 
                 Text(fontSize = 13.sp,text = "Item name", modifier = Modifier
                     .wrapContentSize()
@@ -238,7 +243,7 @@ fun AddSaleScreen(navController: NavHostController){
                 .fillMaxHeight()
                 .weight(weight = .1f)
                 .background(color = Color.Yellow)
-                .border(width = 1.dp, color = Color.Black)){
+                .border(width = 0.3.dp, color = Greye)){
 
                 Text(fontSize = 13.sp,text = "No.", modifier = Modifier
                     .wrapContentSize()
@@ -249,7 +254,7 @@ fun AddSaleScreen(navController: NavHostController){
                 .fillMaxHeight()
                 .weight(weight = .14f)
                 .background(color = Color.Cyan)
-                .border(width = 1.dp, color = Color.Black)){
+                .border(width = 0.3.dp, color = Greye)){
 
                 Text(fontSize = 13.sp,text = "Price", modifier = Modifier
                     .wrapContentSize()
@@ -260,7 +265,7 @@ fun AddSaleScreen(navController: NavHostController){
                 .fillMaxHeight()
                 .weight(weight = .1f)
                 .background(color = Color.Green)
-                .border(width = 1.dp, color = Color.Black)){
+                .border(width = 0.3.dp, color = Greye)){
 
                 Text(fontSize = 13.sp,text = "disc", modifier = Modifier
                     .wrapContentSize()
@@ -271,7 +276,7 @@ fun AddSaleScreen(navController: NavHostController){
                 .fillMaxHeight()
                 .weight(weight = .14f)
                 .background(color = Color.LightGray)
-                .border(width = 1.dp, color = Color.Black)){
+                .border(width = 0.3.dp, color = Greye)){
 
                 Text(fontSize = 13.sp,text = "Total", modifier = Modifier
                     .wrapContentSize()
@@ -279,7 +284,7 @@ fun AddSaleScreen(navController: NavHostController){
 
             }
             if (accountNameExpander){
-                Popup(alignment = Alignment.TopCenter, offset = IntOffset(x = 0, y = RowHeight.toInt() * 3),properties = PopupProperties(excludeFromSystemGesture = true), onDismissRequest = {accountNameExpander = false}) {
+                Popup(alignment = Alignment.TopCenter, offset = IntOffset(x = 0, y = 0),properties = PopupProperties(excludeFromSystemGesture = true), onDismissRequest = {accountNameExpander = false}) {
                     val columheight = RowHeight * 4
                     LazyColumn(
                         modifier = Modifier
@@ -334,7 +339,7 @@ fun AddSaleScreen(navController: NavHostController){
             val focusManager = LocalFocusManager.current
 
             repeat(shownTillIndex ){
-                ItemEntryRow(billId = billId.value,index = it + 1, categories = categories,addNewItemEntryRow = {
+                ItemEntryRow(billId = billId.value,index = it + 1, categories = list_of_all_items,addNewItemEntryRow = {
                     shownTillIndex += 1
 
                     coroutineScope.launch {
@@ -435,7 +440,7 @@ fun ItemEntryRow(billId : Int, index : Int,
         Box (modifier = Modifier
             .fillMaxHeight()
             .weight(weight = .07f)
-            .border(width = 1.dp, color = Color.Black)
+            .border(width = 0.3.dp, color = Greye)
             .background(color = Color.Red)){
 
             Text(fontSize = 13.sp,text = index.toString(), color = Color.White, modifier = Modifier
@@ -460,7 +465,7 @@ fun ItemEntryRow(billId : Int, index : Int,
             .fillMaxHeight()
             .weight(weight = .33f)
             .background(color = Color.LightGray)
-            .border(width = 1.dp, color = Color.Black)){
+            .border(width = 0.3.dp, color = Greye)){
 
             BasicTextField(value = item_name, onValueChange = { item_name = it
                                                               expanded = true}, modifier = Modifier
@@ -488,7 +493,7 @@ fun ItemEntryRow(billId : Int, index : Int,
             .fillMaxHeight()
             .weight(weight = .1f)
             .background(color = Color.Yellow)
-            .border(width = 1.dp, color = Color.Black)){
+            .border(width = 0.3.dp, color = Greye)){
 
             BasicTextField(value = item_quantity, onValueChange = {
                 
@@ -524,7 +529,7 @@ fun ItemEntryRow(billId : Int, index : Int,
             .fillMaxHeight()
             .weight(weight = .14f)
             .background(color = Color.Cyan)
-            .border(width = 1.dp, color = Color.Black)){
+            .border(width = 0.3.dp, color = Greye)){
 
             BasicTextField(value = item_Price, onValueChange = {
 
@@ -558,7 +563,7 @@ fun ItemEntryRow(billId : Int, index : Int,
             .fillMaxHeight()
             .weight(weight = .1f)
             .background(color = Color.Green)
-            .border(width = 1.dp, color = Color.Black)){
+            .border(width = 0.3.dp, color = Greye)){
 
             BasicTextField(value = item_discount, onValueChange = {
 
@@ -611,7 +616,7 @@ fun ItemEntryRow(billId : Int, index : Int,
             .fillMaxHeight()
             .weight(weight = .14f)
             .background(color = Color.LightGray)
-            .border(width = 1.dp, color = Color.Black)){
+            .border(width = 0.3.dp, color = Greye)){
 
             if(item_total_price != null){
                 Text(fontSize = 13.sp,text = item_total_price.toString(), modifier = Modifier

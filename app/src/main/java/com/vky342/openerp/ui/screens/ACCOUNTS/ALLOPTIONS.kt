@@ -44,7 +44,7 @@ fun AllOptionsScreen(
         .background(color = Greye)
         .padding(top = topPadding.dp)) {
 
-        Text(color = Color.LightGray,fontSize = 26.sp,text = "ACCOUNT", modifier = Modifier.align(Alignment.CenterHorizontally))
+        Text(color = Color.LightGray,fontSize = 26.sp,text = "ACCOUNT", modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 10.dp))
 
         Card(modifier = Modifier
             .fillMaxWidth()
@@ -54,7 +54,7 @@ fun AllOptionsScreen(
 
             navController.navigate(AccountScreens.ADD)
 
-            }, colors = CardDefaults.cardColors()) {
+            }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
             Row (modifier = Modifier
                 .height(cardheight.dp)
                 .fillMaxWidth()) {
@@ -73,7 +73,7 @@ fun AllOptionsScreen(
 
                 navController.navigate(AccountScreens.MODIFY)
 
-            }, colors = CardDefaults.cardColors()) {
+            }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
             Row (modifier = Modifier
                 .height(cardheight.dp)
                 .fillMaxWidth()) {
@@ -92,7 +92,7 @@ fun AllOptionsScreen(
 
                 navController.navigate(AccountScreens.LIST)
 
-            }, colors = CardDefaults.cardColors()) {
+            }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
             Row (modifier = Modifier
                 .height(cardheight.dp)
                 .fillMaxWidth()) {
@@ -111,7 +111,7 @@ fun AllOptionsScreen(
 
                 navController.navigate(AccountScreens.DELETE)
 
-            }, colors = CardDefaults.cardColors()) {
+            }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
             Row (modifier = Modifier
                 .height(cardheight.dp)
                 .fillMaxWidth()) {

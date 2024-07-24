@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -38,12 +39,12 @@ fun DeleteScreen(){
         .fillMaxSize()
         .padding(top = topPadding.dp)
     ) {
-        Text(color = Color.LightGray,fontSize = 26.sp,text = "Delete Account", modifier = Modifier.align(Alignment.CenterHorizontally))
+        Text(color = Color.LightGray,fontSize = 26.sp,text = "Delete Account", modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 10.dp))
         TextField(modifier = Modifier
             .padding(25.dp)
             .align(Alignment.CenterHorizontally),
             label = { Text(text = "Name")},value = name , onValueChange = {name = it})
-        Button(modifier = Modifier
+        Button(colors = ButtonColors(containerColor = Color.LightGray, disabledContainerColor = Color.LightGray, contentColor = Greye, disabledContentColor = Greye),modifier = Modifier
             .padding(25.dp)
             .align(Alignment.CenterHorizontally)
             .wrapContentSize(), onClick = {

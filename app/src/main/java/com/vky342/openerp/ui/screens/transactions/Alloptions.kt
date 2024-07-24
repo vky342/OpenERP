@@ -43,7 +43,7 @@ fun AllTransactionOptionsScreen(navController: NavHostController){
         .padding(top = topPadding.dp, bottom = topPadding.dp)
     ) {
 
-        Text(fontSize = 26.sp,text = "TRANSACTIONS", modifier = Modifier.align(Alignment.CenterHorizontally))
+        Text(color = Color.LightGray,fontSize = 26.sp,text = "TRANSACTIONS", modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 10.dp))
 
         Card(modifier = Modifier
             .fillMaxWidth()
@@ -52,7 +52,7 @@ fun AllTransactionOptionsScreen(navController: NavHostController){
             onClick = {
                 navController.navigate(TransactionScreen.AddSale)
 
-            }, colors = CardDefaults.cardColors()) {
+            }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
             Row(
                 modifier = Modifier
                     .height(cardheight.dp)
@@ -83,7 +83,7 @@ fun AllTransactionOptionsScreen(navController: NavHostController){
 
                 navController.navigate(TransactionScreen.AddPurchase)
 
-            }, colors = CardDefaults.cardColors()) {
+            }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
             Row(
                 modifier = Modifier
                     .height(cardheight.dp)
@@ -114,7 +114,7 @@ fun AllTransactionOptionsScreen(navController: NavHostController){
 
                 navController.navigate(TransactionScreen.modifySale)
 
-            }, colors = CardDefaults.cardColors()) {
+            }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
             Row(
                 modifier = Modifier
                     .height(cardheight.dp)
@@ -145,7 +145,7 @@ fun AllTransactionOptionsScreen(navController: NavHostController){
 
                 navController.navigate(TransactionScreen.modifyPurchase)
 
-            }, colors = CardDefaults.cardColors()) {
+            }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
             Row(
                 modifier = Modifier
                     .height(cardheight.dp)
@@ -176,7 +176,7 @@ fun AllTransactionOptionsScreen(navController: NavHostController){
 
                 navController.navigate(TransactionScreen.deleteSale)
 
-            }, colors = CardDefaults.cardColors()) {
+            }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
             Row(
                 modifier = Modifier
                     .height(cardheight.dp)
@@ -207,7 +207,7 @@ fun AllTransactionOptionsScreen(navController: NavHostController){
 
                 navController.navigate(TransactionScreen.deletePurchase)
 
-            }, colors = CardDefaults.cardColors()) {
+            }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
             Row(
                 modifier = Modifier
                     .height(cardheight.dp)

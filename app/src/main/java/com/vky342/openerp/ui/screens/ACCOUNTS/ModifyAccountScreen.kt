@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -65,7 +66,7 @@ fun ModifyAccountScreen(){
         .padding(top = topPadding.dp, bottom = topPadding.dp)
         .verticalScroll(scrollState)
     ) {
-        Text(color = Color.LightGray,text = "Modify Account", modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 26.sp)
+        Text(color = Color.LightGray,text = "Modify Account", modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 10.dp), fontSize = 26.sp)
 
         TextField(modifier = Modifier
             .padding(25.dp)
@@ -101,7 +102,7 @@ fun ModifyAccountScreen(){
             .align(Alignment.CenterHorizontally),label = { Text(text = "new starting balance")},value = newstartingbalance, onValueChange = { newstartingbalance = it },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done))
 
-        Button(modifier = Modifier
+        Button(colors = ButtonColors(containerColor = Color.LightGray, disabledContainerColor = Color.LightGray, contentColor = Greye, disabledContentColor = Greye),modifier = Modifier
             .padding(25.dp)
             .align(Alignment.CenterHorizontally)
             .wrapContentSize(),onClick = {
