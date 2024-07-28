@@ -1,7 +1,7 @@
 
 # OpenERP
 
-This project is an Android native Application and is to be used by MSMEs , this app will be open source and will be totally free. In India MSMEs don't have enough technicality for PC based ERP softwares. They can't even have budgets that can afford high prices set for PC based ERP softwares. This projects aims to target The MSMEs. They will be able to use The OpenERP App in their Phones or Tablets. 
+This project is an Android native Application and is to be used by MSMEs , this app will be open source and will be totally free.For all the MSMEs that don't have enough technicality or budget for PC based ERP softwares. This projects aims to target Those. They will be able to use The OpenERP App in their Phones or Tablets. 
 
 
 ## App Structure
