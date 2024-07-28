@@ -40,7 +40,7 @@ data class Bill(
     tableName = "BillEntries",
     foreignKeys = [
         ForeignKey(entity = Bill::class, parentColumns = ["BillId"], childColumns = ["BillIdFk"], onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE),
-        ForeignKey(entity = Item::class, parentColumns = ["itemName"], childColumns = ["itemNameFk"], onDelete = ForeignKey.RESTRICT, onUpdate = ForeignKey.CASCADE)
+        ForeignKey(entity = Item::class, parentColumns = ["itemName"], childColumns = ["itemNameFk"], onDelete = ForeignKey.NO_ACTION, onUpdate = ForeignKey.CASCADE)
     ])
 data class BillEntry(
     @PrimaryKey(autoGenerate = true)

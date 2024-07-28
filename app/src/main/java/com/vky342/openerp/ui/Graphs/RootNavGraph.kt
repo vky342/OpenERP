@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.vky342.openerp.data.dataInterface.Ledger
+import com.vky342.openerp.ui.screens.Ledgers.Alloptionsforledger
 
 @Composable
 fun RootNavigationGraph(navController: NavHostController, paddingValues: PaddingValues){
@@ -11,6 +14,9 @@ fun RootNavigationGraph(navController: NavHostController, paddingValues: Padding
         HomeNavigationGraph(navController = navController)
         AccountNavigationGraph(navController = navController)
         TransactionNavGraph(navController = navController)
+        composable(route = Graph.LEDGER){
+            Alloptionsforledger()
+        }
     }
 }
 

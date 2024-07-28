@@ -112,7 +112,7 @@ fun AllTransactionOptionsScreen(navController: NavHostController){
             .padding(vertical = 15.dp, horizontal = 25.dp),
             onClick = {
 
-                navController.navigate(TransactionScreen.modifySale)
+                navController.navigate(TransactionScreen.modifyBill)
 
             }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
             Row(
@@ -131,104 +131,12 @@ fun AllTransactionOptionsScreen(navController: NavHostController){
                         .width(20.dp)
                 )
                 Text(
-                    text = "Modify Sale",
+                    text = "Modify Bills",
                     fontSize = 25.sp,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
             }
         }
-        Card(modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentSize()
-            .padding(vertical = 15.dp, horizontal = 25.dp),
-            onClick = {
 
-                navController.navigate(TransactionScreen.modifyPurchase)
-
-            }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
-            Row(
-                modifier = Modifier
-                    .height(cardheight.dp)
-                    .fillMaxWidth()
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = "MOD",
-                    modifier = Modifier.size(cardheight.dp)
-                )
-                Spacer(
-                    modifier = Modifier
-                        .height(cardheight.dp)
-                        .width(20.dp)
-                )
-                Text(
-                    text = "Modify Purchase",
-                    fontSize = 25.sp,
-                    modifier = Modifier.align(Alignment.CenterVertically)
-                )
-            }
-        }
-        Card(modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentSize()
-            .padding(vertical = 15.dp, horizontal = 25.dp),
-            onClick = {
-
-                navController.navigate(TransactionScreen.deleteSale)
-
-            }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
-            Row(
-                modifier = Modifier
-                    .height(cardheight.dp)
-                    .fillMaxWidth()
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "REM",
-                    modifier = Modifier.size(cardheight.dp)
-                )
-                Spacer(
-                    modifier = Modifier
-                        .height(cardheight.dp)
-                        .width(20.dp)
-                )
-                Text(
-                    text = "Delete Sale",
-                    fontSize = 25.sp,
-                    modifier = Modifier.align(Alignment.CenterVertically)
-                )
-            }
-        }
-        Card(modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentSize()
-            .padding(vertical = 15.dp, horizontal = 25.dp),
-            onClick = {
-
-                navController.navigate(TransactionScreen.deletePurchase)
-
-            }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
-            Row(
-                modifier = Modifier
-                    .height(cardheight.dp)
-                    .fillMaxWidth()
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "REM",
-                    modifier = Modifier.size(cardheight.dp)
-                )
-                Spacer(
-                    modifier = Modifier
-                        .height(cardheight.dp)
-                        .width(20.dp)
-                )
-                Text(
-                    text = "Delete Purchase",
-                    fontSize = 25.sp,
-                    modifier = Modifier.align(Alignment.CenterVertically)
-                )
-            }
-        }
     }
 }

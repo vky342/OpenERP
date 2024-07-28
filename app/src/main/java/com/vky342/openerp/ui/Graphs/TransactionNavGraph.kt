@@ -5,9 +5,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.vky342.openerp.ui.screens.transactions.AddPurchaseScreen
 import com.vky342.openerp.ui.screens.transactions.AddSaleScreen
 import com.vky342.openerp.ui.screens.transactions.AllTransactionOptionsScreen
-import com.vky342.openerp.ui.screens.transactions.modifySaleScreen2
+import com.vky342.openerp.ui.screens.transactions.modifyBillScreen
 
 fun NavGraphBuilder.TransactionNavGraph(navController: NavHostController){
     navigation(route = Graph.TRANSACTION,
@@ -19,8 +20,11 @@ fun NavGraphBuilder.TransactionNavGraph(navController: NavHostController){
         composable(route = TransactionScreen.AddSale){
             AddSaleScreen(navController)
         }
-        composable(route = TransactionScreen.modifySale){
-            modifySaleScreen2()
+        composable(route = TransactionScreen.modifyBill){
+            modifyBillScreen()
+        }
+        composable(route = TransactionScreen.AddPurchase){
+            AddPurchaseScreen(navController = navController)
         }
     }
 }
@@ -30,8 +34,5 @@ object TransactionScreen{
     val AllOption = "allOption"
     val AddSale = "addSale"
     val AddPurchase = "addPurchase"
-    val modifySale = "modifySale"
-    val modifyPurchase = "modifyPurchase"
-    val deleteSale = "deleteSale"
-    val deletePurchase = "deletePurchase"
+    val modifyBill = "modifySale"
 }

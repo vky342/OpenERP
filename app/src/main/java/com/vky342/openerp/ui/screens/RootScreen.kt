@@ -1,40 +1,29 @@
 package com.vky342.openerp.ui.screens
 
-import androidx.compose.foundation.Indication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.interaction.InteractionSource
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.ShoppingCart
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -87,6 +76,9 @@ fun BottomBar(navController: NavHostController){
     var Transicon = Icons.Outlined.ShoppingCart
     var TransColor = Color.Black
 
+    var Ledger = Icons.Outlined.Edit
+    var ledgerColor = Color.Black
+
     fun colorFilling(){
         if (onScreen == 1){
             HomeIcon = Icons.Filled.Home
@@ -96,9 +88,13 @@ fun BottomBar(navController: NavHostController){
             AccountIcon = Icons.Filled.Person
             AccountColor = Greye
         }
-        else{
+        else if (onScreen == 3){
             Transicon = Icons.Filled.ShoppingCart
             TransColor = Greye
+        }
+        else {
+            Ledger = Icons.Filled.Edit
+            ledgerColor = Greye
         }
     }
 
@@ -157,6 +153,23 @@ fun BottomBar(navController: NavHostController){
                         }))
 
                     Text(text = "Bills", color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight(700), modifier = Modifier.align(Alignment.CenterHorizontally))
+                }
+
+                Spacer(modifier = Modifier.width(50.dp))
+
+                Column (modifier = Modifier.fillMaxHeight()){
+                    Icon(imageVector = Ledger, tint = ledgerColor, contentDescription = "ADD Sale", modifier = Modifier
+                        .size(IconHeight.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .clickable(onClick = {
+                            onScreen = 4
+                            navController.navigate(Graph.LEDGER) {
+                                popUpTo(navController.graph.findStartDestination().id)
+                                launchSingleTop = true
+                            }
+                        }))
+
+                    Text(text = "Ledger", color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight(700), modifier = Modifier.align(Alignment.CenterHorizontally))
                 }
 
             }

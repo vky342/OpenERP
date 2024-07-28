@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -61,7 +60,7 @@ import kotlin.math.round
 
 
 @Composable
-fun AddSaleScreen(navController: NavHostController){
+fun AddPurchaseScreen(navController: NavHostController){
 
     val height = LocalConfiguration.current.run { screenHeightDp.dp}
     val topPadding = height.value * 0.1
@@ -186,7 +185,7 @@ fun AddSaleScreen(navController: NavHostController){
                 .background(color = Color.White)
                 .border(width = 0.3.dp, color = Greye)){
 
-                Text(fontSize = 16.sp,text = "type : Sale", color = Color.Black, modifier = Modifier
+                Text(fontSize = 16.sp,text = "type : Purchase", color = Color.Black, modifier = Modifier
                     .wrapContentSize()
                     .align(Alignment.Center))
 
@@ -213,7 +212,7 @@ fun AddSaleScreen(navController: NavHostController){
                         .align(Alignment.CenterVertically))
 
                     BasicTextField(value = accountName, onValueChange = {accountName = it
-                                                                        accountNameExpander = true}, modifier = Modifier
+                        accountNameExpander = true}, modifier = Modifier
                         .wrapContentSize()
                         .align(Alignment.CenterVertically)
                         .padding(horizontal = 2.dp))
@@ -346,7 +345,7 @@ fun AddSaleScreen(navController: NavHostController){
             val focusManager = LocalFocusManager.current
 
             repeat(shownTillIndex ){
-                ItemEntryRow(billId = billId.value,index = it + 1, categories = list_of_all_items,addNewItemEntryRow = {
+                ItemEntryRowPurchase(billId = billId.value,index = it + 1, categories = list_of_all_items,addNewItemEntryRow = {
                     shownTillIndex += 1
 
                     coroutineScope.launch {
@@ -371,7 +370,7 @@ fun AddSaleScreen(navController: NavHostController){
 
 
         }
-        
+
         Button(modifier = Modifier
             .height((RowHeight * 1.7).dp)
             .padding(5.dp)
@@ -400,7 +399,7 @@ fun AddSaleScreen(navController: NavHostController){
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ItemEntryRow(billId : Int, index : Int,
+fun ItemEntryRowPurchase(billId : Int, index : Int,
                  addNewItemEntryRow : () -> Unit,
                  categories : List<String>,
                  focusChange : () -> Unit,
@@ -475,7 +474,7 @@ fun ItemEntryRow(billId : Int, index : Int,
             .border(width = 0.3.dp, color = Greye)){
 
             BasicTextField(value = item_name, onValueChange = { item_name = it
-                                                              expanded = true}, modifier = Modifier
+                expanded = true}, modifier = Modifier
                 .fillMaxWidth()
                 .align(alignment = Alignment.Center)
                 .wrapContentHeight()
@@ -503,14 +502,14 @@ fun ItemEntryRow(billId : Int, index : Int,
             .border(width = 0.3.dp, color = Greye)){
 
             BasicTextField(value = item_quantity, onValueChange = {
-                
+
                 if(item_name.isNotEmpty()){
                     item_quantity = it
                 }
                 else{
                     Log.d("QUANTITY", "ItemEntryRow: name is empty")
                 }
-                
+
             }, modifier = Modifier
                 .fillMaxWidth()
                 .align(alignment = Alignment.Center)
@@ -529,7 +528,8 @@ fun ItemEntryRow(billId : Int, index : Int,
                         Log.d("QUANTITY", "ItemEntryRow: please type quantity")
                     }
 
-                }))
+                })
+            )
 
         }
         Box (modifier = Modifier
@@ -563,7 +563,8 @@ fun ItemEntryRow(billId : Int, index : Int,
                     }else{
                         Log.d("PRICE","please enter price")
                     }
-                }))
+                })
+            )
 
         }
         Box (modifier = Modifier
@@ -615,7 +616,7 @@ fun ItemEntryRow(billId : Int, index : Int,
                         Log.d("DISCOUNT", "please enter discount")
                     }
 
-                    })
+                })
             )
 
         }
@@ -679,4 +680,3 @@ fun ItemEntryRow(billId : Int, index : Int,
     }
 
 }
-

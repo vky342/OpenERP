@@ -95,7 +95,7 @@ val list_of_all_account_name = listOf("kunal", "rahul", "amit", "shyam", "ram", 
 
 
 @Composable
-fun modifySaleScreen2(){
+fun modifyBillScreen(){
 
     /*
     * search bar for id
