@@ -21,6 +21,7 @@ fun HomeScreen(){
             Text(text = "HOME")
             Text(text = "HOME")
             Text(text = "HOME")
+            Text(text = "HOME NEW")
         }
 
 }
