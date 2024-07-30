@@ -14,9 +14,7 @@ fun RootNavigationGraph(navController: NavHostController, paddingValues: Padding
         HomeNavigationGraph(navController = navController)
         AccountNavigationGraph(navController = navController)
         TransactionNavGraph(navController = navController)
-        composable(route = Graph.LEDGER){
-            Alloptionsforledger()
-        }
+        LedgerNavigationGraph(navController = navController)
     }
 }
 

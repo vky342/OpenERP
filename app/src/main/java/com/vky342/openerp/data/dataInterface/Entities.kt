@@ -3,6 +3,7 @@ package com.vky342.openerp.data.dataInterface
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.LocalDate
 
 @Entity(tableName = "Accounts")
 data class Account(
@@ -102,4 +103,12 @@ data class Ledger(
     // Foreign Keys
 
     val accountNameFk : String,
+)
+
+data class ledgerItem(
+    val date: LocalDate,
+    val ledgerType : Int,
+    val amount : Int,
+    val transactionType : String,
+    val ForeignId : Int
 )

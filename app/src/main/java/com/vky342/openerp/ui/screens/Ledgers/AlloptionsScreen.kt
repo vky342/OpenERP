@@ -27,12 +27,14 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.vky342.openerp.ui.Graphs.LedgerScreens
 import com.vky342.openerp.ui.theme.Greye
 
 
-@Preview
+
 @Composable
-fun Alloptionsforledger(){
+fun Alloptionsforledger(navController: NavController){
 
     val height = LocalConfiguration.current.run { screenHeightDp.dp }
     val topPadding = height.value * 0.1
@@ -40,7 +42,7 @@ fun Alloptionsforledger(){
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = Greye)
-        .padding(top = topPadding.dp)) {
+        .padding(top = topPadding.dp, bottom = topPadding.dp)) {
 
         Text(color = Color.LightGray,fontSize = 26.sp,text = "LEDGER", modifier = Modifier.align(
             Alignment.CenterHorizontally).padding(top = 10.dp))
@@ -51,7 +53,7 @@ fun Alloptionsforledger(){
             .padding(25.dp),
             onClick = {
 
-                //navController.navigate(AccountScreens.ADD)
+                navController.navigate(LedgerScreens.AccountLedger)
 
             }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
             Row (modifier = Modifier
