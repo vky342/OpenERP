@@ -116,7 +116,7 @@ fun Alloptionsforledger(navController: NavController){
             Row (modifier = Modifier
                 .height(cardheight.dp)
                 .fillMaxWidth()) {
-                Icon(imageVector = Icons.Default.Delete, contentDescription = "List", modifier = Modifier.size(cardheight.dp))
+                Icon(imageVector = Icons.Default.Star, contentDescription = "List", modifier = Modifier.size(cardheight.dp))
                 Spacer(modifier = Modifier
                     .height(cardheight.dp)
                     .width(20.dp))
@@ -135,7 +135,7 @@ fun Alloptionsforledger(navController: NavController){
             Row (modifier = Modifier
                 .height(cardheight.dp)
                 .fillMaxWidth()) {
-                Icon(imageVector = Icons.Default.Delete, contentDescription = "List", modifier = Modifier.size(cardheight.dp))
+                Icon(imageVector = Icons.Default.Star, contentDescription = "List", modifier = Modifier.size(cardheight.dp))
                 Spacer(modifier = Modifier
                     .height(cardheight.dp)
                     .width(20.dp))
