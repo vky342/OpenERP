@@ -55,8 +55,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
-import com.vky342.openerp.data.dataInterface.Bill
-import com.vky342.openerp.data.dataInterface.BillEntry
+import com.vky342.openerp.data.Entities.Bill
+import com.vky342.openerp.data.Entities.BillEntry
 import com.vky342.openerp.ui.theme.Greye
 import kotlin.math.round
 

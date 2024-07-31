@@ -24,7 +24,7 @@ fun NavGraphBuilder.LedgerNavigationGraph(navController: NavHostController){
 }
 
 object LedgerScreens{
-    val Alloptions = "alloptionsr"
+    val Alloptions = "alloptions"
     val AccountLedger = "accountLedger"
     val DayBook = "daybook"
 }

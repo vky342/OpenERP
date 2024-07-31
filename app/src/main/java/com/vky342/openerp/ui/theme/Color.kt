@@ -10,3 +10,9 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 val Greye = Color(0xFF2B2B2A)
+val SaleiconPin = Color(0xFF26AC08)
+val ReceiptIconPin = Color(0xFF0BAAAA)
+
+val InventoryIconPin = Color(0xFFE41F64)
+
+val GreyeHome = Color(0xFF181818)

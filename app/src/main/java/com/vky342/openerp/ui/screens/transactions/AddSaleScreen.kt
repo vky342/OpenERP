@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -52,7 +51,7 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.vky342.openerp.data.dataInterface.BillEntry
+import com.vky342.openerp.data.Entities.BillEntry
 import com.vky342.openerp.ui.Graphs.TransactionScreen
 import com.vky342.openerp.ui.theme.Greye
 import com.vky342.openerp.ui.theme.Purple40

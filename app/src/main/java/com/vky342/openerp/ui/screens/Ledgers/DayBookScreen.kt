@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
@@ -25,9 +23,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.room.Index
-import com.vky342.openerp.data.dataInterface.DayBookVoucher
-import com.vky342.openerp.data.dataInterface.ledgerItem
+import com.vky342.openerp.data.Entities.GeneralDataClasses.DayBookVoucher
 import com.vky342.openerp.ui.theme.Greye
 
 @Preview
@@ -348,7 +344,7 @@ fun day_Book_Item(index: Int, dayBookVoucher: DayBookVoucher){
             Box (modifier = Modifier
                 .fillMaxHeight()
                 .weight(.125f)
-                .border(0.2.dp, color = Color.White)){
+                .border(0.01.dp, color = Color.White)){
 
                 Text(fontSize = 12.sp,text = index.toString(), color = Color.White, maxLines = 1, modifier = Modifier
                     .wrapContentSize()
@@ -361,7 +357,7 @@ fun day_Book_Item(index: Int, dayBookVoucher: DayBookVoucher){
             Box (modifier = Modifier
                 .fillMaxHeight()
                 .weight(.3f)
-                .border(0.2.dp, color = Color.White)){
+                .border(0.01.dp, color = Color.White)){
                 Text(fontSize = 12.sp,text = account, color = Color.White, maxLines = 1, modifier = Modifier
                     .wrapContentSize()
                     .align(Alignment.Center)
@@ -372,7 +368,7 @@ fun day_Book_Item(index: Int, dayBookVoucher: DayBookVoucher){
             Box (modifier = Modifier
                 .fillMaxHeight()
                 .weight(.17f)
-                .border(0.2.dp, color = Color.White)){
+                .border(0.01.dp, color = Color.White)){
                 Text(fontSize = 12.sp,text = VoucherType, color = Color.White, maxLines = 1, modifier = Modifier
                     .wrapContentSize()
                     .align(Alignment.Center)
@@ -383,7 +379,7 @@ fun day_Book_Item(index: Int, dayBookVoucher: DayBookVoucher){
             Box (modifier = Modifier
                 .fillMaxHeight()
                 .weight(.2f)
-                .border(0.2.dp, color = Color.White)){
+                .border(0.01.dp, color = Color.White)){
                 Text(fontSize = 12.sp,text = amount.toString(), color = Color.White, maxLines = 1, modifier = Modifier
                     .wrapContentSize()
                     .align(Alignment.Center)
@@ -401,7 +397,7 @@ fun day_Book_Item(index: Int, dayBookVoucher: DayBookVoucher){
 fun DayBookColumn(list_of_DayBookVoucher : List<DayBookVoucher>){
     LazyColumn() {
         itemsIndexed(items = list_of_DayBookVoucher){ index, item ->
-            day_Book_Item(index, item)
+            day_Book_Item(index + 1, item)
         }
     }
 

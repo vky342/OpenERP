@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.vky342.openerp.data.dataInterface.Account
+import com.vky342.openerp.data.Entities.Account
 import com.vky342.openerp.ui.theme.Greye
 
 @Preview
