@@ -112,3 +112,9 @@ data class ledgerItem(
     val transactionType : String,
     val ForeignId : Int
 )
+
+data class DayBookVoucher(
+    val accountName : String,
+    val voucher_type : String,
+    val voucher_amount : Int
+)

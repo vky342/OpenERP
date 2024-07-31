@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.vky342.openerp.ui.screens.Ledgers.AccountLedgerScreen
 import com.vky342.openerp.ui.screens.Ledgers.Alloptionsforledger
+import com.vky342.openerp.ui.screens.Ledgers.DayBookScreen
 
 fun NavGraphBuilder.LedgerNavigationGraph(navController: NavHostController){
     navigation(route = Graph.LEDGER, startDestination = LedgerScreens.Alloptions){
@@ -16,10 +17,14 @@ fun NavGraphBuilder.LedgerNavigationGraph(navController: NavHostController){
         composable(route = LedgerScreens.AccountLedger){
             AccountLedgerScreen()
         }
+        composable(route = LedgerScreens.DayBook){
+            DayBookScreen()
+        }
     }
 }
 
 object LedgerScreens{
     val Alloptions = "alloptionsr"
     val AccountLedger = "accountLedger"
+    val DayBook = "daybook"
 }

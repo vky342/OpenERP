@@ -427,7 +427,7 @@ fun LedgerColumn(list_of_ledgerItem : List<ledgerItem>){
 @Composable
 fun LedgerItemCard(index: Int, item: ledgerItem){
     val height = LocalConfiguration.current.run { screenHeightDp.dp }
-    val boxHeight = height.value * 0.05
+    val boxHeight = height.value * 0.04
 
     val date  = item.date
 
@@ -450,7 +450,7 @@ fun LedgerItemCard(index: Int, item: ledgerItem){
                 .weight(.15f)
                 .border(0.2.dp, color = Color.White)){
 
-                Text(fontSize = 14.sp,text = index.toString(), color = Color.White, maxLines = 1, modifier = Modifier
+                Text(fontSize = 12.sp,text = index.toString(), color = Color.White, maxLines = 1, modifier = Modifier
                     .wrapContentSize()
                     .align(Alignment.Center)
                 )
@@ -462,7 +462,7 @@ fun LedgerItemCard(index: Int, item: ledgerItem){
                 .fillMaxHeight()
                 .weight(.3f)
                 .border(0.2.dp, color = Color.White)){
-                Text(fontSize = 15.sp,text = date.toString(), color = Color.White, maxLines = 1, modifier = Modifier
+                Text(fontSize = 12.sp,text = date.toString(), color = Color.White, maxLines = 1, modifier = Modifier
                     .wrapContentSize()
                     .align(Alignment.Center)
                 )
@@ -473,7 +473,7 @@ fun LedgerItemCard(index: Int, item: ledgerItem){
                 .fillMaxHeight()
                 .weight(.25f)
                 .border(0.2.dp, color = Color.White)){
-                Text(fontSize = 15.sp,text = transactionType, color = Color.White, maxLines = 1, modifier = Modifier
+                Text(fontSize = 12.sp,text = transactionType, color = Color.White, maxLines = 1, modifier = Modifier
                     .wrapContentSize()
                     .align(Alignment.Center)
                 )
@@ -484,7 +484,7 @@ fun LedgerItemCard(index: Int, item: ledgerItem){
                 .fillMaxHeight()
                 .weight(.18f)
                 .border(0.2.dp, color = Color.White)){
-                Text(fontSize = 15.sp,text = if(ledgerType == 0){"Debit"}else{"Credit"}, color = Color.White, maxLines = 1, modifier = Modifier
+                Text(fontSize = 12.sp,text = if(ledgerType == 0){"Debit"}else{"Credit"}, color = Color.White, maxLines = 1, modifier = Modifier
                     .wrapContentSize()
                     .align(Alignment.Center)
                 )
@@ -495,7 +495,7 @@ fun LedgerItemCard(index: Int, item: ledgerItem){
                 .fillMaxHeight()
                 .weight(.2f)
                 .border(0.2.dp, color = Color.White)){
-                Text(fontSize = 15.sp,text = amount.toString(), color = Color.White, maxLines = 1, modifier = Modifier
+                Text(fontSize = 12.sp,text = amount.toString(), color = Color.White, maxLines = 1, modifier = Modifier
                     .wrapContentSize()
                     .align(Alignment.Center)
                 )

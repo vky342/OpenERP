@@ -72,7 +72,7 @@ fun Alloptionsforledger(navController: NavController){
             .padding(25.dp),
             onClick = {
 
-               // navController.navigate(AccountScreens.MODIFY)
+               navController.navigate(LedgerScreens.DayBook)
 
             }, colors = CardDefaults.cardColors().copy(contentColor = Greye, containerColor = Color.LightGray)) {
             Row (modifier = Modifier
