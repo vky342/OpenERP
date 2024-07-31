@@ -101,75 +101,108 @@ fun BottomBar(navController: NavHostController){
     colorFilling()
 
     BottomAppBar(modifier = Modifier.height(topPadding.dp), containerColor = Color.LightGray){
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+        Box(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp), contentAlignment = Alignment.Center){
 
             Row (modifier = Modifier.wrapContentSize()){
 
-                Column(modifier = Modifier.fillMaxHeight()) {
+                Column(modifier = Modifier.fillMaxHeight().weight(1f)) {
 
-                    Icon(imageVector = HomeIcon, tint = HomeIconColor, contentDescription = "home", modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .size(IconHeight.dp)
-                        .clickable(onClick = {
-                            onScreen = 1
-                            navController.navigate(Graph.HOME) {
-                                popUpTo(navController.graph.findStartDestination().id)
-                                launchSingleTop = true
-                            }
-                        })
-                    )
-                    Text(text = "Home", color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight(weight = 700), modifier = Modifier.align(Alignment.CenterHorizontally))
+                    Box(modifier = Modifier
+                        .wrapContentSize()
+                        .align(Alignment.CenterHorizontally)){
+
+                        Column(modifier = Modifier.fillMaxHeight().align(Alignment.Center)) {
+                            Icon(imageVector = HomeIcon, tint = HomeIconColor, contentDescription = "home", modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .size(IconHeight.dp)
+                                .clickable(onClick = {
+                                    onScreen = 1
+                                    navController.navigate(Graph.HOME) {
+                                        popUpTo(navController.graph.findStartDestination().id)
+                                        launchSingleTop = true
+                                    }
+                                })
+                            )
+                            Text(text = "Home", color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight(weight = 700), modifier = Modifier.align(Alignment.CenterHorizontally))
+                        }
+                    }
 
                 }
-                Spacer(modifier = Modifier.width(50.dp))
 
-                Column (modifier = Modifier.fillMaxHeight()){
-                    Icon(imageVector = AccountIcon, tint = AccountColor, contentDescription = "Account", modifier = Modifier
-                        .size(IconHeight.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .clickable(onClick = {
-                            onScreen = 2
-                            navController.navigate(Graph.ACCOUNT) {
-                                popUpTo(navController.graph.findStartDestination().id)
-                                launchSingleTop = true
-                            }
-                        }))
-                    Text(text = "Account", color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight(700), modifier = Modifier.align(Alignment.CenterHorizontally))
+                Column (modifier = Modifier.fillMaxHeight().weight(1f)){
+
+                    Box(modifier = Modifier
+                        .wrapContentSize()
+                        .align(Alignment.CenterHorizontally)){
+
+                        Column(modifier = Modifier.fillMaxHeight().align(Alignment.Center)) {
+
+                            Icon(imageVector = AccountIcon, tint = AccountColor, contentDescription = "Account", modifier = Modifier
+                                .size(IconHeight.dp)
+                                .align(Alignment.CenterHorizontally)
+                                .clickable(onClick = {
+                                    onScreen = 2
+                                    navController.navigate(Graph.ACCOUNT) {
+                                        popUpTo(navController.graph.findStartDestination().id)
+                                        launchSingleTop = true
+                                    }
+                                }))
+                            Text(text = "Account", color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight(700), modifier = Modifier.align(Alignment.CenterHorizontally))
+
+                        }
+                    }
+
                 }
 
+                Column (modifier = Modifier.fillMaxHeight().weight(1f)){
 
-                Spacer(modifier = Modifier.width(50.dp))
 
-                Column (modifier = Modifier.fillMaxHeight()){
-                    Icon(imageVector = Transicon, tint = TransColor, contentDescription = "ADD Sale", modifier = Modifier
-                        .size(IconHeight.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .clickable(onClick = {
-                            onScreen = 3
-                            navController.navigate(Graph.TRANSACTION) {
-                                popUpTo(navController.graph.findStartDestination().id)
-                                launchSingleTop = true
-                            }
-                        }))
+                    Box(modifier = Modifier
+                        .wrapContentSize()
+                        .align(Alignment.CenterHorizontally)){
 
-                    Text(text = "Bills", color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight(700), modifier = Modifier.align(Alignment.CenterHorizontally))
+                        Column(modifier = Modifier.fillMaxHeight().align(Alignment.Center)) {
+                            Icon(imageVector = Transicon, tint = TransColor, contentDescription = "ADD Sale", modifier = Modifier
+                                .size(IconHeight.dp)
+                                .align(Alignment.CenterHorizontally)
+                                .clickable(onClick = {
+                                    onScreen = 3
+                                    navController.navigate(Graph.TRANSACTION) {
+                                        popUpTo(navController.graph.findStartDestination().id)
+                                        launchSingleTop = true
+                                    }
+                                }))
+
+                            Text(text = "Bills", color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight(700), modifier = Modifier.align(Alignment.CenterHorizontally))
+
+
+                        }
+                    }
                 }
 
-                Spacer(modifier = Modifier.width(50.dp))
+                Column (modifier = Modifier.fillMaxHeight().weight(1f)){
 
-                Column (modifier = Modifier.fillMaxHeight()){
-                    Icon(imageVector = Ledger, tint = ledgerColor, contentDescription = "ADD Sale", modifier = Modifier
-                        .size(IconHeight.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .clickable(onClick = {
-                            onScreen = 4
-                            navController.navigate(Graph.LEDGER) {
-                                popUpTo(navController.graph.findStartDestination().id)
-                                launchSingleTop = true
-                            }
-                        }))
+                    Box(modifier = Modifier
+                        .wrapContentSize()
+                        .align(Alignment.CenterHorizontally)){
 
-                    Text(text = "Ledger", color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight(700), modifier = Modifier.align(Alignment.CenterHorizontally))
+                        Column(modifier = Modifier.fillMaxHeight().align(Alignment.Center)) {
+                            Icon(imageVector = Ledger, tint = ledgerColor, contentDescription = "ADD Sale", modifier = Modifier
+                                .size(IconHeight.dp)
+                                .align(Alignment.CenterHorizontally)
+                                .clickable(onClick = {
+                                    onScreen = 4
+                                    navController.navigate(Graph.LEDGER) {
+                                        popUpTo(navController.graph.findStartDestination().id)
+                                        launchSingleTop = true
+                                    }
+                                }))
+
+                            Text(text = "Ledger", color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight(700), modifier = Modifier.align(Alignment.CenterHorizontally))
+                        }
+
+                    }
+
                 }
 
             }

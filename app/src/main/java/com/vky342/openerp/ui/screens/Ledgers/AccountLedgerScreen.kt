@@ -197,7 +197,10 @@ fun AccountLedgerScreen(){
                     Color.Black,
                     Greye,
                     Color.Gray,
-                    Color.LightGray
+                    Color.LightGray,
+                    Color.Gray,
+                    Greye,
+                    Color.Black
                 )
             )
         )
