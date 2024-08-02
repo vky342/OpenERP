@@ -10,7 +10,7 @@ import com.vky342.openerp.ui.screens.HOMES.HomeScreen
 fun NavGraphBuilder.HomeNavigationGraph(navController: NavHostController){
     navigation(startDestination = "HomeScreen", route = Graph.HOME){
         composable(route = "HomeScreen"){
-            HomeScreen()
+            HomeScreen(navController)
         }
     }
 }

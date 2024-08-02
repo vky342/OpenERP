@@ -16,3 +16,8 @@ data class DayBookVoucher(
     val voucher_type : String,
     val voucher_amount : Int
 )
+
+data class InventoryListItem(
+    val itemName : String,
+    val itemQuantity : Int
+)

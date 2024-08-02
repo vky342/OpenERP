@@ -12,6 +12,7 @@ fun RootNavigationGraph(navController: NavHostController, paddingValues: Padding
         AccountNavigationGraph(navController = navController)
         TransactionNavGraph(navController = navController)
         LedgerNavigationGraph(navController = navController)
+        InvontoryNavigationGraph(navController = navController)
     }
 }
 
@@ -21,5 +22,6 @@ object Graph {
     const val ACCOUNT = "Account_graph"
     const val TRANSACTION = "Transaction_graph"
     const val LEDGER = "Ledger_graph"
+    const val INVENTORY = "Inventory_graph"
 }
 

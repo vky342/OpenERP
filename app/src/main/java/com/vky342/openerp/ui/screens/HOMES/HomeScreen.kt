@@ -1,6 +1,8 @@
 package com.vky342.openerp.ui.screens.HOMES
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,10 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Info
@@ -24,14 +28,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback.ShapeProvider
 import com.vky342.openerp.data.Entities.Item
+import com.vky342.openerp.ui.Graphs.Graph
 import com.vky342.openerp.ui.theme.Greye
 import com.vky342.openerp.ui.theme.GreyeHome
 import com.vky342.openerp.ui.theme.InventoryIconPin
@@ -39,9 +49,9 @@ import com.vky342.openerp.ui.theme.Purple80
 import com.vky342.openerp.ui.theme.ReceiptIconPin
 import com.vky342.openerp.ui.theme.SaleiconPin
 
-@Preview
+
 @Composable
-fun HomeScreen(){
+fun HomeScreen(navController: NavController){
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val topPadding = height.value * 0.1
     Column (modifier = Modifier
@@ -57,7 +67,12 @@ fun HomeScreen(){
         Box(modifier = Modifier
             .wrapContentSize()
             .align(Alignment.CenterHorizontally)){
-            inventoryStatusCard()
+            inventoryStatusCard(toInventory = { navController.navigate(Graph.INVENTORY) {
+                popUpTo(navController.graph.findStartDestination().id)
+                launchSingleTop = true
+                    }
+                }
+            )
         }
 
 
@@ -79,7 +94,8 @@ fun SaleStatusCard(){
         .height(cardHeight.dp)
         .width(cardWidth.dp)
         .padding(horizontal = sidePadding)
-        .padding(top = 32.dp, bottom = 16.dp),
+        .padding(top = 32.dp, bottom = 16.dp)
+        .border(width = 1.dp, color = SaleiconPin, shape = CardDefaults.shape),
         colors = CardDefaults.cardColors().copy(containerColor = Greye),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
     ){
@@ -115,7 +131,9 @@ fun ReceiptStatusCard(){
         .height(cardHeight.dp)
         .width(cardWidth.dp)
         .padding(horizontal = sidePadding)
-        .padding(top = 32.dp, bottom = 16.dp), colors = CardDefaults.cardColors().copy(containerColor = Greye),
+        .padding(top = 32.dp, bottom = 16.dp)
+        .border(width = 1.dp, color = ReceiptIconPin, shape = CardDefaults.shape)
+        , colors = CardDefaults.cardColors().copy(containerColor = Greye),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
     ){
 
@@ -141,7 +159,7 @@ fun ReceiptStatusCard(){
 
 
 @Composable
-fun inventoryStatusCard(){
+fun inventoryStatusCard( toInventory : () -> Unit){
 
     val sampleItems = listOf(
         Item(
@@ -173,7 +191,8 @@ fun inventoryStatusCard(){
     Card(modifier = Modifier
         .height(cardHeight.dp)
         .fillMaxWidth()
-        .padding(horizontal = sidePadding, vertical = 16.dp),
+        .padding(horizontal = sidePadding, vertical = 16.dp)
+        .border(width = 1.dp, color = InventoryIconPin, shape = CardDefaults.shape),
         colors = CardDefaults.cardColors().copy(containerColor = Greye),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
     ) {
@@ -209,7 +228,9 @@ fun inventoryStatusCard(){
                 .align(
                     Alignment.BottomEnd
                 )
-                .padding(10.dp))
+                .padding(10.dp)
+                .clickable { toInventory() }
+            )
         }
     }
 

@@ -58,6 +58,7 @@ import androidx.compose.ui.window.PopupProperties
 import com.vky342.openerp.data.Entities.Bill
 import com.vky342.openerp.data.Entities.BillEntry
 import com.vky342.openerp.ui.theme.Greye
+import com.vky342.openerp.ui.theme.ReceiptIconPin
 import kotlin.math.round
 
 
@@ -899,11 +900,12 @@ fun PartsItems(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(vertical = 2.dp, horizontal = 5.dp)
             .clickable {
                 onSelect(name)
             }
     ) {
-        Text(text = name, fontSize = 16.sp)
+        Text(text = name, fontSize = 16.sp, color = ReceiptIconPin)
     }
 
 }
