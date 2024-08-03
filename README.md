@@ -13,7 +13,7 @@ App uses MVVM architecture , with Room library for database and Jetpack Compose 
 
 ## Roadmap
 
-- Create Database (Will be updated on they way as the project goes on)
+- Create Database (Will be updated on they way as the project goes on).
 
 - Create interface for Database.
 
