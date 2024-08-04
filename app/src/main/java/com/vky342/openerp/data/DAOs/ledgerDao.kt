@@ -24,10 +24,10 @@ interface ledgerDao{
 
     // Function for Screening
 
-    @Query("SELECT * FROM ledgers")
+    @Query("SELECT * FROM Ledgers")
     fun getAllLedger() : Flow<List<Ledger>>
 
-    @Query("SELECT * FROM ledgers WHERE accountNameFk = :name")
+    @Query("SELECT * FROM Ledgers WHERE accountNameFk = :name")
     fun getLedgerByAccountName(name : String) : Flow<Ledger>
 
 }

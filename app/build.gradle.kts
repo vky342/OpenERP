@@ -1,8 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.devtools.ksp") version "2.0.0-1.0.21"
     id("org.jetbrains.kotlin.plugin.compose") version "2.0.0"
+    id("kotlin-kapt")
+
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -20,6 +23,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
     }
 
     buildTypes {
@@ -76,7 +80,25 @@ dependencies {
 
     val nav_version = "2.7.7"
 
-    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
-    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
-    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.compose)
+
+
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.room.ktx)
+
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+
+
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }
