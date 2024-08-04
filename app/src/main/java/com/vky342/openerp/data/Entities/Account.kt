@@ -9,7 +9,8 @@ data class Account(
     val name : String,
     val address : String,
     val contact : Int,
-    val netBalance : Int,
+    val StartingBalance : Int,
+    val StartingBalanceType : String
 
     // Foreign key
 

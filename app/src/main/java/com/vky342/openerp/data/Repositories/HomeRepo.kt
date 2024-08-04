@@ -8,9 +8,5 @@ import javax.inject.Inject
 
 
 class HomeRepo ( private val openERPDataBase: OpenERPDataBase){
-    val account_dao = openERPDataBase.getAccountDao()
-    suspend fun add_account(){
-        account_dao.insert(Account(name = "kunal", address = "India", contact = 4283584, netBalance = 500))
-        Log.d("ADDED", "ACCOUNT HOME repo")
-    }
+
 }

@@ -1,5 +1,6 @@
 package com.vky342.openerp.ui.screens.ACCOUNTS
 
+import android.credentials.Credential
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -32,58 +33,16 @@ fun ListAllAccountsScreen(){
     val heightval = topPadding/2.5
 
     val AllAccount = listOf(
-        Account(name = "kunal", address = "collony", contact = 23423, netBalance = 123),
-        Account(name = "rahul", address = "sakti", contact = 234234, netBalance = 1231),
-        Account(name = "satyam", address = "sakti", contact = 2413, netBalance = 0),
-        Account(name = "nini", address = "sai vihar", contact = 1242453, netBalance = 796),
-        Account(name = "kuchcs", address = "sesk", contact = 2412,235),
-        Account("sbjvdb","shvbdj",214,2353),
-        Account("shjvbdk","vbsdkvbs",3423,3423),
-        Account("svjdb","kdfjn",12443,5968),
-        Account(name = "sdvkl", address = "collony", contact = 23423, netBalance = 123),
-        Account(name = "sefnks", address = "sakti", contact = 234234, netBalance = 1231),
-        Account(name = "sjbsnvs", address = "sakti", contact = 2413, netBalance = 0),
-        Account(name = "nrjvdr", address = "sai vihar", contact = 1242453, netBalance = 796),
-        Account(name = "erghvkd", address = "sesk", contact = 2412,235),
-        Account("vkjc","shvbdj",214,2353),
-        Account("sefhie","vbsdkvbs",3423,3423),
-        Account("wefnkw","kdfjn",12443,5968),
-
-        Account(name = "kunal", address = "collony", contact = 23423, netBalance = 123),
-        Account(name = "rahul", address = "sakti", contact = 234234, netBalance = 1231),
-        Account(name = "satyam", address = "sakti", contact = 2413, netBalance = 0),
-        Account(name = "nini", address = "sai vihar", contact = 1242453, netBalance = 796),
-        Account(name = "kuchcs", address = "sesk", contact = 2412,235),
-        Account("sbjvdb","shvbdj",214,2353),
-        Account("shjvbdk","vbsdkvbs",3423,3423),
-        Account("svjdb","kdfjn",12443,5968),
-        Account(name = "sdvkl", address = "collony", contact = 23423, netBalance = 123),
-        Account(name = "sefnks", address = "sakti", contact = 234234, netBalance = 1231),
-        Account(name = "sjbsnvs", address = "sakti", contact = 2413, netBalance = 0),
-        Account(name = "nrjvdr", address = "sai vihar", contact = 1242453, netBalance = 796),
-        Account(name = "erghvkd", address = "sesk", contact = 2412,235),
-        Account("vkjc","shvbdj",214,2353),
-        Account("sefhie","vbsdkvbs",3423,3423),
-        Account("wefnkw","kdfjn",12443,5968),
-
-        Account(name = "kunal", address = "collony", contact = 23423, netBalance = 123),
-        Account(name = "rahul", address = "sakti", contact = 234234, netBalance = 1231),
-        Account(name = "satyam", address = "sakti", contact = 2413, netBalance = 0),
-        Account(name = "nini", address = "sai vihar", contact = 1242453, netBalance = 796),
-        Account(name = "kuchcs", address = "sesk", contact = 2412,235),
-        Account("sbjvdb","shvbdj",214,2353),
-        Account("shjvbdk","vbsdkvbs",3423,3423),
-        Account("svjdb","kdfjn",12443,5968),
-        Account(name = "sdvkl", address = "collony", contact = 23423, netBalance = 123),
-        Account(name = "sefnks", address = "sakti", contact = 234234, netBalance = 1231),
-        Account(name = "sjbsnvs", address = "sakti", contact = 2413, netBalance = 0),
-        Account(name = "nrjvdr", address = "sai vihar", contact = 1242453, netBalance = 796),
-        Account(name = "erghvkd", address = "sesk", contact = 2412,235),
-        Account("vkjc","shvbdj",214,2353),
-        Account("sefhie","vbsdkvbs",3423,3423),
-        Account("wefnkw","kdfjn",12443,5968)
-        )
-
+        Account(name = "kunal", address = "collony", contact = 23423, StartingBalance = 123, StartingBalanceType = "CR"),
+        Account(name = "rahul", address = "sakti", contact = 234234, StartingBalance = 1231, StartingBalanceType = "CR"),
+        Account(name = "satyam", address = "sakti", contact = 2413, StartingBalance = 0, StartingBalanceType = "CR"),
+        Account(name = "nini", address = "sai vihar", contact = 1242453, StartingBalance = 796, StartingBalanceType = "CR"),
+        Account(name = "kuchcs", address = "sesk", contact = 2412,235, StartingBalanceType = "CR"),
+        Account("sbjvdb","shvbdj",214,2353, StartingBalanceType = "CR"),
+        Account("shjvbdk","vbsdkvbs",3423,3423, StartingBalanceType = "CR"),
+        Account("svjdb","kdfjn",12443,5968, StartingBalanceType = "CR"),
+        Account(name = "sdvkl", address = "collony", contact = 23423, StartingBalance = 123, StartingBalanceType = "CR")
+    )
     Column(modifier = Modifier
         .background(color = Greye)
         .fillMaxSize()
@@ -214,7 +173,7 @@ fun AccountListItem(index : Int, account: Account){
             .weight(weight = .15f)
             .border(width = 1.dp, color = Color.Black)){ // net balance
 
-            Text(color = Greye,text = account.netBalance.toString(), modifier = Modifier
+            Text(color = Greye,text = account.StartingBalance.toString(), modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(), fontSize = 11.sp)
 

@@ -12,19 +12,5 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val homeRepo: HomeRepo) : ViewModel() {
 
-    override fun onCleared() {
-        Log.d("VIEW model", "ended")
-        super.onCleared()
-    }
-
-    fun Status_S(){
-        Log.d("STATUS", "on ViewModel")
-    }
-
-    fun add_account_on_viewModel(){
-        viewModelScope.launch {
-            homeRepo.add_account()
-        }
-    }
 
 }
