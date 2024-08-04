@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "BillEntries",
     foreignKeys = [
-        ForeignKey(entity = Bill::class, parentColumns = ["BillId"], childColumns = ["BillIdFk"], onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE),
+        ForeignKey(entity = Bill::class, parentColumns = ["billId"], childColumns = ["billIdFk"], onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE),
         ForeignKey(entity = Item::class, parentColumns = ["itemName"], childColumns = ["itemNameFk"], onDelete = ForeignKey.NO_ACTION, onUpdate = ForeignKey.CASCADE)
     ])
 data class BillEntry(

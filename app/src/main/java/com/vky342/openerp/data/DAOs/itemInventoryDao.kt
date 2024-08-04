@@ -23,9 +23,9 @@ interface itemInventoryDao {
 
     // Functions for screening
 
-    @Query("SELECT * FROM iteminventory")
+    @Query("SELECT * FROM ItemInventory")
     fun getAllItemInInventory() : Flow<List<Item>>
 
-    @Query("SELECT * FROM iteminventory WHERE itemName = :name")
+    @Query("SELECT * FROM ItemInventory WHERE itemName = :name")
     fun getItemByName(name : String) : Flow<Item>
 }

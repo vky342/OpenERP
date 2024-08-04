@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.Flow
 interface billentriesDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insert(billEntries: BillEntry)
+    suspend fun insert(billEntry: BillEntry)
 
     @Update(onConflict = OnConflictStrategy.ABORT)
-    suspend fun update(billEntries: BillEntry)
+    suspend fun update(billEntry: BillEntry)
 
     @Delete
-    suspend fun delete(billEntries: BillEntry)
+    suspend fun delete(billEntry: BillEntry)
 
     // Function for screening
 

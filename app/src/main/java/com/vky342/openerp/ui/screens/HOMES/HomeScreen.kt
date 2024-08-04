@@ -11,12 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Info
@@ -28,19 +26,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback.ShapeProvider
 import com.vky342.openerp.data.Entities.Item
+import com.vky342.openerp.data.ViewModels.HomeViewModel
 import com.vky342.openerp.ui.Graphs.Graph
 import com.vky342.openerp.ui.theme.Greye
 import com.vky342.openerp.ui.theme.GreyeHome
@@ -51,9 +49,12 @@ import com.vky342.openerp.ui.theme.SaleiconPin
 
 
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hiltViewModel(navController.getBackStackEntry("HomeScreen"))){
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val topPadding = height.value * 0.1
+
+    homeViewModel.Status_S()
+
     Column (modifier = Modifier
         .fillMaxSize()
         .background(color = GreyeHome)
@@ -80,7 +81,6 @@ fun HomeScreen(navController: NavController){
 
 }
 
-@Preview
 @Composable
 fun SaleStatusCard(){
 

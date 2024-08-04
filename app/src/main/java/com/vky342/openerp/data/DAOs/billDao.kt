@@ -23,18 +23,18 @@ interface billsDao {
 
     // Function fro screening
 
-    @Query("SELECT * FROM bills")
+    @Query("SELECT * FROM Bills")
     fun getAllBills() : Flow<List<Bill>>
 
-    @Query("SELECT * FROM bills WHERE billDate = :date")
+    @Query("SELECT * FROM Bills WHERE billDate = :date")
     fun getBillsByDate(date : Int) : Flow<List<Bill>>
 
-    @Query("SELECT * FROM bills WHERE ledgerType = :type")
+    @Query("SELECT * FROM Bills WHERE ledgerType = :type")
     fun getBillsByType(type : Int) : Flow<List<Bill>>
 
     @Query("SELECT * FROM Bills WHERE accountNameFk = :name")
     fun getBillsByAccountName(name : String) : Flow<List<Bill>>
 
-    @Query("SELECT billId FROM bills")
-    fun getListOfBillId() : Flow<List<Int>>
+//    @Query("SELECT billId FROM Bills")
+//    fun getListOfBillId() : Flow<List<Int>>
 }
