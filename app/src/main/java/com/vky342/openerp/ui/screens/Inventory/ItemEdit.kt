@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.vky342.openerp.data.Entities.Item
-import com.vky342.openerp.ui.screens.transactions.PartsItems
 import com.vky342.openerp.ui.screens.transactions.list_of_all_account_name
 import com.vky342.openerp.ui.theme.Greye
 import com.vky342.openerp.ui.theme.GreyeHome
@@ -121,46 +120,46 @@ fun SearchCard(){
     }
 
     if (itemNameExpander.value){
-        Popup(alignment = Alignment.TopCenter,
-            offset = IntOffset(x = 0, y = (cardHeight * 2.3).toInt()),
-            properties = PopupProperties(excludeFromSystemGesture = true),
-            onDismissRequest = {itemNameExpander.value = false}) {
-            val columheight = column_height_for_itemNameExpander
-            val rowWidth = row_width_for_itemNameExpander
-            LazyColumn(
-                modifier = Modifier
-                    .heightIn(max = columheight.dp)
-                    .width(rowWidth.dp)
-                    .background(color = Greye)
-            ) {
-
-                if (itemName.value.isNotEmpty()) {
-                    items(
-                        list_of_all_item.filter {
-                            it.lowercase()
-                                .contains(itemName.value.lowercase()) || it.lowercase()
-                                .contains("others")
-                        }
-                            .sorted()
-                    ) {
-                        PartsItems(name = it) { name ->
-                            itemName.value = name
-                            itemNameExpander.value = false
-                        }
-                    }
-                } else {
-                    items(
-                        list_of_all_item.sorted()
-                    ) {
-                        PartsItems(name = it) { name ->
-                            itemName.value = name
-                            itemNameExpander.value = false
-                        }
-                    }
-                }
-
-            }
-        }
+//        Popup(alignment = Alignment.TopCenter,
+//            offset = IntOffset(x = 0, y = (cardHeight * 2.3).toInt()),
+//            properties = PopupProperties(excludeFromSystemGesture = true),
+//            onDismissRequest = {itemNameExpander.value = false}) {
+//            val columheight = column_height_for_itemNameExpander
+//            val rowWidth = row_width_for_itemNameExpander
+//            LazyColumn(
+//                modifier = Modifier
+//                    .heightIn(max = columheight.dp)
+//                    .width(rowWidth.dp)
+//                    .background(color = Greye)
+//            ) {
+//
+//                if (itemName.value.isNotEmpty()) {
+//                    items(
+//                        list_of_all_item.filter {
+//                            it.lowercase()
+//                                .contains(itemName.value.lowercase()) || it.lowercase()
+//                                .contains("others")
+//                        }
+//                            .sorted()
+//                    ) {
+//                        PartsItems(name = it) { name ->
+//                            itemName.value = name
+//                            itemNameExpander.value = false
+//                        }
+//                    }
+//                } else {
+//                    items(
+//                        list_of_all_item.sorted()
+//                    ) {
+//                        PartsItems(name = it) { name ->
+//                            itemName.value = name
+//                            itemNameExpander.value = false
+//                        }
+//                    }
+//                }
+//
+//            }
+//        }
     }
 
 }

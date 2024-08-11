@@ -1,0 +1,27 @@
+package com.vky342.openerp.data.DAOs
+
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
+import com.vky342.openerp.data.Entities.Purcahase
+
+@Dao
+interface PurchaseDao {
+    @Insert
+    suspend fun insert(purchase : Purcahase)
+
+    @Update
+    suspend fun update(purchase : Purcahase)
+
+    @Delete
+    suspend fun delete(purchase : Purcahase)
+
+    @Query("SELECT * FROM Purchases")
+    fun getAllPurchase() : List<Purcahase>
+
+    @Query("SELECT * FROM Purchases WHERE ledgerId = :ledgerId")
+    fun getPurchaseByLedgerId(ledgerId : Int) : List<Purcahase>
+
+}

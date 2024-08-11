@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.vky342.openerp.data.Entities.GeneralDataClasses.ledgerItem
-import com.vky342.openerp.ui.screens.transactions.PartsItems
 import com.vky342.openerp.ui.screens.transactions.list_of_all_account_name
 import com.vky342.openerp.ui.theme.Greye
 import java.time.LocalDate
@@ -233,46 +232,46 @@ fun AccountLedgerScreen(){
 
         // POP up for auto complete search
         if (accountNameExpander){
-            Popup(alignment = Alignment.TopCenter,
-                offset = IntOffset(x = 0, y = Row_height_for_Billinfo.toInt() * 5),
-                properties = PopupProperties(excludeFromSystemGesture = true),
-                onDismissRequest = {accountNameExpander = false}) {
-                val columheight = Row_height_for_Billinfo * 4
-                val rowWidth = columheight * 2
-                LazyColumn(
-                    modifier = Modifier
-                        .heightIn(max = columheight.dp)
-                        .width(rowWidth.dp)
-                        .background(color = Color.LightGray)
-                ) {
-
-                    if (accountName.isNotEmpty()) {
-                        items(
-                            list_of_all_account_name.filter {
-                                it.lowercase()
-                                    .contains(accountName.lowercase()) || it.lowercase()
-                                    .contains("others")
-                            }
-                                .sorted()
-                        ) {
-                            PartsItems(name = it) { name ->
-                                accountName = name
-                                accountNameExpander = false
-                            }
-                        }
-                    } else {
-                        items(
-                            list_of_all_account_name.sorted()
-                        ) {
-                            PartsItems(name = it) { name ->
-                                accountName = name
-                                accountNameExpander = false
-                            }
-                        }
-                    }
-
-                }
-            }
+//            Popup(alignment = Alignment.TopCenter,
+//                offset = IntOffset(x = 0, y = Row_height_for_Billinfo.toInt() * 5),
+//                properties = PopupProperties(excludeFromSystemGesture = true),
+//                onDismissRequest = {accountNameExpander = false}) {
+//                val columheight = Row_height_for_Billinfo * 4
+//                val rowWidth = columheight * 2
+//                LazyColumn(
+//                    modifier = Modifier
+//                        .heightIn(max = columheight.dp)
+//                        .width(rowWidth.dp)
+//                        .background(color = Color.LightGray)
+//                ) {
+//
+//                    if (accountName.isNotEmpty()) {
+//                        items(
+//                            list_of_all_account_name.filter {
+//                                it.lowercase()
+//                                    .contains(accountName.lowercase()) || it.lowercase()
+//                                    .contains("others")
+//                            }
+//                                .sorted()
+//                        ) {
+//                            PartsItems(name = it) { name ->
+//                                accountName = name
+//                                accountNameExpander = false
+//                            }
+//                        }
+//                    } else {
+//                        items(
+//                            list_of_all_account_name.sorted()
+//                        ) {
+//                            PartsItems(name = it) { name ->
+//                                accountName = name
+//                                accountNameExpander = false
+//                            }
+//                        }
+//                    }
+//
+//                }
+//            }
         }
     }
 

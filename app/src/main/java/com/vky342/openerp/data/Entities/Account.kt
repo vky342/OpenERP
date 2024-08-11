@@ -8,10 +8,5 @@ data class Account(
     @PrimaryKey
     val name : String,
     val address : String,
-    val contact : Int,
-    val StartingBalance : Int,
-    val StartingBalanceType : String
-
-    // Foreign key
-
+    val contact : Int
 )

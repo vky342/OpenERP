@@ -38,14 +38,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.vky342.openerp.data.Entities.Account
-import com.vky342.openerp.data.ViewModels.Add_Account_VM
+import com.vky342.openerp.data.ViewModels.Account.Add_and_Modify_Account_VM
 import com.vky342.openerp.ui.theme.Greye
 import com.vky342.openerp.ui.theme.GreyeHome
 import com.vky342.openerp.ui.theme.ReceiptIconPin
 
-@Preview
+
 @Composable
-fun AddA_Account_Screen( viewModel: Add_Account_VM = hiltViewModel()){
+fun AddA_Account_Screen( viewModel: Add_and_Modify_Account_VM = hiltViewModel()){
 
 
     val height = LocalConfiguration.current.run { screenHeightDp.dp }
@@ -91,9 +91,7 @@ fun AddA_Account_Screen( viewModel: Add_Account_VM = hiltViewModel()){
             .align(Alignment.CenterHorizontally)
             .wrapContentSize(),onClick = {
                 // View Model event call back for saving account
-                val starting_balance_Type = if(balanceType == false){"DEBIT"}else{"CREDIT"}
 
-                viewModel.add_account(Account(name,address,contact.toInt(),starting_balance.toInt(),starting_balance_Type))
                 name = ""
                 address = ""
                 contact = ""

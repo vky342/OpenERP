@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface accountsDao {
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert
     suspend fun insert(account: Account)
 
-    @Update(onConflict = OnConflictStrategy.ABORT)
+    @Update
     suspend fun update(account: Account)
 
     @Delete
@@ -24,9 +24,9 @@ interface accountsDao {
     // Functions for screening
 
     @Query("SELECT * FROM Accounts")
-    fun getAllAccounts() : Flow<List<Account>>
+    fun getAllAccounts() : List<Account>
 
     @Query("SELECT * FROM Accounts WHERE name = :name")
-    fun getAccountByName(name : String) : Flow<Account>
+    fun getAccountByName(name : String) : Account
 
 }

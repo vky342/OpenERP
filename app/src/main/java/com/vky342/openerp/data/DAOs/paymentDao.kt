@@ -8,14 +8,15 @@ import androidx.room.Query
 import androidx.room.Update
 import com.vky342.openerp.data.Entities.Payment
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 @Dao
 interface paymentsDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert
     suspend fun insert(payment: Payment)
 
-    @Update(onConflict = OnConflictStrategy.IGNORE)
+    @Update
     suspend fun update(payment: Payment)
 
     @Delete
@@ -24,11 +25,11 @@ interface paymentsDao {
     // Function for screening
 
     @Query("SELECT * FROM Payments")
-    fun getAllPayments() : Flow<List<Payment>>
+    fun getAllPayments() : List<Payment>
 
     @Query("SELECT * FROM Payments WHERE paymentDate = :date")
-    fun getAllPaymentOnDate(date: Int) : Flow<List<Payment>>
+    fun getAllPaymentOnDate(date: String) : List<Payment>
 
-    @Query("SELECT * FROM Payments WHERE accountLedgerId = :ledgerId")
-    fun getAllPaymentsInLedger(ledgerId : Int) : Flow<List<Payment>>
+    @Query("SELECT * FROM Payments WHERE ledgerId = :ledgerId")
+    fun getAllPaymentsInLedger(ledgerId : Int) : List<Payment>
 }

@@ -4,13 +4,10 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "Ledgers", foreignKeys = [ForeignKey(entity = Account::class, parentColumns = ["name"], childColumns = ["accountNameFk"], onDelete = ForeignKey.CASCADE)])
+@Entity(tableName = "Ledgers")
 data class Ledger(
     @PrimaryKey(autoGenerate = true)
     val ledgerId : Int,
     val ledgerNetBalance: Int,
-
-    // Foreign Keys
-
-    val accountNameFk : String,
+    val accountName : String,
 )

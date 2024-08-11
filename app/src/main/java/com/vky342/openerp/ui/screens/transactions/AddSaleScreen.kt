@@ -51,12 +51,11 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.vky342.openerp.data.Entities.BillEntry
+import com.vky342.openerp.data.Entities.Sale
 import com.vky342.openerp.ui.Graphs.TransactionScreen
 import com.vky342.openerp.ui.theme.Greye
 import com.vky342.openerp.ui.theme.Purple40
 import kotlinx.coroutines.launch
-import kotlin.math.round
 
 
 @Composable
@@ -95,7 +94,7 @@ fun AddSaleScreen(navController: NavHostController){
 
     var billtype = 0 // 0 for sale
 
-    val BillEntries : MutableList<BillEntry> = remember{ mutableListOf()}
+    val BillEntries : MutableList<Sale> = remember{ mutableListOf()}
 
     val List_of_All_account = listOf(
         "Food",
@@ -290,48 +289,46 @@ fun AddSaleScreen(navController: NavHostController){
 
             }
             if (accountNameExpander){
-                Popup(alignment = Alignment.TopCenter, offset = IntOffset(x = 0, y = 0),properties = PopupProperties(excludeFromSystemGesture = true), onDismissRequest = {accountNameExpander = false}) {
-                    val columheight = RowHeight * 4
-                    LazyColumn(
-                        modifier = Modifier
-                            .heightIn(max = columheight.dp)
-                            .background(color = Color.White),
-                    ) {
-
-                        if (accountName.isNotEmpty()) {
-                            items(
-                                List_of_All_account.filter {
-                                    it.lowercase()
-                                        .contains(accountName.lowercase()) || it.lowercase()
-                                        .contains("others")
-                                }
-                                    .sorted()
-                            ) {
-                                PartsItems(name = it) { name ->
-                                    accountName = name
-                                    accountNameExpander = false
-                                }
-                            }
-                        } else {
-                            items(
-                                List_of_All_account.sorted()
-                            ) {
-                                PartsItems(name = it) { name ->
-                                    accountName = name
-                                    accountNameExpander = false
-                                }
-                            }
-                        }
-
-
-
-                    }
-                }
+//                Popup(alignment = Alignment.TopCenter, offset = IntOffset(x = 0, y = 0),properties = PopupProperties(excludeFromSystemGesture = true), onDismissRequest = {accountNameExpander = false}) {
+//                    val columheight = RowHeight * 4
+//                    LazyColumn(
+//                        modifier = Modifier
+//                            .heightIn(max = columheight.dp)
+//                            .background(color = Color.White),
+//                    ) {
+//
+//                        if (accountName.isNotEmpty()) {
+//                            items(
+//                                List_of_All_account.filter {
+//                                    it.lowercase()
+//                                        .contains(accountName.lowercase()) || it.lowercase()
+//                                        .contains("others")
+//                                }
+//                                    .sorted()
+//                            ) {
+//                                PartsItems(name = it) { name ->
+//                                    accountName = name
+//                                    accountNameExpander = false
+//                                }
+//                            }
+//                        } else {
+//                            items(
+//                                List_of_All_account.sorted()
+//                            ) {
+//                                PartsItems(name = it) { name ->
+//                                    accountName = name
+//                                    accountNameExpander = false
+//                                }
+//                            }
+//                        }
+//
+//
+//
+//                    }
+//                }
             }
         }
-        fun AddbilltoBillEntries(BillEntry : BillEntry){
-            BillEntries.add(BillEntry)
-        }
+
 
         Column(modifier = Modifier
             .fillMaxWidth()
@@ -360,9 +357,6 @@ fun AddSaleScreen(navController: NavHostController){
                             //do nothing
                         }
                     },
-                    billEntryAddition = {
-                        BillEntries.add(it)
-                    },
                     removefromBillEntries = {BillEntries.removeAt(it - 1)}
                 )
             }
@@ -379,15 +373,7 @@ fun AddSaleScreen(navController: NavHostController){
             onClick = {
                 // save Bill first
                 // then run a loop for saving every billEntry
-                Log.d("SAVING", "Saved BIll - $billId")
 
-                Log.d("STATUS OF BillEntries", "$BillEntries")
-
-                for (billentry in BillEntries){
-                    Log.d("SAVING", "SAVED Bill entry - ${billentry.entryId} :: ${billentry.itemNameFk}")
-                }
-
-                newBill()
             }
         ) {
             Text(text = "save", fontWeight = FontWeight(500),fontSize = 20.sp)
@@ -404,7 +390,6 @@ fun ItemEntryRow(billId : Int, index : Int,
                  categories : List<String>,
                  focusChange : () -> Unit,
                  removeItemEntryRow : () -> Unit,
-                 billEntryAddition : (BillEntry) -> Unit,
                  removefromBillEntries : (Int) -> Unit){
 
     val (itemname, itemquantity, itemprice,itemdisc) = remember { FocusRequester.createRefs() }
@@ -590,31 +575,9 @@ fun ItemEntryRow(billId : Int, index : Int,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(onNext = {
 
-                    if(item_discount != ""){
-                        addNewItemEntryRow()
-                        val itemno : Int = item_quantity.toInt()
-                        val itemtempprice : Double = item_Price.toDouble()
-                        val discountamnt = item_discount.toDouble()
-                        val upperfract : Double = 100 - discountamnt
-                        val finaldiscamnt : Double = upperfract / 100
 
-                        item_total_price = itemno * itemtempprice * finaldiscamnt
 
-                        item_total_price = round(item_total_price!! * 100) / 100
-
-                        val tempBillEntry = BillEntry(entryId = 0, entryQuantity = itemno, entryPrice = itemtempprice, discount = discountamnt, finalPrice = item_total_price, billIdFk = billId, itemNameFk = item_name)
-
-                        billEntryAddition(tempBillEntry)
-
-                        AddedToBillEntries = true
-
-                        focusChange()
-
-                    }else{
-                        Log.d("DISCOUNT", "please enter discount")
-                    }
-
-                    })
+                })
             )
 
         }
@@ -637,43 +600,43 @@ fun ItemEntryRow(billId : Int, index : Int,
 
 
         if (expanded){
-            Popup(alignment = Alignment.TopCenter, offset = IntOffset(x = 0, y = RowHeight.toInt() * 3),properties = PopupProperties(excludeFromSystemGesture = true), onDismissRequest = {expanded = false}) {
-                val columheight = RowHeight * 2.8
-                LazyColumn(
-                    modifier = Modifier
-                        .heightIn(max = columheight.dp)
-                        .background(color = Color.White),
-                ) {
-
-                    if (item_name.isNotEmpty()) {
-                        items(
-                            categories.filter {
-                                it.lowercase()
-                                    .contains(item_name.lowercase()) || it.lowercase()
-                                    .contains("others")
-                            }
-                                .sorted()
-                        ) {
-                            PartsItems(name = it) { name ->
-                                item_name = name
-                                expanded = false
-                            }
-                        }
-                    } else {
-                        items(
-                            categories.sorted()
-                        ) {
-                            PartsItems(name = it) { name ->
-                                item_name = name
-                                expanded = false
-                            }
-                        }
-                    }
-
-
-
-                }
-            }
+//            Popup(alignment = Alignment.TopCenter, offset = IntOffset(x = 0, y = RowHeight.toInt() * 3),properties = PopupProperties(excludeFromSystemGesture = true), onDismissRequest = {expanded = false}) {
+//                val columheight = RowHeight * 2.8
+//                LazyColumn(
+//                    modifier = Modifier
+//                        .heightIn(max = columheight.dp)
+//                        .background(color = Color.White),
+//                ) {
+//
+//                    if (item_name.isNotEmpty()) {
+//                        items(
+//                            categories.filter {
+//                                it.lowercase()
+//                                    .contains(item_name.lowercase()) || it.lowercase()
+//                                    .contains("others")
+//                            }
+//                                .sorted()
+//                        ) {
+//                            PartsItems(name = it) { name ->
+//                                item_name = name
+//                                expanded = false
+//                            }
+//                        }
+//                    } else {
+//                        items(
+//                            categories.sorted()
+//                        ) {
+//                            PartsItems(name = it) { name ->
+//                                item_name = name
+//                                expanded = false
+//                            }
+//                        }
+//                    }
+//
+//
+//
+//                }
+//            }
         }
     }
 

@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ledgerDao{
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert
     suspend fun insert(ledger: Ledger)
 
-    @Update(onConflict = OnConflictStrategy.ABORT)
+    @Update
     suspend fun update(ledger: Ledger)
 
     @Delete
@@ -25,9 +25,9 @@ interface ledgerDao{
     // Function for Screening
 
     @Query("SELECT * FROM Ledgers")
-    fun getAllLedger() : Flow<List<Ledger>>
+    fun getAllLedger() : List<Ledger>
 
-    @Query("SELECT * FROM Ledgers WHERE accountNameFk = :name")
-    fun getLedgerByAccountName(name : String) : Flow<Ledger>
+    @Query("SELECT * FROM Ledgers WHERE accountName = :name")
+    suspend fun getLedgerByAccountName(name : String) : Ledger
 
 }

@@ -1,6 +1,5 @@
 package com.vky342.openerp.ui.screens.ACCOUNTS
 
-import android.credentials.Credential
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,17 +30,7 @@ fun ListAllAccountsScreen(){
     val topPadding = height.value * 0.1
     val heightval = topPadding/2.5
 
-    val AllAccount = listOf(
-        Account(name = "kunal", address = "collony", contact = 23423, StartingBalance = 123, StartingBalanceType = "CR"),
-        Account(name = "rahul", address = "sakti", contact = 234234, StartingBalance = 1231, StartingBalanceType = "CR"),
-        Account(name = "satyam", address = "sakti", contact = 2413, StartingBalance = 0, StartingBalanceType = "CR"),
-        Account(name = "nini", address = "sai vihar", contact = 1242453, StartingBalance = 796, StartingBalanceType = "CR"),
-        Account(name = "kuchcs", address = "sesk", contact = 2412,235, StartingBalanceType = "CR"),
-        Account("sbjvdb","shvbdj",214,2353, StartingBalanceType = "CR"),
-        Account("shjvbdk","vbsdkvbs",3423,3423, StartingBalanceType = "CR"),
-        Account("svjdb","kdfjn",12443,5968, StartingBalanceType = "CR"),
-        Account(name = "sdvkl", address = "collony", contact = 23423, StartingBalance = 123, StartingBalanceType = "CR")
-    )
+
     Column(modifier = Modifier
         .background(color = Greye)
         .fillMaxSize()
@@ -109,9 +97,7 @@ fun ListAllAccountsScreen(){
             .background(color = Color.White)
             .fillMaxSize()
         ) {
-            itemsIndexed(items = AllAccount){ index : Int, item: Account ->
-                    AccountListItem(index = index, account = item)
-            }
+
 
         }
     }
@@ -173,7 +159,7 @@ fun AccountListItem(index : Int, account: Account){
             .weight(weight = .15f)
             .border(width = 1.dp, color = Color.Black)){ // net balance
 
-            Text(color = Greye,text = account.StartingBalance.toString(), modifier = Modifier
+            Text(color = Greye,text = "", modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(), fontSize = 11.sp)
 
