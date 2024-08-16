@@ -19,15 +19,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.vky342.openerp.data.ViewModels.Account.delete_Account_vm
 import com.vky342.openerp.ui.theme.Greye
 
-@Preview
+
 @Composable
-fun DeleteScreen(){
-    val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
+fun DeleteScreen( viewModel: delete_Account_vm = hiltViewModel()){
+    val height = LocalConfiguration.current.run { screenHeightDp.dp }
     val topPadding = height.value * 0.1
 
     var name by remember {
@@ -39,7 +40,9 @@ fun DeleteScreen(){
         .fillMaxSize()
         .padding(top = topPadding.dp)
     ) {
-        Text(color = Color.LightGray,fontSize = 26.sp,text = "Delete Account", modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 10.dp))
+        Text(color = Color.LightGray,fontSize = 26.sp,text = "Delete Account", modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .padding(top = 10.dp))
         TextField(modifier = Modifier
             .padding(25.dp)
             .align(Alignment.CenterHorizontally),
@@ -48,7 +51,10 @@ fun DeleteScreen(){
             .padding(25.dp)
             .align(Alignment.CenterHorizontally)
             .wrapContentSize(), onClick = {
+                viewModel.search(name)
+                viewModel.deleteAccount()
             Log.d("DELETE", " ACCOUNT deleted - $name")
+
         }) {
             Text(text = "Delete", fontSize = 24.sp)
         }

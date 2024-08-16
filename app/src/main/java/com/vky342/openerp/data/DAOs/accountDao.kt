@@ -3,7 +3,6 @@ package com.vky342.openerp.data.DAOs
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.vky342.openerp.data.Entities.Account
@@ -24,9 +23,6 @@ interface accountsDao {
     // Functions for screening
 
     @Query("SELECT * FROM Accounts")
-    fun getAllAccounts() : List<Account>
-
-    @Query("SELECT * FROM Accounts WHERE name = :name")
-    fun getAccountByName(name : String) : Account
+    fun getAllAccounts() : Flow<List<Account>>
 
 }

@@ -33,40 +33,31 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.vky342.openerp.data.Entities.Account
-import com.vky342.openerp.data.ViewModels.Account.Add_and_Modify_Account_VM
+import com.vky342.openerp.data.ViewModels.Account.Add_Account_VM
 import com.vky342.openerp.ui.theme.Greye
 import com.vky342.openerp.ui.theme.GreyeHome
 import com.vky342.openerp.ui.theme.ReceiptIconPin
 
 
 @Composable
-fun AddA_Account_Screen( viewModel: Add_and_Modify_Account_VM = hiltViewModel()){
+fun AddA_Account_Screen( viewModel: Add_Account_VM = hiltViewModel()){
 
 
     val height = LocalConfiguration.current.run { screenHeightDp.dp }
     val topPadding = height.value * 0.1
 
-    var name by remember {
-        mutableStateOf("")
-    }
+    val name = remember{ mutableStateOf("")}
+
     var address by remember {
         mutableStateOf("")
     }
     var contact by remember {
         mutableStateOf("")
     }
-    var starting_balance by remember {
-        mutableStateOf("")
-    }
 
-    var balanceType by remember {
-        mutableStateOf(false) // CRED and true means // DEBIT
-    }
 
     Column(modifier = Modifier
         .background(color = GreyeHome)
@@ -76,27 +67,22 @@ fun AddA_Account_Screen( viewModel: Add_and_Modify_Account_VM = hiltViewModel())
         Text(color = Color.LightGray,fontSize = 26.sp,text = "ADD ACCOUNT", modifier = Modifier
             .align(Alignment.CenterHorizontally)
             .padding(top = 10.dp))
-        Field_for_Add_Account_Card(label = "Name", field_value = name, onValueChanged = {name = it})
+        Field_for_Add_Account_Card(label = "Name", field_value = name.value, onValueChanged = {  name.value = it  })
 
-        Field_for_Add_Account_Card(label = "Address", field_value = address) { address = it}
+        Field_for_Add_Account_Card(label = "Address", field_value = address) { address = it }
 
-        Field_for_Add_Account_Card(label = "Contact", field_value = contact) {contact = it}
-
-        Field_for_Add_Account_Card(label = "Starting Balance", field_value = starting_balance) {starting_balance = it}
-
-        Switch_for_BalanceType(defaultPos = balanceType) { balanceType = it}
+        Field_for_Add_Account_Card(label = "Contact", field_value = contact) { contact = it }
 
         Button(colors = ButtonColors(containerColor = Color.LightGray, disabledContainerColor = Color.LightGray, contentColor = Greye, disabledContentColor = Greye),modifier = Modifier
             .padding(25.dp)
             .align(Alignment.CenterHorizontally)
             .wrapContentSize(),onClick = {
                 // View Model event call back for saving account
-
-                name = ""
+                viewModel.save_account(name.value, address,contact)
+                name.value = ""
                 address = ""
                 contact = ""
-                starting_balance = ""
-                balanceType = false
+
         }) {
             Text(text = "Save", fontSize = 24.sp)
             
