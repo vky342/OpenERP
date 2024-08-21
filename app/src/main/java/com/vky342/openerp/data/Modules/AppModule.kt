@@ -25,6 +25,8 @@ import com.vky342.openerp.data.Entities.Sale
 import com.vky342.openerp.data.Entities.SaleEntry
 import com.vky342.openerp.data.Repositories.AccountRepo
 import com.vky342.openerp.data.Repositories.HomeRepo
+import com.vky342.openerp.data.Repositories.InventoryRepo
+import com.vky342.openerp.data.Repositories.PurchaseRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -56,6 +58,18 @@ object AppModule{
     @Singleton
     fun provideAccountRepo(openDb: OpenERPDataBase) : AccountRepo{
         return AccountRepo(openDb)
+    }
+
+    @Provides
+    @Singleton
+    fun providePurchaseRepo(openDb: OpenERPDataBase) : PurchaseRepo{
+        return PurchaseRepo(openDb)
+    }
+
+    @Provides
+    @Singleton
+    fun provideInventoryRepo(openDb: OpenERPDataBase) : InventoryRepo{
+        return InventoryRepo(openDb)
     }
 
 }

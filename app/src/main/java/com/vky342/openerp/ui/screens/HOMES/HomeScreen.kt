@@ -161,20 +161,20 @@ fun inventoryStatusCard( toInventory : () -> Unit){
     val sampleItems = listOf(
         Item(
             itemName = "Laptop",
-            itemSellingPrice = 1500,
-            itemPurchasePrice = 1200,
+            itemSellingPrice = 1500.00,
+            itemPurchasePrice = 1200.00,
             itemQuantity = 10
         ),
         Item(
             itemName = "Smartphone",
-            itemSellingPrice = 800,
-            itemPurchasePrice = 600,
+            itemSellingPrice = 800.00,
+            itemPurchasePrice = 600.00,
             itemQuantity = 25
         ),
         Item(
             itemName = "Headphones",
-            itemSellingPrice = 200,
-            itemPurchasePrice = 150,
+            itemSellingPrice = 200.00,
+            itemPurchasePrice = 150.00,
             itemQuantity = 50
         )
     )

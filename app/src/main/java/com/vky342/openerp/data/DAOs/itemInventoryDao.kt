@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface itemInventoryDao {
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert
     suspend fun insert(item : Item)
 
-    @Update(onConflict = OnConflictStrategy.ABORT)
+    @Update
     suspend fun update(item: Item)
 
     @Delete
@@ -24,8 +24,8 @@ interface itemInventoryDao {
     // Functions for screening
 
     @Query("SELECT * FROM ItemInventory")
-    fun getAllItemInInventory() : Flow<List<Item>>
+    fun getAllItemInInventory() : List<Item>
 
     @Query("SELECT * FROM ItemInventory WHERE itemName = :name")
-    fun getItemByName(name : String) : Flow<Item>
+    fun getItemByName(name : String) : Item
 }

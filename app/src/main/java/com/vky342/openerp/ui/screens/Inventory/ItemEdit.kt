@@ -36,19 +36,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.vky342.openerp.data.Entities.Item
+import com.vky342.openerp.data.ViewModels.InventoryList_VM
 import com.vky342.openerp.ui.screens.transactions.list_of_all_account_name
 import com.vky342.openerp.ui.theme.Greye
 import com.vky342.openerp.ui.theme.GreyeHome
 import com.vky342.openerp.ui.theme.ReceiptIconPin
 import com.vky342.openerp.ui.theme.SaleiconPin
 
-@Preview
+
 @Composable
-fun ItemEdit(){
+fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
 
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val topPadding = height.value * 0.1
+
+    viewModel.Add_Item_to_inventory()
 
     Column (modifier = Modifier
         .fillMaxSize()
@@ -202,7 +206,9 @@ fun Item_properties_Card(){
             .wrapContentHeight()
             .padding(2.dp)){
 
-            Column (modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
+            Column (modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()) {
 
                 TextField(value = itemName.value,
                     onValueChange = { itemName.value = it },

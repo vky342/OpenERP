@@ -21,14 +21,18 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.vky342.openerp.data.Entities.GeneralDataClasses.InventoryListItem
+import com.vky342.openerp.data.ViewModels.InventoryList_VM
 import com.vky342.openerp.ui.theme.Greye
 import com.vky342.openerp.ui.theme.GreyeHome
 import com.vky342.openerp.ui.theme.SaleiconPin
 
-@Preview
+
 @Composable
-fun InventoryList(){
+fun InventoryList(viewModel : InventoryList_VM = hiltViewModel()){
+
+    viewModel.Add_Item_to_inventory()
 
     val sampleData = listOf(
         InventoryListItem("Apple", 50),
