@@ -24,4 +24,7 @@ interface SaleDao{
     @Query("SELECT * FROM Sales WHERE ledgerId = :ledgerId")
     fun getSalesByLedgerId(ledgerId : Int) : List<Sale>
 
+    @Query("SELECT * FROM Sales WHERE saleId = (SELECT max(saleId) FROM Sales)")
+    fun getLastSale() : Sale
+
 }

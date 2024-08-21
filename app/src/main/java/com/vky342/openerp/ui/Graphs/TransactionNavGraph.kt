@@ -18,7 +18,7 @@ fun NavGraphBuilder.TransactionNavGraph(navController: NavHostController){
             AllTransactionOptionsScreen(navController)
         }
         composable(route = TransactionScreen.AddSale){
-            AddSaleScreen(navController)
+            AddSaleScreen()
         }
         composable(route = TransactionScreen.modifyBill){
             modifyBillScreen()

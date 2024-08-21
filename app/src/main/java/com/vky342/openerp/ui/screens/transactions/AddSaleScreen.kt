@@ -49,9 +49,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.vky342.openerp.data.Entities.Sale
+import com.vky342.openerp.data.ViewModels.transaction.Add_sale_Vm
 import com.vky342.openerp.ui.Graphs.TransactionScreen
 import com.vky342.openerp.ui.theme.Greye
 import com.vky342.openerp.ui.theme.Purple40
@@ -59,7 +62,9 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun AddSaleScreen(navController: NavHostController){
+fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
+
+    viewModel.test_initialize()
 
     val height = LocalConfiguration.current.run { screenHeightDp.dp}
     val topPadding = height.value * 0.1
@@ -118,14 +123,6 @@ fun AddSaleScreen(navController: NavHostController){
         "Fees",
         "Others",
     )
-
-    fun newBill(){
-        navController.navigate(TransactionScreen.AddSale){
-            popUpTo(navController.graph.findStartDestination().id)
-            launchSingleTop = true
-        }
-
-    }
 
     Column(modifier = Modifier
         .background(color = Greye)
