@@ -16,6 +16,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             OpenERPTheme {
                 RootScreen()
+                Log.d("STATUS", "initializing")
             }
         }
     }
