@@ -222,8 +222,8 @@ fun BottomBar(navController: NavHostController){
 @Preview
 @Composable
 fun TopAppBar(){
-    val height = LocalConfiguration.current.run { screenHeightDp.dp}
-    val sidePadding = 20.dp
+    val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp}
+    val sidePadding = width.value * 0.05
     val topPadding = height.value * 0.1
     val statusBar = topPadding * 0.3
     Box(modifier = Modifier
@@ -232,7 +232,7 @@ fun TopAppBar(){
         .height(topPadding.dp)){
         Text(fontSize = 34.sp, color = Greye, fontWeight = FontWeight(500),text = "OpenERP", modifier = Modifier
             .align(Alignment.CenterStart)
-            .padding(horizontal = sidePadding)
+            .padding(horizontal = sidePadding.dp)
             .padding(top = statusBar.dp))
 
         Box(modifier = Modifier
@@ -240,7 +240,7 @@ fun TopAppBar(){
             .height(topPadding.dp)
             .background(color = Color.White)
             .align(Alignment.CenterEnd)
-            .padding(horizontal = sidePadding)
+            .padding(horizontal = sidePadding.dp)
             ){
 
             Row (
