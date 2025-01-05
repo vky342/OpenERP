@@ -1,12 +1,14 @@
 package com.vky342.openerp.ui.Graphs
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 
 @Composable
-fun RootNavigationGraph(navController: NavHostController, paddingValues: PaddingValues){
+fun RootNavigationGraph(navController: NavHostController){
     NavHost(navController = navController, startDestination = Graph.HOME, route = Graph.ROOT){
         HomeNavigationGraph(navController = navController)
         AccountNavigationGraph(navController = navController)
