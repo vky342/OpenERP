@@ -20,6 +20,9 @@ fun NavGraphBuilder.LedgerNavigationGraph(navController: NavHostController){
         composable(route = LedgerScreens.DayBook){
             DayBookScreen()
         }
+        composable(route = LedgerScreens.YearBook){
+
+        }
     }
 }
 
@@ -27,4 +30,5 @@ object LedgerScreens{
     val Alloptions = "alloptions"
     val AccountLedger = "accountLedger"
     val DayBook = "daybook"
+    val YearBook = "yearbook"
 }

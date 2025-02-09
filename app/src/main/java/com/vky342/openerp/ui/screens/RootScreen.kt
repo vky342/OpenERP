@@ -23,6 +23,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -82,6 +83,7 @@ fun RootScreen(navController: NavHostController = rememberNavController()){
 
     Scaffold (topBar = { TopAppBar(
         title = { Text("OpenERP")},
+        colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = Color.White),
         actions = {
             IconButton(onClick = {}){
                 Icon(Icons.Default.Notifications, contentDescription = "")

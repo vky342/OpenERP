@@ -4,7 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.vky342.openerp.ui.screens.ACCOUNTS.AddA_Account_Screen
+import com.vky342.openerp.ui.screens.ACCOUNTS.Add_Account_Screen
 import com.vky342.openerp.ui.screens.ACCOUNTS.AllOptionsScreen
 import com.vky342.openerp.ui.screens.ACCOUNTS.DeleteScreen
 import com.vky342.openerp.ui.screens.ACCOUNTS.ListAllAccountsScreen
@@ -17,7 +17,7 @@ fun NavGraphBuilder.AccountNavigationGraph(navController: NavHostController){
             AllOptionsScreen(navController)
         }
         composable(route = AccountScreens.ADD){
-            AddA_Account_Screen()
+            Add_Account_Screen()
         }
         composable(route = AccountScreens.DELETE){
             DeleteScreen()

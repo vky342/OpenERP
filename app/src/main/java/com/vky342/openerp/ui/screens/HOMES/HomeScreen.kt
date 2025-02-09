@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,10 +46,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.vky342.openerp.data.ViewModels.HomeViewModel
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import com.vky342.openerp.ui.theme.shadow_color
+import com.vky342.openerp.ui.theme.var_amount_row_colour
 import kotlin.math.max
 
 
@@ -76,26 +82,37 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
             .fillMaxSize()
             .background(color = Color.White)) {
 
-            Box(modifier = Modifier
-                .background(color = Color.White)
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .weight(0.2f)){
-                Box(modifier = Modifier
-                    .padding(horizontal = sidePadding.dp)
+            Box(
+                modifier = Modifier
+                    .background(color = Color.White)
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .border(shape = CircleShape.copy(topStart = CornerSize(20f),
-                        topEnd = CornerSize(size = 20f),
-                        bottomStart = CornerSize(size = 20f),
-                        bottomEnd = CornerSize(size = 20f)),
-                        border = BorderStroke(color = Color.LightGray, width = 1.dp))
-                    .shadow(elevation = 5.dp, shape = CircleShape.copy(
-                        topStart = CornerSize(20f),
-                        topEnd = CornerSize(size = 20f),
-                        bottomStart = CornerSize(size = 20f),
-                        bottomEnd = CornerSize(size = 20f)))
-                    .background(color = Color.White)){
+                    .weight(0.2f)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = sidePadding.dp)
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .background(color = var_amount_row_colour)
+                        .border(
+                            shape = CircleShape.copy(
+                                topStart = CornerSize(20f),
+                                topEnd = CornerSize(size = 20f),
+                                bottomStart = CornerSize(size = 20f),
+                                bottomEnd = CornerSize(size = 20f)
+                            ),
+                            border = BorderStroke(color = Color.LightGray, width = 1.dp)
+                        )
+                        .shadow(
+                            elevation = -4.dp, shape = CircleShape.copy(
+                                topStart = CornerSize(20f),
+                                topEnd = CornerSize(size = 20f),
+                                bottomStart = CornerSize(size = 20f),
+                                bottomEnd = CornerSize(size = 20f)
+                            )
+                        )
+                ) {
 
                     VariableAmountRow()
 
@@ -127,93 +144,7 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                 }
                 Box (modifier = Modifier.background(color = Color.White).fillMaxWidth().fillMaxHeight(0.75f).align(Alignment.BottomCenter)) {
 
-                    // overall body
-                    Column(modifier = Modifier.fillMaxHeight().fillMaxWidth(0.8f).align(Alignment.Center)) {
-
-                        // title
-                        Box (modifier = Modifier.fillMaxWidth().fillMaxHeight().weight(0.1f).padding(horizontal = sidePadding.dp).background(color = Color.White)) {
-                            Box (modifier = Modifier.wrapContentSize().align(Alignment.CenterStart)) {
-                                Text(text = "Inventory Status", fontSize = 18.sp)
-                            }
-                        }
-
-                        // subtitle
-                        Box (modifier = Modifier.fillMaxWidth().fillMaxHeight().weight(0.17f).shadow(elevation = 5.dp, shape = RoundedCornerShape(20f)).background(color = Color.White).border(width = 1.dp, color = Color.LightGray, shape = RoundedCornerShape(topStart = 20f, topEnd = 20f, ))) {
-                            Box (modifier = Modifier.fillMaxHeight().padding(7.dp).width(25.dp).align(Alignment.CenterStart)) {
-
-                                Icon(Icons.Outlined.Info, contentDescription = "", modifier = Modifier.fillMaxSize())
-                            }
-                            Box (modifier = Modifier.wrapContentHeight().padding(10.dp).wrapContentWidth().align(Alignment.CenterEnd)) {
-                                Text(text = "Recent Items", fontSize = 15.sp)
-                            }
-                        }
-
-                        // table
-
-                        Box (modifier = Modifier.fillMaxWidth().fillMaxHeight().weight(0.9f).background(color = Color.White)) {
-
-                            Column (modifier = Modifier.fillMaxWidth().fillMaxHeight()) {
-                                Box (modifier = Modifier.fillMaxWidth().weight(1f).background(color = Color.White).border(width = Dp.Hairline, color = Color.LightGray).shadow(elevation = 5.dp)) {
-
-                                    Row (modifier = Modifier.fillMaxHeight().fillMaxWidth()){
-                                        //Srn
-                                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.1f).background(color = Color.White)) {
-                                            Text(text = "Sr.no", modifier = Modifier.align(Alignment.Center))
-                                        }
-
-                                        //Name
-                                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.25f).background(color = Color.White)) {
-                                            Text(text = "Name", modifier = Modifier.align(Alignment.Center))
-                                        }
-
-                                        //Pcs
-                                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
-                                            Text(text = "Pcs", modifier = Modifier.align(Alignment.Center))
-                                        }
-
-                                        //Price
-                                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
-                                            Text(text = "Price", modifier = Modifier.align(Alignment.Center))
-                                        }
-                                    }
-                                }
-
-                                repeat(5){
-
-                                    Box (modifier = Modifier.fillMaxWidth().weight(1f).background(color = Color.White).border(width = Dp.Hairline, color = Color.LightGray).shadow(elevation = 5.dp)) {
-
-                                        Row (modifier = Modifier.fillMaxHeight().fillMaxWidth()){
-                                            //Srn
-                                            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.1f).background(color = Color.White)) {
-                                                Text(text = (it + 1).toString(), modifier = Modifier.align(Alignment.Center))
-                                            }
-
-                                            //Name
-                                            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.25f).background(color = Color.White)) {
-                                                Text(text = items.keys.toList()[it], modifier = Modifier.align(Alignment.Center))
-                                            }
-
-                                            //Pcs
-                                            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
-                                                Text(text = items.values.toList()[it].first.toString(), modifier = Modifier.align(Alignment.Center), color = Calculate_color_of_pieces(items.values.toList()[it].first))
-                                            }
-
-                                            //Price
-                                            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
-                                                Text(text = items.values.toList()[it].second.toString(), modifier = Modifier.align(Alignment.Center))
-                                            }
-                                        }
-                                    }
-                                }
-
-                                Box (modifier = Modifier.fillMaxWidth().weight(1f)){
-                                    Text("Load more..", fontSize = 14.sp, modifier = Modifier.padding(5.dp).align(Alignment.CenterEnd), color = Color.Black)
-                                }
-
-                            }
-
-                        }
-                    }
+                   table_for_recent_items(modifier = Modifier.align(Alignment.Center).padding(horizontal = sidePadding.dp), items = items)
 
 
                 }
@@ -222,7 +153,7 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
 
             Box(modifier = Modifier.background(color = Color.White).fillMaxWidth().fillMaxHeight().weight(0.3f)){
 
-                Box (modifier = Modifier.fillMaxWidth(0.8f).fillMaxHeight(0.3f).shadow(elevation = 5.dp).background(color = Color.White, shape = RoundedCornerShape(20f)).border(width = 1.dp, color = Color.LightGray, shape = RoundedCornerShape(20f)).align(Alignment.Center)) {
+                Box (modifier = Modifier.fillMaxWidth(0.8f).fillMaxHeight(0.3f).shadow(elevation = 3.dp, shape = RoundedCornerShape(20f)).background(color = Color.White, shape = RoundedCornerShape(20f)).border(width = 1.dp, color = Color.LightGray, shape = RoundedCornerShape(20f)).align(Alignment.Center)) {
                     Row (modifier = Modifier.fillMaxSize()) {
                         Box (modifier = Modifier.weight(0.2f).align(Alignment.CenterVertically).padding(5.dp)) {
                             Icon(Icons.Default.Menu, contentDescription = "", modifier = Modifier.size(30.dp))
@@ -310,7 +241,6 @@ fun Searchbar(onVC : (MutableList<String>)-> Unit ) {
 
 }
 
-
 @Composable
 fun AmountSection(title: String, amount: String, modifier: Modifier = Modifier) {
     Column(
@@ -331,8 +261,8 @@ fun AmountSection(title: String, amount: String, modifier: Modifier = Modifier) 
             fontWeight = FontWeight(350),
             style = TextStyle(shadow =
                 Shadow(
-                color = Color.Black, // Shadow color
-                offset = Offset(0f, 5f), // Shadow offset (x, y)
+                color = shadow_color, // Shadow color
+                offset = Offset(0f, 4f), // Shadow offset (x, y)
                 blurRadius = 4f // Shadow blur radius
             ),
                 fontWeight = FontWeight.Bold),
@@ -355,4 +285,148 @@ fun calculateDynamicFontSize(amount: String): TextUnit {
 
     // Ensure font size is within valid range
     return scaledSize.coerceAtLeast(minSize).sp
+}
+
+
+//@Preview
+@Composable
+fun prev_check(){
+    Column (modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color.White)) {
+
+        Box(
+            modifier = Modifier
+                .background(color = Color.White)
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .weight(0.2f)
+        ) {
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .border(
+                        shape = CircleShape.copy(
+                            topStart = CornerSize(20f),
+                            topEnd = CornerSize(size = 20f),
+                            bottomStart = CornerSize(size = 20f),
+                            bottomEnd = CornerSize(size = 20f)
+                        ),
+                        border = BorderStroke(color = Color.LightGray, width = 1.dp)
+                    )
+                    .shadow(
+                        elevation = -4.dp, shape = CircleShape.copy(
+                            topStart = CornerSize(20f),
+                            topEnd = CornerSize(size = 20f),
+                            bottomStart = CornerSize(size = 20f),
+                            bottomEnd = CornerSize(size = 20f)
+                        )
+                    )
+                    .background(color = var_amount_row_colour)
+            ) {
+
+                VariableAmountRow()
+
+            }
+        }
+    }
+}
+
+
+@Composable
+fun table_for_recent_items(modifier: Modifier = Modifier, items : Map<String, Pair<Int, Int>>){
+
+    // overall body
+    Column(modifier = modifier.fillMaxHeight(0.8f).fillMaxWidth(1f)) {
+
+        // title
+        Box (modifier = Modifier.fillMaxWidth().fillMaxHeight().weight(0.1f).padding(horizontal = 20.dp).background(color = Color.White)) {
+            Box (modifier = Modifier.wrapContentSize().align(Alignment.CenterStart)) {
+                Text(text = "Inventory Status", fontSize = 18.sp)
+            }
+        }
+
+        // subtitle
+        Box (modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .weight(0.17f)
+            .shadow(elevation = 3.dp, shape = RoundedCornerShape(topEnd = 20f, topStart = 20f))
+            .background(color = Color.White, shape = RoundedCornerShape(topEnd = 20f, topStart = 20f))) {
+
+            Box (modifier = Modifier.fillMaxHeight().padding(7.dp).width(25.dp).align(Alignment.CenterStart)) {
+
+                Icon(Icons.Outlined.Info, contentDescription = "", modifier = Modifier.fillMaxSize())
+            }
+            Box (modifier = Modifier.wrapContentHeight().padding(10.dp).wrapContentWidth().align(Alignment.CenterEnd)) {
+                Text(text = "Recent Items", fontSize = 15.sp)
+            }
+        }
+
+        // table
+
+        Box (modifier = Modifier.fillMaxWidth().fillMaxHeight().weight(0.9f)) {
+
+            Column (modifier = Modifier.fillMaxWidth().fillMaxHeight().border(BorderStroke(width = 1.dp, color = Color.White),shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f)).background(color = Color.White).shadow(elevation = 3.dp, shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f))) {
+                Box (modifier = Modifier.fillMaxWidth().weight(1f).background(color = Color.White)) {
+
+                    Row (modifier = Modifier.fillMaxHeight().fillMaxWidth()){
+                        //Srn
+                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.1f).background(color = Color.White)) {
+                            Text(text = "Sr.no", modifier = Modifier.align(Alignment.Center))
+                        }
+
+                        //Name
+                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.25f).background(color = Color.White)) {
+                            Text(text = "Name", modifier = Modifier.align(Alignment.Center))
+                        }
+
+                        //Pcs
+                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
+                            Text(text = "Pcs", modifier = Modifier.align(Alignment.Center))
+                        }
+
+                        //Price
+                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
+                            Text(text = "Price", modifier = Modifier.align(Alignment.Center))
+                        }
+                    }
+                }
+
+                repeat(5){
+
+                    Spacer(modifier = Modifier.fillMaxWidth().height(1.dp).background(color = Color.LightGray))
+
+                    Box (modifier = Modifier.fillMaxWidth().weight(1f).background(color = Color.White)) {
+
+                        Row (modifier = Modifier.fillMaxHeight().fillMaxWidth()){
+                            //Srn
+                            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.1f).background(color = Color.White)) {
+                                Text(text = (it + 1).toString(), modifier = Modifier.align(Alignment.Center))
+                            }
+
+                            //Name
+                            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.25f).background(color = Color.White)) {
+                                Text(text = items.keys.toList()[it], modifier = Modifier.align(Alignment.Center))
+                            }
+
+                            //Pcs
+                            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
+                                Text(text = items.values.toList()[it].first.toString(), modifier = Modifier.align(Alignment.Center), color = Calculate_color_of_pieces(items.values.toList()[it].first))
+                            }
+
+                            //Price
+                            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
+                                Text(text = items.values.toList()[it].second.toString(), modifier = Modifier.align(Alignment.Center))
+                            }
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.fillMaxWidth().height(1.dp).background(color = Color.LightGray))
+            }
+        }
+    }
+
 }

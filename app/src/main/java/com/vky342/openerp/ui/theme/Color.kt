@@ -16,3 +16,10 @@ val ReceiptIconPin = Color(0xFF0BAAAA)
 val InventoryIconPin = Color(0xFFE41F64)
 
 val GreyeHome = Color(0xFF181818)
+
+val var_amount_row_colour = Color(0xFFFCFCFC)
+
+val amount_text_color_home = Color(0xFF07D200)
+
+val shadow_color = Color(0x25000000)
+
