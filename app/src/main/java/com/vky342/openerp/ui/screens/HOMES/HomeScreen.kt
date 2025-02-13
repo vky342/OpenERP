@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,15 +16,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -48,11 +54,33 @@ import com.vky342.openerp.data.ViewModels.HomeViewModel
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import com.vky342.openerp.ui.theme.amount_stat_border_color
+import com.vky342.openerp.ui.theme.amount_text_color
+import com.vky342.openerp.ui.theme.background_color
+import com.vky342.openerp.ui.theme.card_shadow_color
+import com.vky342.openerp.ui.theme.edit_item_border_color
+import com.vky342.openerp.ui.theme.edit_item_card_shadow_color
+import com.vky342.openerp.ui.theme.edit_item_container_colour
+import com.vky342.openerp.ui.theme.edit_item_content_color
+import com.vky342.openerp.ui.theme.item_table_container_colour
+import com.vky342.openerp.ui.theme.item_table_content_color
+import com.vky342.openerp.ui.theme.middle_spacer_color
+import com.vky342.openerp.ui.theme.sale_button_background_color
+import com.vky342.openerp.ui.theme.sale_button_box_color
+import com.vky342.openerp.ui.theme.sale_icon_color
+import com.vky342.openerp.ui.theme.search_item_border_color
+import com.vky342.openerp.ui.theme.search_item_card_shadow_color
+import com.vky342.openerp.ui.theme.search_item_container_colour
+import com.vky342.openerp.ui.theme.search_item_content_color
+import com.vky342.openerp.ui.theme.search_item_focused_container_colour
 import com.vky342.openerp.ui.theme.shadow_color
 import com.vky342.openerp.ui.theme.var_amount_row_colour
 import kotlin.math.max
@@ -65,112 +93,241 @@ data class list_item(
 )
 
 @Composable
-fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hiltViewModel(navController.getBackStackEntry("HomeScreen"))){
+fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hiltViewModel(navController.getBackStackEntry("HomeScreen"))) {
 
-        val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
+    val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
 
-        val sidePadding = width.value * 0.05
+    val sidePadding = width.value * 0.05
 
-        var initial_item_list = listOf(list_item("",0,0))
+    var initial_item_list = listOf(list_item("", 0, 0))
 
-        var Today_Sale = remember{ mutableStateOf(1000000) }
-        var Today_Receipt = remember{ mutableStateOf(1000000) }
+    var Today_Sale = remember { mutableStateOf(1000000) }
+    var Today_Receipt = remember { mutableStateOf(1000000) }
 
-        var Items_to_show = remember { mutableStateOf(initial_item_list) }
-
-        Column (modifier = Modifier
+    var Items_to_show = remember { mutableStateOf(initial_item_list) }
+    Box(
+        modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White)) {
+            .background(color = background_color)
 
+    )
+    {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = background_color)
+                .verticalScroll(rememberScrollState())
+        ) {
+            // Variable Amount Row (20% Height → Adjusted to fixed 120.dp)
             Box(
                 modifier = Modifier
-                    .background(color = Color.White)
                     .fillMaxWidth()
-                    .fillMaxHeight()
-                    .weight(0.2f)
+                    .height(120.dp)
+                    .padding(vertical = 8.dp)
             ) {
                 Box(
                     modifier = Modifier
-                        .padding(horizontal = sidePadding.dp)
                         .fillMaxWidth()
                         .fillMaxHeight()
-                        .background(color = var_amount_row_colour)
+                        .padding(horizontal = (sidePadding + 7).dp)
+                        .shadow(
+                            elevation = 4.dp,
+                            spotColor = card_shadow_color,
+                            ambientColor = card_shadow_color,
+                            shape = CircleShape.copy(CornerSize(20f))
+                        )
+                        .background(
+                            color = var_amount_row_colour,
+                            shape = CircleShape.copy(
+                                topStart = CornerSize(20f),
+                                topEnd = CornerSize(20f),
+                                bottomStart = CornerSize(20f),
+                                bottomEnd = CornerSize(20f)
+                            )
+                        )
                         .border(
                             shape = CircleShape.copy(
                                 topStart = CornerSize(20f),
-                                topEnd = CornerSize(size = 20f),
-                                bottomStart = CornerSize(size = 20f),
-                                bottomEnd = CornerSize(size = 20f)
+                                topEnd = CornerSize(20f),
+                                bottomStart = CornerSize(20f),
+                                bottomEnd = CornerSize(20f)
                             ),
-                            border = BorderStroke(color = Color.LightGray, width = 1.dp)
-                        )
-                        .shadow(
-                            elevation = -4.dp, shape = CircleShape.copy(
-                                topStart = CornerSize(20f),
-                                topEnd = CornerSize(size = 20f),
-                                bottomStart = CornerSize(size = 20f),
-                                bottomEnd = CornerSize(size = 20f)
-                            )
+                            border = BorderStroke(1.dp, amount_stat_border_color)
                         )
                 ) {
-
-                    VariableAmountRow()
-
+                    VariableAmountRow(modifier = Modifier.align(Alignment.Center))
                 }
             }
 
-            Box(modifier = Modifier.background(color = Color.Yellow).fillMaxWidth().fillMaxHeight().weight(.8f)){
+            // Edit Items Button (13% Height → Adjusted to fixed 80.dp)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(56.dp)
+                        .shadow(
+                            elevation = 4.dp,
+                            shape = RoundedCornerShape(20f),
+                            ambientColor = edit_item_card_shadow_color,
+                            spotColor = edit_item_card_shadow_color
+                        )
+                        .background(
+                            color = edit_item_container_colour,
+                            shape = RoundedCornerShape(20f)
+                        )
+                        .border(1.dp, edit_item_border_color, RoundedCornerShape(20f))
+                        .align(Alignment.Center)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.Default.Menu,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(30.dp)
+                                .padding(5.dp),
+                            tint = edit_item_content_color
+                        )
+                        Text(
+                            text = "Edit Items",
+                            fontSize = 20.sp,
+                            color = edit_item_content_color,
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                    }
+                }
+            }
 
-                var items : Map<String, Pair<Int, Int>> = mapOf(
-                    "Apple" to Pair(10, 30),   // 10 Apples, each costing 3
-                    "Banana" to Pair(5, 10),   // 5 Bananas, each costing 1
-                    "Orange" to Pair(8, 20),   // 8 Oranges, each costing 2
-                    "Milk" to Pair(2, 40),     // 2 Milk cartons, each costing 4
-                    "Bread" to Pair(1, 20)     // 1 Bread loaf, costing 2
+            // Account Ledger Button (13% Height → Adjusted to fixed 80.dp)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(56.dp)
+                        .shadow(
+                            elevation = 4.dp,
+                            shape = RoundedCornerShape(20f),
+                            ambientColor = edit_item_card_shadow_color,
+                            spotColor = edit_item_card_shadow_color
+                        )
+                        .background(
+                            color = edit_item_container_colour,
+                            shape = RoundedCornerShape(20f)
+                        )
+                        .border(1.dp, edit_item_border_color, RoundedCornerShape(20f))
+                        .align(Alignment.Center)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.Default.Create,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(30.dp)
+                                .padding(5.dp),
+                            tint = edit_item_content_color
+                        )
+                        Text(
+                            text = "Account Ledger",
+                            fontSize = 20.sp,
+                            color = edit_item_content_color,
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                    }
+                }
+            }
+
+            // Search Bar and Recent Items Table (80% → Adjusted to 500.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(500.dp)
+            ) {
+                val items: Map<String, Pair<Int, Int>> = mapOf(
+                    "Apple" to Pair(10, 30),
+                    "Banana" to Pair(5, 10),
+                    "Orange" to Pair(8, 20),
+                    "Milk" to Pair(2, 40),
+                    "Bread" to Pair(1, 20)
                 )
 
-
-                Box (modifier = Modifier.background(color = Color.White).fillMaxWidth().fillMaxHeight(0.25f).align(Alignment.TopCenter)) {
-                    Box (modifier = Modifier
-                        .align(Alignment.Center)
-                        .wrapContentHeight()
-                        .wrapContentWidth()
-                        .padding(horizontal = sidePadding.dp)
-                        .align(Alignment.Center)) {
+                // Search Bar (20% → Adjusted to fixed 100.dp)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .wrapContentHeight()
+                            .wrapContentWidth()
+                            .padding(horizontal = sidePadding.dp)
+                    ) {
                         Searchbar(onVC = {
                             // on value change of search Bar
                         })
                     }
                 }
-                Box (modifier = Modifier.background(color = Color.White).fillMaxWidth().fillMaxHeight(0.75f).align(Alignment.BottomCenter)) {
 
-                   table_for_recent_items(modifier = Modifier.align(Alignment.Center).padding(horizontal = sidePadding.dp), items = items)
-
-
+                // Recent Items Table (75% → Adjusted to 380.dp)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(300.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    table_for_recent_items(
+                        modifier = Modifier
+                            .padding(horizontal = (sidePadding + 7).dp),
+                        items = items
+                    )
                 }
-
-            }
-
-            Box(modifier = Modifier.background(color = Color.White).fillMaxWidth().fillMaxHeight().weight(0.3f)){
-
-                Box (modifier = Modifier.fillMaxWidth(0.8f).fillMaxHeight(0.3f).shadow(elevation = 3.dp, shape = RoundedCornerShape(20f)).background(color = Color.White, shape = RoundedCornerShape(20f)).border(width = 1.dp, color = Color.LightGray, shape = RoundedCornerShape(20f)).align(Alignment.Center)) {
-                    Row (modifier = Modifier.fillMaxSize()) {
-                        Box (modifier = Modifier.weight(0.2f).align(Alignment.CenterVertically).padding(5.dp)) {
-                            Icon(Icons.Default.Menu, contentDescription = "", modifier = Modifier.size(30.dp))
-                        }
-
-                        Box(modifier = Modifier.weight(0.8f).align(Alignment.CenterVertically)){
-                            Text(text = "Edit Items", fontSize = 20.sp)
-                        }
-                    }
-                }
-
             }
 
         }
+        // Sale Button (Fixed Height: 60.dp)
+        Box(
+            modifier = Modifier
+                .height(60.dp)
+                .fillMaxWidth()
+                .background(color = sale_button_box_color)
+                .align(Alignment.BottomCenter),
+            contentAlignment = Alignment.Center
+        ) {
 
+
+            Box( modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .fillMaxHeight(0.75f)
+                .shadow(elevation = 4.dp, shape = CircleShape.copy(CornerSize(20f)))
+                .background(color = sale_button_background_color, shape = RoundedCornerShape(
+                    CornerSize(20f)))){
+                Icon(
+                    imageVector = Icons.Default.ShoppingCart,
+                    contentDescription = "",
+                    tint = sale_icon_color,
+                    modifier = Modifier.size(50.dp).align(Alignment.Center)
+                )
+            }
+
+        }
+    }
 
 }
+
 
 
 
@@ -179,43 +336,6 @@ fun Calculate_color_of_pieces(int: Int) : Color{
         return Color.Red
     }
     return Color.Green
-}
-
-@Composable
-fun VariableAmountRow() {
-    // Mutable state for the amounts
-    var todaySales by remember { mutableStateOf("10,00,000") }
-    var todayReceipts by remember { mutableStateOf("40,00,000") }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // Left section: Today's Sale
-        AmountSection(
-            title = "Today's Sale",
-            amount = todaySales,
-            modifier = Modifier.weight(1f)
-        )
-
-        // Thin vertical line separator
-        Box(
-            modifier = Modifier
-                .width(1.dp)
-                .height(50.dp) // Half the height of the row
-                .background(Color.LightGray)
-                .shadow(elevation = 3.dp)
-        )
-
-        // Right section: Today's Receipts
-        AmountSection(
-            title = "Today's Receipts",
-            amount = todayReceipts,
-            modifier = Modifier.weight(1f)
-        )
-    }
 }
 
 
@@ -227,24 +347,26 @@ fun Searchbar(onVC : (MutableList<String>)-> Unit ) {
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth(0.95f)
-            .border(width = 1.dp, color = Color.DarkGray, shape = CircleShape.copy(
+            .border(width = 1.dp, color = search_item_border_color, shape = CircleShape.copy(
                 CornerSize(20f)))
-            .shadow(elevation = 5.dp, shape = CircleShape.copy(CornerSize(20f))),
+            .shadow(elevation = 5.dp, shape = CircleShape.copy(CornerSize(20f)), ambientColor = search_item_card_shadow_color, spotColor = search_item_card_shadow_color),
         value = current_value.value,
-        placeholder = { Text("Search Items...")},
+        placeholder = { Text("Search Items...", color = search_item_content_color)},
         onValueChange = {
             current_value.value = it
 
         },
-        trailingIcon = { Icon(Icons.Default.Search, contentDescription = "")},
-        colors = TextFieldDefaults.colors().copy(focusedContainerColor = Color.White, unfocusedContainerColor = Color.White))
+        trailingIcon = { Icon(Icons.Default.Search, contentDescription = "", tint = search_item_content_color)},
+        colors = TextFieldDefaults.colors().copy(focusedContainerColor = search_item_focused_container_colour, unfocusedContainerColor = search_item_container_colour))
 
 }
 
 @Composable
 fun AmountSection(title: String, amount: String, modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier
+            .padding(16.dp)
+            .wrapContentHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -252,85 +374,100 @@ fun AmountSection(title: String, amount: String, modifier: Modifier = Modifier) 
         Text(
             text = title,
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.Black
+            color = Color.Black,
+            maxLines = 1 // Prevents multi-line wrapping
         )
 
-        // Amount with dynamic font size
+        // Auto-adjusting font size for amount
+        Box(
+            modifier = Modifier
+                .widthIn(min = 50.dp, max = 150.dp) // Ensures text has a fixed width range
+        ) {
+            AutoResizeText(
+                text = "₹$amount",
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = shadow_color, // Shadow color
+                        offset = Offset(0f, 4f), // Shadow offset (x, y)
+                        blurRadius = 4f // Shadow blur radius
+                    ),
+                    fontWeight = FontWeight.Bold
+                ),
+                color = amount_text_color,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+@Composable
+fun AutoResizeText(
+    text: String,
+    style: TextStyle,
+    color: Color,
+    textAlign: TextAlign,
+    modifier: Modifier = Modifier
+) {
+    var textSize by remember { mutableStateOf(24.sp) } // Default font size
+
+    BoxWithConstraints(modifier = modifier) {
+        val maxWidth = constraints.maxWidth.toFloat()
+
         Text(
-            text = "+$amount",
-            fontWeight = FontWeight(350),
-            style = TextStyle(shadow =
-                Shadow(
-                color = shadow_color, // Shadow color
-                offset = Offset(0f, 4f), // Shadow offset (x, y)
-                blurRadius = 4f // Shadow blur radius
-            ),
-                fontWeight = FontWeight.Bold),
-            color = Color.Green,
-            textAlign = TextAlign.Center,
-            fontSize = calculateDynamicFontSize(amount)
+            text = text,
+            style = style.copy(fontSize = textSize),
+            color = color,
+            textAlign = textAlign,
+            modifier = Modifier.layout { measurable, constraints ->
+                var newFontSize = textSize.value // Convert to Float
+
+                // Measure text width
+                val placeable = measurable.measure(constraints)
+                if (placeable.width > maxWidth) {
+                    newFontSize *= maxWidth / placeable.width // Reduce font size dynamically
+                }
+
+                textSize = newFontSize.coerceAtLeast(12f).sp // Fix: Convert Float to TextUnit
+                layout(placeable.width, placeable.height) { placeable.placeRelative(0, 0) }
+            }
         )
     }
 }
 
 @Composable
-fun calculateDynamicFontSize(amount: String): TextUnit {
-    val baseSize = 24f // Base font size in sp
-    val minSize = 14f // Minimum font size in sp
-    val maxLength = 10 // Maximum length before scaling down
+fun VariableAmountRow(modifier: Modifier) {
+    // Mutable state for the amounts
+    var todaySales by remember { mutableStateOf("10,00,000") }
+    var todayReceipts by remember { mutableStateOf("40,00,000") }
 
-    // Calculate scaling factor
-    val factor = maxLength.toFloat() / max(amount.length, 1).toFloat()
-    val scaledSize = baseSize * factor
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight(), // Fix height issue
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Left section: Today's Sale
+        AmountSection(
+            title = "Today's Sale",
+            amount = todaySales,
+            modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
+        )
 
-    // Ensure font size is within valid range
-    return scaledSize.coerceAtLeast(minSize).sp
-}
-
-
-//@Preview
-@Composable
-fun prev_check(){
-    Column (modifier = Modifier
-        .fillMaxSize()
-        .background(color = Color.White)) {
-
+        // Thin vertical line separator
         Box(
-            modifier = Modifier
-                .background(color = Color.White)
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .weight(0.2f)
-        ) {
-            Box(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .border(
-                        shape = CircleShape.copy(
-                            topStart = CornerSize(20f),
-                            topEnd = CornerSize(size = 20f),
-                            bottomStart = CornerSize(size = 20f),
-                            bottomEnd = CornerSize(size = 20f)
-                        ),
-                        border = BorderStroke(color = Color.LightGray, width = 1.dp)
-                    )
-                    .shadow(
-                        elevation = -4.dp, shape = CircleShape.copy(
-                            topStart = CornerSize(20f),
-                            topEnd = CornerSize(size = 20f),
-                            bottomStart = CornerSize(size = 20f),
-                            bottomEnd = CornerSize(size = 20f)
-                        )
-                    )
-                    .background(color = var_amount_row_colour)
-            ) {
+            modifier = modifier
+                .width(3.dp)
+                .height(40.dp) // Adjust height for better UI
+                .background(middle_spacer_color)
+                .shadow(elevation = 2.dp)
+        )
 
-                VariableAmountRow()
-
-            }
-        }
+        // Right section: Today's Receipts
+        AmountSection(
+            title = "Today's Receipts",
+            amount = todayReceipts,
+            modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
+        )
     }
 }
 
@@ -339,37 +476,35 @@ fun prev_check(){
 fun table_for_recent_items(modifier: Modifier = Modifier, items : Map<String, Pair<Int, Int>>){
 
     // overall body
-    Column(modifier = modifier.fillMaxHeight(0.8f).fillMaxWidth(1f)) {
-
-        // title
-        Box (modifier = Modifier.fillMaxWidth().fillMaxHeight().weight(0.1f).padding(horizontal = 20.dp).background(color = Color.White)) {
-            Box (modifier = Modifier.wrapContentSize().align(Alignment.CenterStart)) {
-                Text(text = "Inventory Status", fontSize = 18.sp)
-            }
-        }
+    Column(modifier = modifier.fillMaxHeight(0.95f).fillMaxWidth(1f)) {
 
         // subtitle
         Box (modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .weight(0.17f)
+            .weight(0.2f)
             .shadow(elevation = 3.dp, shape = RoundedCornerShape(topEnd = 20f, topStart = 20f))
-            .background(color = Color.White, shape = RoundedCornerShape(topEnd = 20f, topStart = 20f))) {
+            .background(color = item_table_container_colour, shape = RoundedCornerShape(topEnd = 20f, topStart = 20f))) {
 
-            Box (modifier = Modifier.fillMaxHeight().padding(7.dp).width(25.dp).align(Alignment.CenterStart)) {
+            Box (modifier = Modifier.wrapContentHeight().padding(10.dp).wrapContentWidth().align(Alignment.CenterStart)) {
+                Text(text = "Inventory", fontSize = 18.sp, color = item_table_content_color)
+            }
 
-                Icon(Icons.Outlined.Info, contentDescription = "", modifier = Modifier.fillMaxSize())
-            }
-            Box (modifier = Modifier.wrapContentHeight().padding(10.dp).wrapContentWidth().align(Alignment.CenterEnd)) {
-                Text(text = "Recent Items", fontSize = 15.sp)
-            }
         }
 
         // table
 
-        Box (modifier = Modifier.fillMaxWidth().fillMaxHeight().weight(0.9f)) {
+        Box (modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .weight(0.9f)) {
 
-            Column (modifier = Modifier.fillMaxWidth().fillMaxHeight().border(BorderStroke(width = 1.dp, color = Color.White),shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f)).background(color = Color.White).shadow(elevation = 3.dp, shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f))) {
+            Column (modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .border(BorderStroke(width = 1.dp, color = Color.White),shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f))
+                .shadow(elevation = 3.dp, shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f))
+                .background(color = Color.White, shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f))) {
                 Box (modifier = Modifier.fillMaxWidth().weight(1f).background(color = Color.White)) {
 
                     Row (modifier = Modifier.fillMaxHeight().fillMaxWidth()){
