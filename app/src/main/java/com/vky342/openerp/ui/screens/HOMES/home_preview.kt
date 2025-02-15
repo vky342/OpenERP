@@ -217,7 +217,7 @@ fun homePrev(){
                         .wrapContentWidth()
                         .padding(horizontal = sidePadding.dp)
                 ) {
-                    Searchbar(onVC = {
+                    Searchbar("Search items...",onVC = {
                         // on value change of search Bar
                     })
                 }

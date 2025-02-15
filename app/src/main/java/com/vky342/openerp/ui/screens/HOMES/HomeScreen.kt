@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -30,7 +29,6 @@ import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -52,16 +50,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.vky342.openerp.data.ViewModels.HomeViewModel
 import androidx.compose.runtime.*
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import com.vky342.openerp.ui.theme.amount_stat_border_color
 import com.vky342.openerp.ui.theme.amount_text_color
 import com.vky342.openerp.ui.theme.background_color
@@ -83,7 +75,6 @@ import com.vky342.openerp.ui.theme.search_item_content_color
 import com.vky342.openerp.ui.theme.search_item_focused_container_colour
 import com.vky342.openerp.ui.theme.shadow_color
 import com.vky342.openerp.ui.theme.var_amount_row_colour
-import kotlin.math.max
 
 
 data class list_item(
@@ -276,7 +267,7 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                             .wrapContentWidth()
                             .padding(horizontal = sidePadding.dp)
                     ) {
-                        Searchbar(onVC = {
+                        Searchbar("Search items...",onVC = {
                             // on value change of search Bar
                         })
                     }
@@ -340,7 +331,7 @@ fun Calculate_color_of_pieces(int: Int) : Color{
 
 
 @Composable
-fun Searchbar(onVC : (MutableList<String>)-> Unit ) {
+fun Searchbar(label : String,onVC : (MutableList<String>)-> Unit ) {
     val current_value = remember{mutableStateOf("")}
 
     TextField(
@@ -351,7 +342,7 @@ fun Searchbar(onVC : (MutableList<String>)-> Unit ) {
                 CornerSize(20f)))
             .shadow(elevation = 5.dp, shape = CircleShape.copy(CornerSize(20f)), ambientColor = search_item_card_shadow_color, spotColor = search_item_card_shadow_color),
         value = current_value.value,
-        placeholder = { Text("Search Items...", color = search_item_content_color)},
+        placeholder = { Text(label, color = search_item_content_color)},
         onValueChange = {
             current_value.value = it
 
@@ -486,7 +477,7 @@ fun table_for_recent_items(modifier: Modifier = Modifier, items : Map<String, Pa
             .shadow(elevation = 3.dp, shape = RoundedCornerShape(topEnd = 20f, topStart = 20f))
             .background(color = item_table_container_colour, shape = RoundedCornerShape(topEnd = 20f, topStart = 20f))) {
 
-            Box (modifier = Modifier.wrapContentHeight().padding(10.dp).wrapContentWidth().align(Alignment.CenterStart)) {
+            Box (modifier = Modifier.wrapContentHeight().padding(10.dp).wrapContentWidth().align(Alignment.Center)) {
                 Text(text = "Inventory", fontSize = 18.sp, color = item_table_content_color)
             }
 

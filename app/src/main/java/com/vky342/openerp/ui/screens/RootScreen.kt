@@ -87,9 +87,8 @@ fun RootScreen(navController: NavHostController = rememberNavController()){
             selectedIcon = Icons.Default.ShoppingCart,
             unSelectedIcon = Icons.Outlined.ShoppingCart,
             Route = Graph.TRANSACTION
-        ),
-
         )
+    )
 
     var selectedIcon by rememberSaveable { mutableStateOf(0) }
 

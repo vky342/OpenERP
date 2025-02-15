@@ -1,5 +1,6 @@
 package com.vky342.openerp.ui.theme
 
+import androidx.annotation.ColorRes
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -77,12 +78,44 @@ val background_color = Color(0xFFFBF5DD)
 
     //item_table
     val item_table_container_colour = Color(0xFFA6CDC6)
-    val item_table_focused_container_colour = Color(0xFFFFFFFF)
-    val item_table_border_color = Color(0xFF16404D)
     val item_table_content_color = Color(0xFF16404D)
-    val item_table_card_shadow_color = Color(0xFF16404D)
 
     // Direct_sale floating button
     val sale_button_background_color = Color(0xFFDDA853)
     val sale_icon_color = Color(0xFFFFFFFF)
     val sale_button_box_color = Color(0xFF16404D)
+
+
+// Account_Screen
+
+    val account_screen_background_color = Color(0xFFFBF5DD)
+
+    // edit_button
+    val account_edit_options_container_color = Color(0xFFDDA853)
+    val account_edit_content_color = Color(0xFF16404D)
+    val account_edit_shadow_color = Color(0xFF16404D)
+    val account_edit_border_color = Color(0xFF16404D)
+    val account_edit_title_color = Color(0xFFFFFFFF)
+    val account_edit_subtitle_color = Color(0xFF16404D)
+
+    // add_button
+    val account_add_options_container_color = Color(0xFFA6CDC6)
+    val account_add_shadow_color = Color(0xFF16404D)
+    val account_add_border_color = Color(0xFF16404D)
+    val account_add_title_color = Color(0xFFFFFFFF)
+    val account_add_subtitle_color = Color(0xFF16404D)
+    val account_add_content_color = Color(0xFF16404D)
+
+    // account list type selector
+    val account_list_type_selector_container_color = Color(0xFF16404D)
+    val account_list_type_selector_border_color = Color(0xFF16404D)
+    val account_list_type_selector_shadow_color = Color(0xFF16404D)
+    val account_list_type_selector_selected_txt_color = Color(0xFF16404D)
+    val account_list_type_selector_unselected_txt_color = Color(0xFFA6CDC6)
+    val account_type_selector_selected_button_color = Color(0xFFFFFFFF)
+    val account_type_selector_unselected_button_color = Color(0xFF16404D)
+
+    // account_list_title
+    val account_list_title_color = Color(0xFFFFFFFF)
+    val account_list_title_container_color = Color(0xFFA6CDC6)
+    val account_list_title_border_color = Color(0xFF16404D)
