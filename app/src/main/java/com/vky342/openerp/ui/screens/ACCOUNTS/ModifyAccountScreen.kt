@@ -20,10 +20,10 @@ import com.vky342.openerp.data.ViewModels.Account.modify_Account_vm
 @Composable
 fun ModifyAccountScreen( viewModel: modify_Account_vm = hiltViewModel() ){
 
-    val old_Account = Account(0,"","",0)
+    val old_Account = Account(0,"","",0, "")
     Log.d("OLD ACCOUNT 18" , old_Account.toString())
     
-    val new_Account : MutableState<Account> = remember{mutableStateOf(Account(0,"","",0))}
+    val new_Account : MutableState<Account> = remember{mutableStateOf(Account(0,"","",0, ""))}
     
     Column(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxSize()){

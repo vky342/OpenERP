@@ -34,9 +34,9 @@ class Add_Account_VM @Inject constructor( private val accountRepo: AccountRepo):
         return true
     }
 
-    fun save_account(name :  String, address: String, contact: String){
+    fun save_account(name :  String, address: String, contact: String, type : String){
         if(validateInput(name = name, address = address, contact = contact)){
-            viewModelScope.launch (Dispatchers.IO) { accountRepo.insert_Account(name, address, contact)}
+            viewModelScope.launch (Dispatchers.IO) { accountRepo.insert_Account(name, address, contact, type)}
         }else{
             Log.e("47 Add-account-Vm", "ERROR validating")
         }

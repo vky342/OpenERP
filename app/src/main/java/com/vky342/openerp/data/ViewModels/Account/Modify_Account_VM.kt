@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class modify_Account_vm @Inject constructor(private val accountRepo: AccountRepo) : ViewModel(){
 
-    var account_to_modify : Account = Account(0,"","",0)
+    var account_to_modify : Account = Account(0,"","",0, "")
     val old_Account_list : MutableState<List<Account>> = mutableStateOf(listOf())
     init {
         viewModelScope.launch {

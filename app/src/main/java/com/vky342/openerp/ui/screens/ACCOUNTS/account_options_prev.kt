@@ -1,6 +1,5 @@
 package com.vky342.openerp.ui.screens.ACCOUNTS
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -58,7 +57,6 @@ import com.vky342.openerp.ui.theme.account_edit_title_color
 import com.vky342.openerp.ui.theme.account_list_title_border_color
 import com.vky342.openerp.ui.theme.account_list_title_color
 import com.vky342.openerp.ui.theme.account_list_title_container_color
-import com.vky342.openerp.ui.theme.account_list_type_selector_border_color
 import com.vky342.openerp.ui.theme.account_list_type_selector_container_color
 import com.vky342.openerp.ui.theme.account_list_type_selector_selected_txt_color
 import com.vky342.openerp.ui.theme.account_list_type_selector_shadow_color
@@ -123,7 +121,7 @@ fun account_search_bar(modifier: Modifier = Modifier){
 
 @Preview
 @Composable
-fun add_account_button(modifier: Modifier = Modifier){
+fun add_account_button(modifier: Modifier = Modifier, onClick : () -> Unit = {}){
 
     Box(
         modifier = modifier
@@ -140,9 +138,13 @@ fun add_account_button(modifier: Modifier = Modifier){
                     ambientColor = account_add_shadow_color,
                     spotColor = account_add_shadow_color
                 )
-                .background(color = account_add_options_container_color, shape = RoundedCornerShape(20f))
+                .background(
+                    color = account_add_options_container_color,
+                    shape = RoundedCornerShape(20f)
+                )
                 .border(1.dp, account_add_border_color, RoundedCornerShape(20f))
                 .align(Alignment.Center)
+                .clickable { onClick() }
         ) {
             Row(
                 modifier = Modifier.fillMaxSize(),
@@ -156,7 +158,9 @@ fun add_account_button(modifier: Modifier = Modifier){
                         .padding(3.dp),
                     tint = account_add_content_color
                 )
-                Box (modifier = Modifier.height(40.dp).align(Alignment.CenterVertically)) {
+                Box (modifier = Modifier
+                    .height(40.dp)
+                    .align(Alignment.CenterVertically)) {
                     Text(
                         text = "Add account",
                         fontSize = 20.sp,
@@ -203,7 +207,10 @@ fun edit_account_button(modifier: Modifier = Modifier){
                         ambientColor = account_edit_shadow_color,
                         spotColor = account_edit_shadow_color
                     )
-                    .background(color = account_edit_options_container_color, shape = RoundedCornerShape(20f))
+                    .background(
+                        color = account_edit_options_container_color,
+                        shape = RoundedCornerShape(20f)
+                    )
                     .border(1.dp, account_edit_border_color, RoundedCornerShape(20f))
                     .align(Alignment.Center)
             ) {
@@ -219,7 +226,9 @@ fun edit_account_button(modifier: Modifier = Modifier){
                             .padding(3.dp),
                         tint = account_edit_content_color
                     )
-                    Box (modifier = Modifier.height(40.dp).align(Alignment.CenterVertically)) {
+                    Box (modifier = Modifier
+                        .height(40.dp)
+                        .align(Alignment.CenterVertically)) {
                         Text(
                             text = "Edit account",
                             fontSize = 20.sp,
@@ -259,11 +268,15 @@ fun account_list(modifier: Modifier = Modifier){
             .wrapContentHeight()
             .fillMaxWidth(0.9f)
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(20f))
-            .background(color = account_list_title_container_color,
-                shape = RoundedCornerShape(20f))
-            .border(width = 1.dp,
+            .background(
+                color = account_list_title_container_color,
+                shape = RoundedCornerShape(20f)
+            )
+            .border(
+                width = 1.dp,
                 color = account_list_title_border_color,
-                shape = RoundedCornerShape(20f))
+                shape = RoundedCornerShape(20f)
+            )
             .align(Alignment.CenterHorizontally)
         ) {
             Column (modifier = Modifier
@@ -290,78 +303,172 @@ fun account_list(modifier: Modifier = Modifier){
 @Composable
 fun account_list_table(modifier: Modifier = Modifier){
 
-    val accounts_list: Map<String, Pair<Int,String>> = mapOf(
-        "Priyansh Singh" to Pair(2000,"Cr"),
-        "Sarwang sinha" to Pair(10000,"Dr"),
-        "Ajit Sidar" to Pair(18000,"Cr"),
-        "Ankit Agarwal" to Pair(1000,"Cr"),
-        "Rahul Sharma" to Pair(50000,"Dr"),
-        "Jangde" to Pair(100000,"Dr"),
-        "Manan Chauhan" to Pair(786000,"Dr"),
-
+    val accounts_list: Map<String, Pair<Int, String>> = mapOf(
+        "Priyansh Singh" to Pair(2000, "Cr"),
+        "Sarwang sinha" to Pair(10000, "Dr"),
+        "Ajit Sidar" to Pair(18000, "Cr"),
+        "Ankit Agarwal" to Pair(1000, "Cr"),
+        "Rahul Sharma" to Pair(50000, "Dr"),
+        "Jangde" to Pair(100000, "Dr"),
+        "Manan Chauhan" to Pair(786000, "Dr")
     )
 
 
-        Column (modifier = modifier
+    Column(
+        modifier = modifier
             .fillMaxWidth(0.9f)
             .fillMaxHeight()
-            .background(color = Color.White, shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f))) {
-            Box (modifier = Modifier.fillMaxWidth().weight(1f).background(color = Color.White)) {
+            .background(
+                color = Color.White,
+                shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f)
+            )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .background(color = Color.White)
+        ) {
 
-                Row (modifier = Modifier.fillMaxHeight().fillMaxWidth()){
+            Row(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+            ) {
+                //Srn
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .weight(0.1f)
+                        .background(color = Color.White)
+                ) {
+                    Text(text = "Sr", modifier = Modifier.align(Alignment.Center))
+                }
+
+                //Name
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .weight(0.25f)
+                        .background(color = Color.White)
+                ) {
+                    Text(text = "Name", modifier = Modifier.align(Alignment.CenterStart))
+                }
+
+                //balance
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .weight(0.25f)
+                        .background(color = Color.White)
+                ) {
+                    Text(text = "balance", modifier = Modifier.align(Alignment.Center))
+                }
+
+                // balance type
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .weight(0.15f)
+                        .background(color = Color.White)
+                ) {
+                    Text(text = "Cr/Dr", modifier = Modifier.align(Alignment.Center))
+                }
+            }
+        }
+
+        repeat(7) {
+
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(color = Color.LightGray)
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .background(color = Color.White)
+            ) {
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                ) {
                     //Srn
-                    Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.1f).background(color = Color.White)) {
-                        Text(text = "Sr", modifier = Modifier.align(Alignment.Center))
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth()
+                            .weight(0.1f)
+                            .background(color = Color.White)
+                    ) {
+                        Text(
+                            text = (it + 1).toString(),
+                            modifier = Modifier.align(Alignment.Center)
+                        )
                     }
 
-                    //Name
-                    Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.25f).background(color = Color.White)) {
-                        Text(text = "Name", modifier = Modifier.align(Alignment.CenterStart))
+                    // Name
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth()
+                            .weight(0.25f)
+                            .background(color = Color.White)
+                    ) {
+                        Text(
+                            text = accounts_list.keys.toList()[it],
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.align(Alignment.CenterStart)
+                        )
                     }
 
-                    //balance
-                    Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.25f).background(color = Color.White)) {
-                        Text(text = "balance", modifier = Modifier.align(Alignment.Center))
+                    // balance
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth()
+                            .weight(0.25f)
+                            .background(color = Color.White)
+                    ) {
+                        Text(
+                            text = accounts_list.values.toList()[it].first.toString(),
+                            modifier = Modifier.align(Alignment.Center)
+                        )
                     }
 
                     // balance type
-                    Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
-                        Text(text = "Cr/Dr", modifier = Modifier.align(Alignment.Center))
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth()
+                            .weight(0.15f)
+                            .background(color = Color.White)
+                    ) {
+                        Text(
+                            text = accounts_list.values.toList()[it].second,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
                     }
                 }
             }
-
-            repeat(7){
-
-                Spacer(modifier = Modifier.fillMaxWidth().height(1.dp).background(color = Color.LightGray))
-
-                Box (modifier = Modifier.fillMaxWidth().weight(1f).background(color = Color.White)) {
-
-                    Row (modifier = Modifier.fillMaxHeight().fillMaxWidth()){
-                        //Srn
-                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.1f).background(color = Color.White)) {
-                            Text(text = (it + 1).toString(), modifier = Modifier.align(Alignment.Center))
-                        }
-
-                        // Name
-                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.25f).background(color = Color.White)) {
-                            Text(text = accounts_list.keys.toList()[it], maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.align(Alignment.CenterStart))
-                        }
-
-                        // balance
-                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.25f).background(color = Color.White)) {
-                            Text(text = accounts_list.values.toList()[it].first.toString(), modifier = Modifier.align(Alignment.Center))
-                        }
-
-                        // balance type
-                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
-                            Text(text = accounts_list.values.toList()[it].second, modifier = Modifier.align(Alignment.Center))
-                        }
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.fillMaxWidth().height(1.dp).background(color = Color.LightGray))
         }
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(color = Color.LightGray)
+        )
+    }
 
 }
 
@@ -426,13 +533,16 @@ fun account_list_type_selector(modifier: Modifier = Modifier){
                 .padding(top = 4.dp, start = 4.dp, end = 4.dp, bottom = 0.dp)
                 .weight(1f)
                 .fillMaxHeight()
-                .shadow(elevation = customer_type_elevation,
+                .shadow(
+                    elevation = customer_type_elevation,
                     shape = RoundedCornerShape(topEnd = 20f, topStart = 20f),
                     ambientColor = Color.Black,
                     spotColor = Color.Black
                 )
-                .background(color = customer_type_button_color,
-                    shape = RoundedCornerShape(topEnd = 20f, topStart = 20f))
+                .background(
+                    color = customer_type_button_color,
+                    shape = RoundedCornerShape(topEnd = 20f, topStart = 20f)
+                )
                 .align(Alignment.CenterVertically)) {
 
                 Text(text = "Customer",
@@ -449,12 +559,16 @@ fun account_list_type_selector(modifier: Modifier = Modifier){
                 .padding(top = 4.dp, start = 4.dp, end = 4.dp, bottom = 0.dp)
                 .weight(1f)
                 .fillMaxHeight()
-                .shadow(elevation = supplier_type_elevation,
+                .shadow(
+                    elevation = supplier_type_elevation,
                     shape = RoundedCornerShape(topEnd = 20f, topStart = 20f),
                     ambientColor = Color.Black,
-                    spotColor = Color.Black)
-                .background(color = supplier_type_button_color,
-                    shape = RoundedCornerShape(topEnd = 20f, topStart = 20f))
+                    spotColor = Color.Black
+                )
+                .background(
+                    color = supplier_type_button_color,
+                    shape = RoundedCornerShape(topEnd = 20f, topStart = 20f)
+                )
                 .align(Alignment.CenterVertically)) {
 
                 Text(text = "Supplier",
@@ -470,12 +584,16 @@ fun account_list_type_selector(modifier: Modifier = Modifier){
                 .padding(top = 4.dp, start = 4.dp, end = 4.dp, bottom = 0.dp)
                 .weight(1f)
                 .fillMaxHeight()
-                .shadow(elevation = regular_type_elevation,
+                .shadow(
+                    elevation = regular_type_elevation,
                     shape = RoundedCornerShape(topEnd = 20f, topStart = 20f),
                     ambientColor = Color.Black,
-                    spotColor = Color.Black)
-                .background(color = regular_type_button_color,
-                    shape = RoundedCornerShape(topEnd = 20f, topStart = 20f))
+                    spotColor = Color.Black
+                )
+                .background(
+                    color = regular_type_button_color,
+                    shape = RoundedCornerShape(topEnd = 20f, topStart = 20f)
+                )
                 .align(Alignment.CenterVertically)) {
 
                 Text(text = "Regular",

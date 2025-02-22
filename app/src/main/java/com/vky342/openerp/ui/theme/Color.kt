@@ -108,8 +108,7 @@ val background_color = Color(0xFFFBF5DD)
 
     // account list type selector
     val account_list_type_selector_container_color = Color(0xFF16404D)
-    val account_list_type_selector_border_color = Color(0xFF16404D)
-    val account_list_type_selector_shadow_color = Color(0xFF16404D)
+    val account_list_type_selector_shadow_color = Color(0xFF000000)
     val account_list_type_selector_selected_txt_color = Color(0xFF16404D)
     val account_list_type_selector_unselected_txt_color = Color(0xFFA6CDC6)
     val account_type_selector_selected_button_color = Color(0xFFFFFFFF)
@@ -119,3 +118,16 @@ val background_color = Color(0xFFFBF5DD)
     val account_list_title_color = Color(0xFFFFFFFF)
     val account_list_title_container_color = Color(0xFFA6CDC6)
     val account_list_title_border_color = Color(0xFF16404D)
+
+    // add_account_screen
+    val New_account_title_color = Color(0xFF16404D)
+
+        // form color
+        val form_focused_container_color = Color(0xFFFFFFFF)
+        val form_unfocused_container_color = Color(0xFFA6CDC6)
+        val form_focused_indicator_color = Color(0xFF000000)
+        val form_unfocused_indicator_color = Color(0xFF16404D)
+        val form_unfocused_label_color = Color(0xFF16404D)
+        val form_focused_label_color = Color(0xFF16404D)
+        val form_focused_leading_icon_color = Color(0xFF000000)
+        val form_unfocused_leading_icon_color = Color(0xFF16404D)
