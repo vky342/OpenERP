@@ -10,12 +10,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -50,6 +54,7 @@ import com.vky342.openerp.ui.theme.form_unfocused_container_color
 import com.vky342.openerp.ui.theme.form_unfocused_indicator_color
 import com.vky342.openerp.ui.theme.form_unfocused_label_color
 import com.vky342.openerp.ui.theme.form_unfocused_leading_icon_color
+import com.vky342.openerp.ui.theme.save_button_container_color
 
 
 @Preview
@@ -115,6 +120,16 @@ fun add_acc_screen_prev(){
 
         ) {
             form_fields(icon = Icons.Outlined.Call,label = "Contact",modifier = Modifier.padding(horizontal = sidePadding.dp).align(Alignment.CenterStart))
+        }
+        // save button
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp)
+                .height(70.dp)
+
+        ) {
+            Save_button(modifier = Modifier.align(Alignment.Center))
         }
     }
 }
@@ -274,5 +289,18 @@ fun account_registration_type_selector(modifier: Modifier = Modifier){
             }
 
         }
+    }
+}
+
+@Preview
+@Composable
+fun Save_button(modifier: Modifier = Modifier, onClick : () -> Unit = {},enabled : Boolean = true){
+    Button(colors = ButtonDefaults.buttonColors().copy(containerColor = save_button_container_color),
+        modifier = modifier
+            .width(100.dp),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 7.dp, pressedElevation = 3.dp),
+        enabled = enabled,
+        onClick = {onClick()}) {
+        Text("Save", color = Color.White)
     }
 }

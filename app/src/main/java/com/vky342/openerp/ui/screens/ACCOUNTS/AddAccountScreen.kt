@@ -110,6 +110,15 @@ fun Add_Account_Screen( viewModel: Add_Account_VM = hiltViewModel()){
             ) {
                 form_fields(icon = Icons.Outlined.Call, value = contact, onVc = {contact = it},label = "Contact",modifier = Modifier.padding(horizontal = sidePadding.dp).align(Alignment.CenterStart))
             }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp)
+                    .height(70.dp)
+
+            ) {
+                Save_button(modifier = Modifier.align(Alignment.Center))
+            }
         }
     }
 }
