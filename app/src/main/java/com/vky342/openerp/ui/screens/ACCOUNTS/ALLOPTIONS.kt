@@ -57,7 +57,7 @@ fun AllOptionsScreen(
         ) {
 
             add_account_button(onClick = {navController.navigate(AccountScreens.ADD)})
-            edit_account_button()
+            edit_account_button(onClick = {navController.navigate(AccountScreens.MODIFY)})
             account_search_bar(modifier = Modifier.padding(horizontal = sidePadding.dp))
             account_list()
         }

@@ -132,3 +132,12 @@ val background_color = Color(0xFFFBF5DD)
         val form_focused_leading_icon_color = Color(0xFF000000)
         val form_unfocused_leading_icon_color = Color(0xFF16404D)
         val save_button_container_color = Color(0xFFDDA853)
+
+//modify account screen
+val search_account_content_color_for_edit_account = Color(0xFFFBF5DD)
+val search_account_icon_color_for_edit_account = Color(0xFF000000)
+val search_account_border_color_for_edit_account = Color(0xFF000000)
+val search_account_focused_container_color_for_edit_account = Color(0xFFA6CDC6)
+val search_account_container_color_for_edit_account = Color(0xFF16404D)
+val search_account_focused_text_color_for_edit_account = Color(0xFF000000)
+val search_account_unfocused_text_color_for_edit_account = Color(0xFFFBF5DD)

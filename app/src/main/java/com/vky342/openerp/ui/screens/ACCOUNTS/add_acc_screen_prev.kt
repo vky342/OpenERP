@@ -294,13 +294,13 @@ fun account_registration_type_selector(modifier: Modifier = Modifier){
 
 @Preview
 @Composable
-fun Save_button(modifier: Modifier = Modifier, onClick : () -> Unit = {},enabled : Boolean = true){
+fun Save_button(modifier: Modifier = Modifier, onClick : () -> Unit = {},enabled : Boolean = true,label: String = ""){
     Button(colors = ButtonDefaults.buttonColors().copy(containerColor = save_button_container_color),
         modifier = modifier
             .width(100.dp),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 7.dp, pressedElevation = 3.dp),
         enabled = enabled,
         onClick = {onClick()}) {
-        Text("Save", color = Color.White)
+        Text(label, color = Color.White)
     }
 }

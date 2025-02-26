@@ -117,7 +117,7 @@ fun Add_Account_Screen( viewModel: Add_Account_VM = hiltViewModel()){
                     .height(70.dp)
 
             ) {
-                Save_button(modifier = Modifier.align(Alignment.Center))
+                Save_button(modifier = Modifier.align(Alignment.Center), label = "Save")
             }
         }
     }

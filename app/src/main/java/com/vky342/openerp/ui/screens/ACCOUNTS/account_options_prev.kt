@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -190,7 +189,7 @@ fun add_account_button(modifier: Modifier = Modifier, onClick : () -> Unit = {})
 
 @Preview
 @Composable
-fun edit_account_button(modifier: Modifier = Modifier){
+fun edit_account_button(modifier: Modifier = Modifier, onClick: () -> Unit = {}){
 
         Box(
             modifier = modifier
@@ -213,6 +212,7 @@ fun edit_account_button(modifier: Modifier = Modifier){
                     )
                     .border(1.dp, account_edit_border_color, RoundedCornerShape(20f))
                     .align(Alignment.Center)
+                    .clickable { onClick() }
             ) {
                 Row(
                     modifier = Modifier.fillMaxSize(),
