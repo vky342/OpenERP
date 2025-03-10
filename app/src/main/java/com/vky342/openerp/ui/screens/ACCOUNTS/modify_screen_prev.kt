@@ -171,6 +171,10 @@ fun Searchbar_for_edit_account(label : String,onVC : (MutableList<String>)-> Uni
 
         },
         trailingIcon = { Icon(Icons.Default.Check, contentDescription = "", tint = search_account_icon_color_for_edit_account) },
-        colors = TextFieldDefaults.colors().copy(focusedTextColor = search_account_focused_text_color_for_edit_account, unfocusedTextColor = search_account_unfocused_text_color_for_edit_account,focusedContainerColor = search_account_focused_container_color_for_edit_account, unfocusedContainerColor = search_account_container_color_for_edit_account))
+        colors = TextFieldDefaults.colors().copy(
+            focusedTextColor = search_account_focused_text_color_for_edit_account,
+            unfocusedTextColor = search_account_unfocused_text_color_for_edit_account,
+            focusedContainerColor = search_account_focused_container_color_for_edit_account,
+            unfocusedContainerColor = search_account_container_color_for_edit_account))
 
 }
