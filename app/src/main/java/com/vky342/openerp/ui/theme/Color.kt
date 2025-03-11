@@ -141,3 +141,8 @@ val search_account_focused_container_color_for_edit_account = Color(0xFFA6CDC6)
 val search_account_container_color_for_edit_account = Color(0xFF16404D)
 val search_account_focused_text_color_for_edit_account = Color(0xFF000000)
 val search_account_unfocused_text_color_for_edit_account = Color(0xFFFBF5DD)
+
+// add purchase screen
+val add_purchase_screen_item_card_background_color = Color(0xFFA6CDC6)
+// item card
+val add_purchase_screen_item_card_delete_color = Color(0xFFE91E63)

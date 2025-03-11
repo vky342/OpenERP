@@ -2,10 +2,13 @@ package com.vky342.openerp.ui.screens.transactions
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,9 +21,14 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.Delete
@@ -44,14 +52,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
+import com.vky342.openerp.ui.screens.HOMES.AutoResizeText
 import com.vky342.openerp.ui.theme.New_account_title_color
 import com.vky342.openerp.ui.theme.account_list_type_selector_container_color
 import com.vky342.openerp.ui.theme.account_list_type_selector_selected_txt_color
@@ -59,15 +73,19 @@ import com.vky342.openerp.ui.theme.account_list_type_selector_shadow_color
 import com.vky342.openerp.ui.theme.account_list_type_selector_unselected_txt_color
 import com.vky342.openerp.ui.theme.account_type_selector_selected_button_color
 import com.vky342.openerp.ui.theme.account_type_selector_unselected_button_color
+import com.vky342.openerp.ui.theme.add_purchase_screen_item_card_background_color
+import com.vky342.openerp.ui.theme.add_purchase_screen_item_card_delete_color
+import com.vky342.openerp.ui.theme.amount_text_color
 import com.vky342.openerp.ui.theme.background_color
 import com.vky342.openerp.ui.theme.sale_button_background_color
 import com.vky342.openerp.ui.theme.sale_icon_color
 import com.vky342.openerp.ui.theme.search_account_container_color_for_edit_account
+import com.vky342.openerp.ui.theme.shadow_color
+import com.vky342.openerp.ui.theme.title_color
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun add_purchase_screen_prev(){
@@ -101,18 +119,21 @@ fun add_purchase_screen_prev(){
         }
 
         // Payment mode selector
-        Box(
+        Row (horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .padding(horizontal = sidePadding.dp)
                 .fillMaxWidth()
                 .padding(vertical = 7.dp)
                 .height(50.dp)
         ) {
-            payment_mode_type_selector(modifier = Modifier.align(Alignment.CenterStart))
-            Box (modifier = Modifier.fillMaxWidth(0.5f).align(Alignment.TopEnd).height(45.dp)){
+            payment_mode_type_selector(modifier = Modifier.align(Alignment.CenterVertically).fillMaxHeight())
+
+            Box (modifier = Modifier.fillMaxWidth(1f).align(Alignment.Top).height(43.dp)){
                 DatePickerComposable (label = "Date"){  }
             }
         }
+
+        item_Card(modifier = Modifier.padding(horizontal = sidePadding.dp))
     }
 }
 
@@ -121,6 +142,7 @@ fun add_purchase_screen_prev(){
 @Preview
 @Composable
 fun payment_mode_type_selector(modifier: Modifier = Modifier){
+
     val selected_type = remember { mutableStateOf(0) }
 
     var customer_type_txt_color = account_list_type_selector_unselected_txt_color
@@ -138,9 +160,11 @@ fun payment_mode_type_selector(modifier: Modifier = Modifier){
     }
 
     if (selected_type.value == 1){
+
         supplier_type_txt_color = account_list_type_selector_selected_txt_color
         supplier_type_button_color = account_type_selector_selected_button_color
         supplier_type_elevation = 5.dp
+
     }
 
     Box(
@@ -267,61 +291,140 @@ fun DatePickerComposable(
 @Preview
 @Composable
 fun item_Card(modifier: Modifier = Modifier){
-    Box (modifier = modifier.wrapContentSize()){
 
-        Box (modifier = Modifier.height(250.dp).fillMaxWidth().background(color = Color.White, shape = RoundedCornerShape(20f))) {
+
+        Box (modifier = modifier.height(250.dp).fillMaxWidth().shadow(elevation = 4.dp, shape = RoundedCornerShape(20f)).background(color = add_purchase_screen_item_card_background_color, shape = RoundedCornerShape(20f)).border(1.dp, color = title_color, shape = RoundedCornerShape(20f))) {
             Column (modifier = Modifier.fillMaxSize()){
                 Box (modifier = Modifier.fillMaxWidth().weight(1f)){
                     Row (modifier = Modifier.fillMaxSize()){
-                        Box (modifier = Modifier.fillMaxHeight().weight(0.75f).padding(all = 5.dp).background(color = Color.LightGray, shape = RoundedCornerShape(20f))){
-                            Image(Icons.Default.Refresh, contentDescription = "",modifier = Modifier.fillMaxSize())
+
+                        // Image - Item
+                        Box (modifier = Modifier.fillMaxHeight().weight(0.75f).padding(all = 12.dp).shadow(elevation = 4.dp,shape = RoundedCornerShape(20f)).background(color = Color.White, shape = RoundedCornerShape(20f))){
+                            Image(Icons.Default.Refresh, contentDescription = "",modifier = Modifier.align(Alignment.Center))
                         }
+
+
                         Box (modifier = Modifier.fillMaxHeight().weight(1f)){
-                            Column (modifier = Modifier.fillMaxSize()){
-                                BasicTextField(value = "24x36x45 R/B", textStyle = TextStyle(fontSize = 23.sp),onValueChange = {}, modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth(0.8f).padding(top = 17.dp, bottom = 5.dp))
-                                BasicTextField(value = "48.36 $", textStyle = TextStyle(fontSize = 20.sp),onValueChange = {}, modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth(0.8f).padding(vertical = 7.dp))
-                                BasicTextField(value = "Disc - 12%", textStyle = TextStyle(fontSize = 20.sp),onValueChange = {}, modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth(0.8f).padding(vertical = 8.dp))
-                                BasicTextField(value = "Total - 486.40 $", textStyle = TextStyle(fontSize = 23.sp),onValueChange = {}, modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth(0.8f).padding(vertical = 10.dp))
+
+                            // item details
+                            Column (modifier = Modifier.fillMaxSize().padding(start = 10.dp, bottom = 5.dp).align(Alignment.Center), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+
+                                AutoResizeText("24x36x45 R/B",
+                                    style = TextStyle(
+                                        shadow = Shadow(
+                                            color = shadow_color, // Shadow color
+                                            offset = Offset(0f, 4f), // Shadow offset (x, y)
+                                            blurRadius = 4f // Shadow blur radius
+                                        ),
+                                        fontWeight = FontWeight.Bold
+                                    ),
+                                    color = amount_text_color,
+                                    textAlign = TextAlign.Center, modifier = Modifier.align(
+                                        Alignment.Start).padding(vertical = 2.5.dp)
+                                )
+
+                                AutoResizeText("24.80 $",
+                                    style = TextStyle(
+                                        shadow = Shadow(
+                                            color = shadow_color, // Shadow color
+                                            offset = Offset(0f, 4f), // Shadow offset (x, y)
+                                            blurRadius = 4f // Shadow blur radius
+                                        ),
+                                        fontWeight = FontWeight.Light
+                                    ),
+                                    color = amount_text_color,
+                                    textAlign = TextAlign.Center, modifier = Modifier.align(
+                                        Alignment.Start).padding(vertical = 2.5.dp)
+                                )
+
+                                AutoResizeText("disc - 20%",
+                                    style = TextStyle(
+                                        shadow = Shadow(
+                                            color = shadow_color, // Shadow color
+                                            offset = Offset(0f, 4f), // Shadow offset (x, y)
+                                            blurRadius = 4f // Shadow blur radius
+                                        ),
+                                        fontWeight = FontWeight.Light
+                                    ),
+                                    color = amount_text_color,
+                                    textAlign = TextAlign.Center, modifier = Modifier.align(
+                                        Alignment.Start).padding(vertical = 2.5.dp)
+                                )
+
+
+
+
+                                AutoResizeText("486.40 $",
+                                    style = TextStyle(
+                                    shadow = Shadow(
+                                        color = shadow_color, // Shadow color
+                                        offset = Offset(0f, 4f), // Shadow offset (x, y)
+                                        blurRadius = 4f // Shadow blur radius
+                                    ),
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                    color = amount_text_color,
+                                    textAlign = TextAlign.Center, modifier = Modifier.align(
+                                        Alignment.Start)
+                                )
                             }
+
                         }
                     }
                 }
                 Box (modifier = Modifier.fillMaxWidth().weight(0.4f)){
                     Row (modifier = Modifier.fillMaxSize()){
+
+                        // Delete button
                         Box( modifier = Modifier
-                            .padding(horizontal = 5.dp)
+                            .padding(horizontal = 12.dp, vertical = 5.dp)
                             .weight(1f)
                             .fillMaxHeight(0.9f)
-                            .background(color = sale_button_background_color, shape = RoundedCornerShape(
+                            .shadow(elevation = 4.dp,shape = RoundedCornerShape(20f))
+                            .background(color = add_purchase_screen_item_card_delete_color, shape = RoundedCornerShape(
                                 CornerSize(20f)
                             ))
+
                             .align(Alignment.CenterVertically)){
+
                             Icon(
                                 imageVector = Icons.Filled.Delete,
                                 contentDescription = "",
                                 tint = Color.White,
                                 modifier = Modifier.size(50.dp).align(Alignment.Center)
                             )
+
                         }
+
+                        // Quantity button
                         Box( modifier = Modifier
-                            .padding(horizontal = 5.dp)
+                            .padding(horizontal = 12.dp, vertical = 5.dp)
                             .weight(1f)
                             .fillMaxHeight(0.9f)
+                            .shadow(elevation = 4.dp,shape = RoundedCornerShape(20f))
                             .background(color = sale_button_background_color, shape = RoundedCornerShape(
                                 CornerSize(20f)
                             ))
-                            .align(Alignment.CenterVertically)){
-                            Icon(
-                                imageVector = Icons.Filled.Delete,
-                                contentDescription = "",
-                                tint = Color.White,
-                                modifier = Modifier.size(50.dp).align(Alignment.Center)
-                            )
+                            .align(Alignment.CenterVertically)) {
+
+                            Row (modifier = Modifier.fillMaxSize()){
+
+                                Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = "", tint = Color.White, modifier = Modifier.weight(1f).align(Alignment.CenterVertically))
+
+                                Box ( modifier = Modifier.weight(2.8f).align(Alignment.CenterVertically)) {
+
+                                    Text("20", modifier = Modifier.align(Alignment.Center), fontSize = 26.sp)
+
+                                }
+
+                                Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = "", tint = Color.White, modifier = Modifier.weight(1f).align(Alignment.CenterVertically))
+
+                            }
                         }
                     }
 
                 }
             }
         }
-    }
+
 }
