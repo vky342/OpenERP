@@ -2,6 +2,7 @@ package com.vky342.openerp.ui.screens.transactions
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,8 +19,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,6 +39,8 @@ fun AddPurchaseScreen(viewModel : Add_purchase_VM = hiltViewModel()){
 
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val sidePadding = width.value * 0.08
+
+    val item_fill_popUp_status = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -92,6 +98,25 @@ fun AddPurchaseScreen(viewModel : Add_purchase_VM = hiltViewModel()){
             }
         }
 
-        floating_add_button(modifier = Modifier.padding(vertical = 85.dp, horizontal = (sidePadding/2).dp).align(Alignment.BottomEnd))
+        floating_add_button(onClick = {item_fill_popUp_status.value = true},modifier = Modifier.padding(vertical = 85.dp, horizontal = (sidePadding/2).dp).align(Alignment.BottomEnd))
+
+        if (item_fill_popUp_status.value){
+
+            Box (modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.DarkGray.copy(alpha = 0.5f))
+                .clickable {  }) {
+
+                // touch barrier
+
+            }
+
+            item_fill_popUp(modifier = Modifier.padding(horizontal = 10.dp, vertical = 150.dp).align(Alignment.TopCenter),
+                onCancel = {item_fill_popUp_status.value = false},
+                onDone = {item_fill_popUp_status.value = false}
+            )
+
+        }
+
     }
 }

@@ -23,16 +23,27 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Person
@@ -80,6 +91,7 @@ import com.vky342.openerp.ui.theme.add_purchase_screen_item_card_background_colo
 import com.vky342.openerp.ui.theme.add_purchase_screen_item_card_delete_color
 import com.vky342.openerp.ui.theme.amount_text_color
 import com.vky342.openerp.ui.theme.background_color
+import com.vky342.openerp.ui.theme.form_unfocused_container_color
 import com.vky342.openerp.ui.theme.sale_button_background_color
 import com.vky342.openerp.ui.theme.sale_icon_color
 import com.vky342.openerp.ui.theme.search_account_container_color_for_edit_account
@@ -294,7 +306,7 @@ fun DatePickerComposable(
     )
 }
 
-//@Preview
+@Preview
 @Composable
 fun item_Card(modifier: Modifier = Modifier){
 
@@ -437,21 +449,97 @@ fun item_Card(modifier: Modifier = Modifier){
 
 //@Preview
 @Composable
-fun floating_add_button(modifier: Modifier = Modifier){
-    Box (modifier = modifier.size(60.dp).shadow(elevation = 8.dp, shape = RoundedCornerShape(20f)).background(color = New_account_title_color, shape = RoundedCornerShape(20f))){
+fun floating_add_button(modifier: Modifier = Modifier,onClick : () -> Unit = {}){
+    Box (modifier = modifier
+        .size(60.dp)
+        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20f))
+        .background(color = New_account_title_color, shape = RoundedCornerShape(20f))
+        .clickable { onClick() }
+    ){
         Icon(Icons.Default.Add, contentDescription = "", tint = background_color,modifier = Modifier.size(45.dp).align(Alignment.Center))
     }
 }
 
 @Preview
 @Composable
-fun item_fill_popUp(modifier: Modifier = Modifier){
+fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, onDone : () -> Unit = {}){
     Box(
         modifier = modifier
             .height(300.dp)
             .fillMaxWidth()
             .background(color = background_color,shape = RoundedCornerShape(20f))
+            .border(width = 1.dp,color = title_color, shape = RoundedCornerShape(20f))
+            .shadow(elevation = 4.dp, ambientColor = Color.White, spotColor = Color.White)
     ) {
-        //to be continued
+        Row(modifier = Modifier.fillMaxWidth()){
+
+            // left side
+            Box(modifier = Modifier.fillMaxHeight().weight(4f)){
+                Column (modifier = Modifier.fillMaxSize()){
+                    //Title
+                    Box (modifier = Modifier.fillMaxWidth().weight(0.7f)){
+                        Text("Add new item", fontSize = 20.sp,modifier = Modifier.padding(horizontal = 20.dp).align(Alignment.CenterStart))
+                    }
+
+                    // Item name
+                    Box (modifier = Modifier.fillMaxWidth().weight(1f)){
+                        form_fields(icon = Icons.Default.Search,label = "item name",modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth())
+                    }
+
+                    // Item price and discount
+                    Box (modifier = Modifier.fillMaxWidth().weight(1f)){
+                        Row (modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth().fillMaxHeight(0.9f).align(Alignment.Center)) {
+
+                            // Price
+                            Box (modifier = Modifier.fillMaxHeight().padding(end = 2.dp).weight(1f)){
+                                form_fields(icon = Icons.Default.KeyboardArrowUp,label = "Price $",modifier = Modifier.fillMaxWidth().align(Alignment.Center))
+                            }
+
+                            // Discount
+                            Box (modifier = Modifier.fillMaxHeight().weight(1f)){
+                                form_fields(icon = Icons.Default.KeyboardArrowDown,label = "Disc %",modifier = Modifier.fillMaxWidth().align(Alignment.Center))
+                            }
+                        }
+                    }
+
+                    // quantity
+                    Box (modifier = Modifier.fillMaxWidth().weight(1.5f)){
+                        Text("Q u a n t i t y", fontWeight = FontWeight(300), color = form_unfocused_container_color, fontSize = 50.sp,modifier = Modifier.align(Alignment.Center))
+                        Text("28", fontSize = 50.sp, fontWeight = FontWeight(500),color = New_account_title_color, modifier = Modifier.align(Alignment.Center))
+                    }
+                }
+            }
+
+            //Right side
+            Box(modifier = Modifier.fillMaxHeight().weight(1f)){
+
+                Column (modifier = Modifier.fillMaxSize()){
+
+                    // Cancel button
+                    Box(modifier = Modifier.fillMaxWidth()
+                        .padding(bottom = 3.dp, start = 5.dp, end = 8.dp, top = 8.dp)
+                        .weight(1f)
+                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(20f))
+                        .background(color = add_purchase_screen_item_card_delete_color, shape = RoundedCornerShape(20f))
+                        .align(Alignment.CenterHorizontally)
+                        .clickable { onCancel() }){
+                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "",modifier = Modifier.size(50.dp).align(Alignment.Center))
+                    }
+
+                    // Save button
+                    Box(modifier = Modifier.fillMaxWidth()
+                        .padding(bottom = 8.dp, start = 5.dp, end = 8.dp, top = 3.dp)
+                        .weight(1f)
+                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(20f))
+                        .background(color = sale_button_background_color, shape = RoundedCornerShape(20f))
+                        .align(Alignment.CenterHorizontally)
+                        .clickable { onDone() }){
+                        Icon(Icons.Default.Check, contentDescription = "",modifier = Modifier.size(50.dp).align(Alignment.Center))
+                    }
+                }
+
+            }
+
+        }
     }
 }
