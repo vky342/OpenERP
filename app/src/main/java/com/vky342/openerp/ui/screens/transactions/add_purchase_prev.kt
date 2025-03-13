@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CornerSize
@@ -56,6 +58,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -86,7 +89,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-@Preview
+//@Preview
 @Composable
 fun add_purchase_screen_prev(){
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
@@ -132,14 +135,17 @@ fun add_purchase_screen_prev(){
                 DatePickerComposable (label = "Date"){  }
             }
         }
-
-        item_Card(modifier = Modifier.padding(horizontal = sidePadding.dp))
+        Column (modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(top = 25.dp)){
+            item_Card(modifier = Modifier.padding(horizontal = sidePadding.dp, vertical = 10.dp))
+            item_Card(modifier = Modifier.padding(horizontal = sidePadding.dp, vertical = 10.dp))
+            item_Card(modifier = Modifier.padding(horizontal = sidePadding.dp, vertical = 10.dp))
+        }
     }
 }
 
 // payment mode selector
 
-@Preview
+//@Preview
 @Composable
 fun payment_mode_type_selector(modifier: Modifier = Modifier){
 
@@ -288,7 +294,7 @@ fun DatePickerComposable(
     )
 }
 
-@Preview
+//@Preview
 @Composable
 fun item_Card(modifier: Modifier = Modifier){
 
@@ -427,4 +433,25 @@ fun item_Card(modifier: Modifier = Modifier){
             }
         }
 
+}
+
+//@Preview
+@Composable
+fun floating_add_button(modifier: Modifier = Modifier){
+    Box (modifier = modifier.size(60.dp).shadow(elevation = 8.dp, shape = RoundedCornerShape(20f)).background(color = New_account_title_color, shape = RoundedCornerShape(20f))){
+        Icon(Icons.Default.Add, contentDescription = "", tint = background_color,modifier = Modifier.size(45.dp).align(Alignment.Center))
+    }
+}
+
+@Preview
+@Composable
+fun item_fill_popUp(modifier: Modifier = Modifier){
+    Box(
+        modifier = modifier
+            .height(300.dp)
+            .fillMaxWidth()
+            .background(color = background_color,shape = RoundedCornerShape(20f))
+    ) {
+        //to be continued
+    }
 }
