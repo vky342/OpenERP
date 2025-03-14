@@ -32,6 +32,7 @@ import com.vky342.openerp.data.ViewModels.transaction.Add_purchase_VM
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.theme.New_account_title_color
 import com.vky342.openerp.ui.theme.background_color
+import com.vky342.openerp.ui.theme.var_amount_row_colour
 
 
 @Composable
@@ -92,6 +93,13 @@ fun AddPurchaseScreen(viewModel : Add_purchase_VM = hiltViewModel()){
                 }
             }
             Column (modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(top = 25.dp)){
+
+                Variable_Amount_Row_2(modifier = Modifier.background(color = var_amount_row_colour))
+
+                Box (modifier = Modifier.fillMaxWidth().height(20.dp)){
+                    //padding
+                }
+
                 item_Card(modifier = Modifier.padding(horizontal = (sidePadding/2).dp, vertical = 10.dp))
                 item_Card(modifier = Modifier.padding(horizontal = (sidePadding/2).dp, vertical = 10.dp))
                 item_Card(modifier = Modifier.padding(horizontal = (sidePadding/2).dp, vertical = 10.dp))
@@ -111,7 +119,7 @@ fun AddPurchaseScreen(viewModel : Add_purchase_VM = hiltViewModel()){
 
             }
 
-            item_fill_popUp(modifier = Modifier.padding(horizontal = 10.dp, vertical = 150.dp).align(Alignment.TopCenter),
+            item_fill_popUp(modifier = Modifier.padding(horizontal = 10.dp, vertical = 40.dp).align(Alignment.TopCenter),
                 onCancel = {item_fill_popUp_status.value = false},
                 onDone = {item_fill_popUp_status.value = false}
             )

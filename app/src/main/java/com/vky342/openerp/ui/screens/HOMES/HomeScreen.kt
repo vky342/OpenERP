@@ -54,6 +54,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import com.vky342.openerp.ui.theme.amount_stat_border_color
 import com.vky342.openerp.ui.theme.amount_text_color
 import com.vky342.openerp.ui.theme.background_color
@@ -425,11 +426,12 @@ fun AutoResizeText(
     }
 }
 
+@Preview
 @Composable
-fun VariableAmountRow(modifier: Modifier) {
+fun VariableAmountRow(modifier: Modifier = Modifier) {
     // Mutable state for the amounts
-    var todaySales by remember { mutableStateOf("10,00,000") }
-    var todayReceipts by remember { mutableStateOf("40,00,000") }
+    val todaySales by remember { mutableStateOf("10,00,000") }
+    val todayReceipts by remember { mutableStateOf("40,00,000") }
 
     Row(
         modifier = modifier
