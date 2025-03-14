@@ -325,66 +325,74 @@ fun item_Card(modifier: Modifier = Modifier){
                         Box (modifier = Modifier.fillMaxHeight().weight(1f)){
 
                             // item details
-                            Column (modifier = Modifier.fillMaxSize().padding(start = 10.dp, bottom = 5.dp).align(Alignment.Center), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                            Column (modifier = Modifier.fillMaxSize().padding(start = 10.dp, bottom = 5.dp, top = 10.dp).align(Alignment.Center), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
 
-                                AutoResizeText("24x36x45 R/B",
-                                    style = TextStyle(
-                                        shadow = Shadow(
+                                // Item name
+                                Box(modifier = Modifier.padding(horizontal = 6.dp).fillMaxWidth().weight(1f)){
+                                    Text("24x36x45 R/B",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 25.sp,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                        color = amount_text_color,
+                                        style = TextStyle(shadow = Shadow(
                                             color = shadow_color, // Shadow color
                                             offset = Offset(0f, 4f), // Shadow offset (x, y)
                                             blurRadius = 4f // Shadow blur radius
-                                        ),
-                                        fontWeight = FontWeight.Bold
-                                    ),
-                                    color = amount_text_color,
-                                    textAlign = TextAlign.Center, modifier = Modifier.align(
-                                        Alignment.Start).padding(vertical = 2.5.dp)
-                                )
+                                        )))
+                                }
 
-                                AutoResizeText("24.80 $",
-                                    style = TextStyle(
-                                        shadow = Shadow(
+
+                                // Item Price
+                                Box(modifier = Modifier.padding(horizontal = 6.dp).fillMaxWidth().weight(1f)){
+                                    Text("P r i c e", fontWeight = FontWeight.Light, fontSize = 20.sp, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
+                                    Text("24.60 $",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 23.sp,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                        color = amount_text_color,
+                                        style = TextStyle(shadow = Shadow(
                                             color = shadow_color, // Shadow color
                                             offset = Offset(0f, 4f), // Shadow offset (x, y)
-                                            blurRadius = 4f // Shadow blur radius
-                                        ),
-                                        fontWeight = FontWeight.Light
-                                    ),
-                                    color = amount_text_color,
-                                    textAlign = TextAlign.Center, modifier = Modifier.align(
-                                        Alignment.Start).padding(vertical = 2.5.dp)
-                                )
+                                            blurRadius = 4f)
+                                        ), modifier = Modifier.align(Alignment.CenterStart)
+                                    )
+                                }
 
-                                AutoResizeText("disc - 20%",
-                                    style = TextStyle(
-                                        shadow = Shadow(
+                                // Item Discount
+                                Box(modifier = Modifier.padding(horizontal = 6.dp).fillMaxWidth().weight(1f)){
+                                    Text("D i s c o u n t", fontWeight = FontWeight.Light, fontSize = 20.sp, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
+                                    Text("12 %",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 23.sp,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                        color = amount_text_color,
+                                        style = TextStyle(shadow = Shadow(
                                             color = shadow_color, // Shadow color
                                             offset = Offset(0f, 4f), // Shadow offset (x, y)
-                                            blurRadius = 4f // Shadow blur radius
-                                        ),
-                                        fontWeight = FontWeight.Light
-                                    ),
-                                    color = amount_text_color,
-                                    textAlign = TextAlign.Center, modifier = Modifier.align(
-                                        Alignment.Start).padding(vertical = 2.5.dp)
-                                )
+                                            blurRadius = 4f)
+                                        ), modifier = Modifier.align(Alignment.CenterStart)
+                                    )
+                                }
 
-
-
-
-                                AutoResizeText("486.40 $",
-                                    style = TextStyle(
-                                    shadow = Shadow(
-                                        color = shadow_color, // Shadow color
-                                        offset = Offset(0f, 4f), // Shadow offset (x, y)
-                                        blurRadius = 4f // Shadow blur radius
-                                    ),
-                                    fontWeight = FontWeight.Bold
-                                ),
-                                    color = amount_text_color,
-                                    textAlign = TextAlign.Center, modifier = Modifier.align(
-                                        Alignment.Start)
-                                )
+                                // Total amount
+                                Box(modifier = Modifier.padding(horizontal = 6.dp).fillMaxWidth().weight(1f)){
+                                    Text("T o t a l", fontWeight = FontWeight.Light, fontSize = 20.sp, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
+                                    Text("480.00 $",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 23.sp,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                        color = Color.White,
+                                        style = TextStyle(shadow = Shadow(
+                                            color = shadow_color,
+                                            offset = Offset(0f, 4f),
+                                            blurRadius = 4f)
+                                        ),modifier = Modifier.align(Alignment.CenterStart)
+                                    )
+                                }
                             }
 
                         }
@@ -474,7 +482,7 @@ fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, o
         Row(modifier = Modifier.fillMaxWidth()){
 
             // left side
-            Box(modifier = Modifier.fillMaxHeight().weight(4f)){
+            Box(modifier = Modifier.fillMaxHeight().weight(5f)){
                 Column (modifier = Modifier.fillMaxSize()){
                     //Title
                     Box (modifier = Modifier.fillMaxWidth().weight(0.7f)){
@@ -497,14 +505,14 @@ fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, o
 
                             // Discount
                             Box (modifier = Modifier.fillMaxHeight().weight(1f)){
-                                form_fields(icon = Icons.Default.KeyboardArrowDown,label = "Disc %",modifier = Modifier.fillMaxWidth().align(Alignment.Center))
+                                form_fields(icon = Icons.Default.KeyboardArrowDown,label = "Disc%",modifier = Modifier.fillMaxWidth().align(Alignment.Center))
                             }
                         }
                     }
 
                     // quantity
                     Box (modifier = Modifier.fillMaxWidth().weight(1.5f)){
-                        Text("Q u a n t i t y", fontWeight = FontWeight(300), color = form_unfocused_container_color, fontSize = 50.sp,modifier = Modifier.align(Alignment.Center))
+                        Text("Q u a n t i t y", fontWeight = FontWeight(300), color = form_unfocused_container_color, fontSize = 40.sp,modifier = Modifier.align(Alignment.Center))
                         Text("28", fontSize = 50.sp, fontWeight = FontWeight(500),color = New_account_title_color, modifier = Modifier.align(Alignment.Center))
                     }
                 }

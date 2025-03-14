@@ -92,9 +92,9 @@ fun AddPurchaseScreen(viewModel : Add_purchase_VM = hiltViewModel()){
                 }
             }
             Column (modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(top = 25.dp)){
-                item_Card(modifier = Modifier.padding(horizontal = sidePadding.dp, vertical = 10.dp))
-                item_Card(modifier = Modifier.padding(horizontal = sidePadding.dp, vertical = 10.dp))
-                item_Card(modifier = Modifier.padding(horizontal = sidePadding.dp, vertical = 10.dp))
+                item_Card(modifier = Modifier.padding(horizontal = (sidePadding/2).dp, vertical = 10.dp))
+                item_Card(modifier = Modifier.padding(horizontal = (sidePadding/2).dp, vertical = 10.dp))
+                item_Card(modifier = Modifier.padding(horizontal = (sidePadding/2).dp, vertical = 10.dp))
             }
         }
 
