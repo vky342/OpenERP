@@ -681,13 +681,6 @@ fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, o
 
                     }
 
-//                    // quantity
-//                    Box (modifier = Modifier
-//                        .fillMaxWidth()
-//                        .weight(1.5f)){
-//                        Text("Q u a n t i t y", fontWeight = FontWeight(300), color = form_unfocused_container_color, fontSize = 40.sp,modifier = Modifier.align(Alignment.Center))
-//                        Text("28", fontSize = 50.sp, fontWeight = FontWeight(500),color = New_account_title_color, modifier = Modifier.align(Alignment.Center))
-//                    }
                     // Quantity
                     Box (modifier = Modifier
                         .fillMaxWidth()
