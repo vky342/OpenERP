@@ -32,6 +32,7 @@ import com.vky342.openerp.data.ViewModels.transaction.Add_purchase_VM
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.theme.New_account_title_color
 import com.vky342.openerp.ui.theme.background_color
+import com.vky342.openerp.ui.theme.title_color
 import com.vky342.openerp.ui.theme.var_amount_row_colour
 
 
@@ -94,7 +95,17 @@ fun AddPurchaseScreen(viewModel : Add_purchase_VM = hiltViewModel()){
             }
             Column (modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(top = 25.dp)){
 
+                Text("P u r c h a s e   S u m m a r y",
+                    fontSize = 20.sp,color = title_color,
+                    modifier = Modifier
+                        .padding(horizontal = sidePadding.dp)
+                        .align(Alignment.CenterHorizontally))
+
                 Variable_Amount_Row_2(modifier = Modifier.background(color = var_amount_row_colour))
+
+                checkout_Strip()
+
+                Add_button_Strip(onClick = {item_fill_popUp_status.value = true})
 
                 Box (modifier = Modifier.fillMaxWidth().height(20.dp)){
                     //padding
@@ -105,8 +116,6 @@ fun AddPurchaseScreen(viewModel : Add_purchase_VM = hiltViewModel()){
                 item_Card(modifier = Modifier.padding(horizontal = (sidePadding/2).dp, vertical = 10.dp))
             }
         }
-
-        floating_add_button(onClick = {item_fill_popUp_status.value = true},modifier = Modifier.padding(vertical = 85.dp, horizontal = (sidePadding/2).dp).align(Alignment.BottomEnd))
 
         if (item_fill_popUp_status.value){
 

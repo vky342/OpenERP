@@ -37,6 +37,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -131,8 +132,11 @@ fun add_purchase_screen_prev(){
                 .padding(vertical = 2.dp)
                 .height(50.dp)
         ) {
-            Text(text = "New purchase", color = New_account_title_color,fontSize = 32.sp, modifier = Modifier.align(
-                Alignment.CenterStart).padding(horizontal = sidePadding.dp))
+            Text(text = "New purchase", color = New_account_title_color,fontSize = 32.sp, modifier = Modifier
+                .align(
+                    Alignment.CenterStart
+                )
+                .padding(horizontal = sidePadding.dp))
         }
         // Name
         Box(
@@ -141,7 +145,9 @@ fun add_purchase_screen_prev(){
                 .padding(vertical = 16.dp)
                 .height(70.dp)
         ) {
-            form_fields(icon = Icons.Outlined.Person,label = "Party",modifier = Modifier.padding(horizontal = sidePadding.dp).align(Alignment.CenterStart))
+            form_fields(icon = Icons.Outlined.Person,label = "Party",modifier = Modifier
+                .padding(horizontal = sidePadding.dp)
+                .align(Alignment.CenterStart))
         }
 
         // Payment mode selector
@@ -152,14 +158,22 @@ fun add_purchase_screen_prev(){
                 .padding(vertical = 7.dp)
                 .height(50.dp)
         ) {
-            payment_mode_type_selector(modifier = Modifier.align(Alignment.CenterVertically).fillMaxHeight())
+            payment_mode_type_selector(modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .fillMaxHeight())
 
-            Box (modifier = Modifier.fillMaxWidth(1f).align(Alignment.Top).height(43.dp)){
+            Box (modifier = Modifier
+                .fillMaxWidth(1f)
+                .align(Alignment.Top)
+                .height(43.dp)){
                 DatePickerComposable (label = "Date"){  }
             }
         }
-        Column (modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(top = 25.dp)){
-            Text("Purchase summary",
+        Column (modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(top = 25.dp)){
+            Text("P u r c h a s e   S u m m a r y",
                 fontSize = 20.sp,color = title_color,
                 modifier = Modifier
                     .padding(horizontal = sidePadding.dp)
@@ -167,15 +181,19 @@ fun add_purchase_screen_prev(){
 
             Variable_Amount_Row_2(modifier = Modifier.background(color = var_amount_row_colour))
 
+            checkout_Strip()
+
+            Add_button_Strip()
+
             item_Card(modifier = Modifier.padding(horizontal = (sidePadding/2).dp, vertical = 10.dp))
-            //item_Card(modifier = Modifier.padding(horizontal = sidePadding.dp, vertical = 10.dp))
-            //item_Card(modifier = Modifier.padding(horizontal = sidePadding.dp, vertical = 10.dp))
+
         }
     }
 }
 
-// payment mode selector
 
+
+// payment mode selector
 //@Preview
 @Composable
 fun payment_mode_type_selector(modifier: Modifier = Modifier){
@@ -217,11 +235,24 @@ fun payment_mode_type_selector(modifier: Modifier = Modifier){
             .align(Alignment.Center)
             .shadow(
                 elevation = 4.dp,
-                shape = RoundedCornerShape(topStart = 20f, topEnd = 20f, bottomEnd = 20f, bottomStart = 20f),
+                shape = RoundedCornerShape(
+                    topStart = 20f,
+                    topEnd = 20f,
+                    bottomEnd = 20f,
+                    bottomStart = 20f
+                ),
                 ambientColor = account_list_type_selector_shadow_color,
                 spotColor = account_list_type_selector_shadow_color
             )
-            .background(color = account_list_type_selector_container_color, shape = RoundedCornerShape(topStart = 20f, topEnd = 20f, bottomEnd = 20f, bottomStart = 20f))
+            .background(
+                color = account_list_type_selector_container_color,
+                shape = RoundedCornerShape(
+                    topStart = 20f,
+                    topEnd = 20f,
+                    bottomEnd = 20f,
+                    bottomStart = 20f
+                )
+            )
 
         ) {
 
@@ -232,13 +263,23 @@ fun payment_mode_type_selector(modifier: Modifier = Modifier){
                 .fillMaxHeight()
                 .shadow(
                     elevation = customer_type_elevation,
-                    shape = RoundedCornerShape(topStart = 20f, topEnd = 20f, bottomEnd = 20f, bottomStart = 20f),
+                    shape = RoundedCornerShape(
+                        topStart = 20f,
+                        topEnd = 20f,
+                        bottomEnd = 20f,
+                        bottomStart = 20f
+                    ),
                     ambientColor = Color.Black,
                     spotColor = Color.Black
                 )
                 .background(
                     color = customer_type_button_color,
-                    shape = RoundedCornerShape(topStart = 20f, topEnd = 20f, bottomEnd = 20f, bottomStart = 20f)
+                    shape = RoundedCornerShape(
+                        topStart = 20f,
+                        topEnd = 20f,
+                        bottomEnd = 20f,
+                        bottomStart = 20f
+                    )
                 )
                 .align(Alignment.CenterVertically)) {
 
@@ -264,7 +305,12 @@ fun payment_mode_type_selector(modifier: Modifier = Modifier){
                 )
                 .background(
                     color = supplier_type_button_color,
-                    shape = RoundedCornerShape(topStart = 20f, topEnd = 20f, bottomEnd = 20f, bottomStart = 20f)
+                    shape = RoundedCornerShape(
+                        topStart = 20f,
+                        topEnd = 20f,
+                        bottomEnd = 20f,
+                        bottomStart = 20f
+                    )
                 )
                 .align(Alignment.CenterVertically)) {
 
@@ -335,24 +381,54 @@ fun item_Card(modifier: Modifier = Modifier){
 
     val quality = remember { mutableStateOf(10) }
 
-        Box (modifier = modifier.height(200.dp).fillMaxWidth().shadow(elevation = 4.dp, shape = RoundedCornerShape(20f)).background(color = add_purchase_screen_item_card_background_color, shape = RoundedCornerShape(20f)).border(1.dp, color = title_color, shape = RoundedCornerShape(20f))) {
+        Box (modifier = modifier
+            .height(200.dp)
+            .fillMaxWidth()
+            .shadow(elevation = 4.dp, shape = RoundedCornerShape(20f))
+            .background(
+                color = add_purchase_screen_item_card_background_color,
+                shape = RoundedCornerShape(20f)
+            )
+            .border(1.dp, color = title_color, shape = RoundedCornerShape(20f))
+        ) {
             Column (modifier = Modifier.fillMaxSize()){
-                Box (modifier = Modifier.fillMaxWidth().weight(1f)){
+                Box (modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)){
                     Row (modifier = Modifier.fillMaxSize()){
 
                         // Image - Item
-                        Box (modifier = Modifier.fillMaxHeight().weight(0.75f).padding(all = 12.dp).shadow(elevation = 4.dp,shape = RoundedCornerShape(20f)).background(color = Color.White, shape = RoundedCornerShape(20f))){
-                            Image(Icons.Default.Refresh, contentDescription = "",modifier = Modifier.align(Alignment.Center))
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .weight(0.75f)
+                                .padding(all = 12.dp)
+                                .shadow(elevation = 4.dp, shape = RoundedCornerShape(20f))
+                                .background(color = Color.White, shape = RoundedCornerShape(20f))
+                        ) {
+                            Image(
+                                Icons.Default.Refresh,
+                                contentDescription = "",
+                                modifier = Modifier.align(Alignment.Center)
+                            )
                         }
 
 
-                        Box (modifier = Modifier.fillMaxHeight().weight(1f)){
+                        Box (modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(1f)){
 
                             // item details
-                            Column (modifier = Modifier.fillMaxSize().padding(start = 10.dp, bottom = 7.dp, top = 14.dp).align(Alignment.Center), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                            Column (modifier = Modifier
+                                .fillMaxSize()
+                                .padding(start = 10.dp, bottom = 7.dp, top = 14.dp)
+                                .align(Alignment.Center), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
 
                                 // Item name
-                                Box(modifier = Modifier.padding(horizontal = 6.dp).fillMaxWidth().weight(1f)){
+                                Box(modifier = Modifier
+                                    .padding(horizontal = 6.dp)
+                                    .fillMaxWidth()
+                                    .weight(1f)){
                                     Text("24x36x45 R/B",
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 22.sp,
@@ -368,7 +444,10 @@ fun item_Card(modifier: Modifier = Modifier){
 
 
                                 // Item Price
-                                Box(modifier = Modifier.padding(horizontal = 6.dp).fillMaxWidth().weight(1f)){
+                                Box(modifier = Modifier
+                                    .padding(horizontal = 6.dp)
+                                    .fillMaxWidth()
+                                    .weight(1f)){
                                     Text("Price", fontWeight = FontWeight.Light, fontSize = 14.sp, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
                                     Text("24.60 $",
                                         fontWeight = FontWeight.Bold,
@@ -385,7 +464,10 @@ fun item_Card(modifier: Modifier = Modifier){
                                 }
 
                                 // Item Discount
-                                Box(modifier = Modifier.padding(horizontal = 6.dp).fillMaxWidth().weight(1f)){
+                                Box(modifier = Modifier
+                                    .padding(horizontal = 6.dp)
+                                    .fillMaxWidth()
+                                    .weight(1f)){
                                     Text("Discount", fontWeight = FontWeight.Light, fontSize = 14.sp, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
                                     Text("12 %",
                                         fontWeight = FontWeight.Bold,
@@ -402,7 +484,10 @@ fun item_Card(modifier: Modifier = Modifier){
                                 }
 
                                 // Total amount
-                                Box(modifier = Modifier.padding(horizontal = 6.dp).fillMaxWidth().weight(1f)){
+                                Box(modifier = Modifier
+                                    .padding(horizontal = 6.dp)
+                                    .fillMaxWidth()
+                                    .weight(1f)){
                                     Text("Total", fontWeight = FontWeight.Light, fontSize = 14.sp, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
                                     Text("480.00 $",
                                         fontWeight = FontWeight.Bold,
@@ -422,7 +507,9 @@ fun item_Card(modifier: Modifier = Modifier){
                         }
                     }
                 }
-                Box (modifier = Modifier.fillMaxWidth().weight(0.3f)){
+                Box (modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.3f)){
                     Row (modifier = Modifier.fillMaxSize()){
 
                         // Delete button
@@ -430,10 +517,13 @@ fun item_Card(modifier: Modifier = Modifier){
                             .padding(horizontal = 12.dp, vertical = 5.dp)
                             .weight(1f)
                             .fillMaxHeight(0.9f)
-                            .shadow(elevation = 4.dp,shape = RoundedCornerShape(20f))
-                            .background(color = add_purchase_screen_item_card_delete_color, shape = RoundedCornerShape(
-                                CornerSize(20f)
-                            ))
+                            .shadow(elevation = 4.dp, shape = RoundedCornerShape(20f))
+                            .background(
+                                color = add_purchase_screen_item_card_delete_color,
+                                shape = RoundedCornerShape(
+                                    CornerSize(20f)
+                                )
+                            )
 
                             .align(Alignment.CenterVertically)){
 
@@ -441,7 +531,9 @@ fun item_Card(modifier: Modifier = Modifier){
                                 imageVector = Icons.Filled.Delete,
                                 contentDescription = "",
                                 tint = Color.White,
-                                modifier = Modifier.size(50.dp).align(Alignment.Center)
+                                modifier = Modifier
+                                    .size(50.dp)
+                                    .align(Alignment.Center)
                             )
 
                         }
@@ -451,25 +543,31 @@ fun item_Card(modifier: Modifier = Modifier){
                             .padding(horizontal = 12.dp, vertical = 5.dp)
                             .weight(1f)
                             .fillMaxHeight(0.9f)
-                            .shadow(elevation = 4.dp,shape = RoundedCornerShape(20f))
-                            .background(color = sale_button_background_color, shape = RoundedCornerShape(
-                                CornerSize(20f)
-                            ))
+                            .shadow(elevation = 4.dp, shape = RoundedCornerShape(20f))
+                            .background(
+                                color = sale_button_background_color, shape = RoundedCornerShape(
+                                    CornerSize(20f)
+                                )
+                            )
                             .align(Alignment.CenterVertically)) {
 
                             Row (modifier = Modifier.fillMaxSize()){
 
                                 Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = "", tint = Color.White,
-                                    modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .align(Alignment.CenterVertically)
                                         .clickable {
                                             // Decrease the quality by 1
-                                            if (quality.value > 1){
+                                            if (quality.value > 1) {
                                                 quality.value -= 1
                                             }
 
                                         })
 
-                                Box ( modifier = Modifier.weight(2.8f).align(Alignment.CenterVertically)) {
+                                Box ( modifier = Modifier
+                                    .weight(2.8f)
+                                    .align(Alignment.CenterVertically)) {
 
                                     //Text("20", modifier = Modifier.align(Alignment.Center), fontSize = 26.sp)
                                     BasicTextField(keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),textStyle = TextStyle(fontSize = 25.sp,textAlign = TextAlign.Center),singleLine = true,
@@ -482,7 +580,9 @@ fun item_Card(modifier: Modifier = Modifier){
                                 }
 
                                 Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = "", tint = Color.White,
-                                    modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .align(Alignment.CenterVertically)
                                         .clickable {
                                             // increase the quality by 1
                                             quality.value += 1
@@ -508,88 +608,144 @@ fun floating_add_button(modifier: Modifier = Modifier,onClick : () -> Unit = {})
         .background(color = New_account_title_color, shape = RoundedCornerShape(20f))
         .clickable { onClick() }
     ){
-        Icon(Icons.Default.Add, contentDescription = "", tint = background_color,modifier = Modifier.size(45.dp).align(Alignment.Center))
+        Icon(Icons.Default.Add, contentDescription = "", tint = background_color,modifier = Modifier
+            .size(45.dp)
+            .align(Alignment.Center))
     }
 }
 
-//@Preview
+@Preview
 @Composable
 fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, onDone : () -> Unit = {}){
     Box(
         modifier = modifier
             .height(300.dp)
             .fillMaxWidth()
-            .background(color = background_color,shape = RoundedCornerShape(20f))
-            .border(width = 1.dp,color = title_color, shape = RoundedCornerShape(20f))
+            .background(color = background_color, shape = RoundedCornerShape(20f))
+            //.border(width = 1.dp, color = title_color, shape = RoundedCornerShape(20f))
             .shadow(elevation = 4.dp, ambientColor = Color.White, spotColor = Color.White)
     ) {
 
         Row(modifier = Modifier.fillMaxWidth()){
 
             // left side
-            Box(modifier = Modifier.fillMaxHeight().weight(5f)){
+            Box(modifier = Modifier
+                .fillMaxHeight()
+                .weight(5f)){
                 Column (modifier = Modifier.fillMaxSize()){
-                    //Title
-                    Box (modifier = Modifier.fillMaxWidth().weight(0.5f)){
-                        Text("Add new item", fontSize = 20.sp,modifier = Modifier.padding(horizontal = 20.dp).align(Alignment.CenterStart))
-                    }
+//                    //Title
+//                    Box (modifier = Modifier.fillMaxWidth().weight(0.5f)){
+//                        Text("Add new item", fontSize = 18.sp,modifier = Modifier.padding(horizontal = 20.dp).align(Alignment.CenterStart))
+//                    }
 
                     // Item name
-                    Box (modifier = Modifier.fillMaxWidth().weight(1f)){
-                        form_fields(icon = Icons.Default.Search,label = "item name",modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth())
+                    Box (modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)){
+                        form_fields(icon = Icons.Default.Search,label = "item name",modifier = Modifier
+                            .padding(horizontal = 10.dp)
+                            .fillMaxWidth())
                     }
 
                     // Item price and discount
-                    Box (modifier = Modifier.fillMaxWidth().weight(1f)){
+                    Box (modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)){
                             // Price
-                            Box (modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth(0.8f).fillMaxHeight().align(Alignment.CenterStart)){
-                                form_fields(icon = Icons.Default.KeyboardArrowUp,label = "Price$",modifier = Modifier.fillMaxWidth().align(Alignment.Center))
+                            Box (modifier = Modifier
+                                .padding(horizontal = 10.dp)
+                                .fillMaxWidth(0.8f)
+                                .fillMaxHeight()
+                                .align(Alignment.CenterStart)){
+                                form_fields(icon = Icons.Default.KeyboardArrowUp,label = "Price$",modifier = Modifier
+                                    .fillMaxWidth()
+                                    .align(Alignment.Center))
                             }
 
 
                     }
                     // Item price and discount
-                    Box (modifier = Modifier.fillMaxWidth().weight(1f)){
+                    Box (modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)){
                             // Discount
-                            Box (modifier = Modifier.padding(horizontal = 10.dp).fillMaxWidth(0.8f).fillMaxHeight().align(Alignment.CenterStart)){
-                                form_fields(icon = Icons.Default.KeyboardArrowDown,label = "Disc%",modifier = Modifier.fillMaxWidth().align(Alignment.Center))
+                            Box (modifier = Modifier
+                                .padding(horizontal = 10.dp)
+                                .fillMaxWidth(0.8f)
+                                .fillMaxHeight()
+                                .align(Alignment.CenterStart)){
+                                form_fields(icon = Icons.Default.KeyboardArrowDown,label = "Disc%",modifier = Modifier
+                                    .fillMaxWidth()
+                                    .align(Alignment.Center))
                             }
 
                     }
 
-                    // quantity
-                    Box (modifier = Modifier.fillMaxWidth().weight(1.5f)){
-                        Text("Q u a n t i t y", fontWeight = FontWeight(300), color = form_unfocused_container_color, fontSize = 40.sp,modifier = Modifier.align(Alignment.Center))
-                        Text("28", fontSize = 50.sp, fontWeight = FontWeight(500),color = New_account_title_color, modifier = Modifier.align(Alignment.Center))
+//                    // quantity
+//                    Box (modifier = Modifier
+//                        .fillMaxWidth()
+//                        .weight(1.5f)){
+//                        Text("Q u a n t i t y", fontWeight = FontWeight(300), color = form_unfocused_container_color, fontSize = 40.sp,modifier = Modifier.align(Alignment.Center))
+//                        Text("28", fontSize = 50.sp, fontWeight = FontWeight(500),color = New_account_title_color, modifier = Modifier.align(Alignment.Center))
+//                    }
+                    // Quantity
+                    Box (modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1.0f)){
+                        // Discount
+                        Box (modifier = Modifier
+                            .padding(horizontal = 10.dp)
+                            .fillMaxWidth(0.8f)
+                            .fillMaxHeight()
+                            .align(Alignment.CenterStart)){
+                            form_fields(icon = Icons.Default.Info,label = "Quantity",modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.Center))
+                        }
+
                     }
                 }
             }
 
             //Right side
-            Box(modifier = Modifier.fillMaxHeight().weight(1f)){
+            Box(modifier = Modifier
+                .fillMaxHeight()
+                .weight(1f)){
 
                 Column (modifier = Modifier.fillMaxSize()){
 
                     // Cancel button
-                    Box(modifier = Modifier.fillMaxWidth()
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
                         .padding(bottom = 3.dp, start = 5.dp, end = 8.dp, top = 8.dp)
                         .weight(1f)
                         .shadow(elevation = 4.dp, shape = RoundedCornerShape(20f))
-                        .background(color = add_purchase_screen_item_card_delete_color, shape = RoundedCornerShape(20f))
+                        .background(
+                            color = add_purchase_screen_item_card_delete_color,
+                            shape = RoundedCornerShape(20f)
+                        )
                         .align(Alignment.CenterHorizontally)
                         .clickable { onCancel() }){
-                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "",modifier = Modifier.size(50.dp).align(Alignment.Center))
+                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "",modifier = Modifier
+                            .size(50.dp)
+                            .align(Alignment.Center))
                     }
 
                     // Save button
-                    Box(modifier = Modifier.fillMaxWidth()
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
                         .padding(bottom = 8.dp, start = 5.dp, end = 8.dp, top = 3.dp)
                         .weight(1f)
                         .shadow(elevation = 4.dp, shape = RoundedCornerShape(20f))
-                        .background(color = sale_button_background_color, shape = RoundedCornerShape(20f))
+                        .background(
+                            color = sale_button_background_color,
+                            shape = RoundedCornerShape(20f)
+                        )
                         .align(Alignment.CenterHorizontally)
                         .clickable { onDone() }){
-                        Icon(Icons.Default.Check, contentDescription = "",modifier = Modifier.size(50.dp).align(Alignment.Center)
+                        Icon(Icons.Default.Check, contentDescription = "",modifier = Modifier
+                            .size(50.dp)
+                            .align(Alignment.Center)
                         )
                     }
                 }
@@ -659,7 +815,9 @@ fun Variable_Amount_Row_2(modifier: Modifier = Modifier) {
         Amount_Section_2(
             title = "Total items",
             amount = total_item,
-            modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
+            modifier = Modifier
+                .weight(1f)
+                .align(Alignment.CenterVertically)
         )
 
         // Thin vertical line separator
@@ -675,8 +833,64 @@ fun Variable_Amount_Row_2(modifier: Modifier = Modifier) {
         AmountSection(
             title = "Total amount",
             amount = total_amount,
-            modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
+            modifier = Modifier
+                .weight(1f)
+                .align(Alignment.CenterVertically)
         )
     }
 }
+
+@Preview
+@Composable
+fun checkout_Strip(){
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .height(60.dp)
+        .background(color = Color.White)){
+        Row (horizontalArrangement = Arrangement.Center,modifier = Modifier
+            .fillMaxWidth(0.8f)
+            .height(50.dp)
+            .align(Alignment.Center)){
+            Icon(Icons.AutoMirrored.Filled.ExitToApp, tint = title_color,contentDescription = "", modifier = Modifier.size(30.dp).align(Alignment.CenterVertically))
+            Text("Save", color = title_color,fontSize = 30.sp,
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = shadow_color,
+                        offset = Offset(0f, 4f),
+                        blurRadius = 4f
+                    ),
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier.align(Alignment.CenterVertically))
+        }
+    }
+}
+
+@Preview
+@Composable
+fun Add_button_Strip(onClick: () -> Unit = {}){
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .height(60.dp)
+        .background(color = title_color)){
+        Row (horizontalArrangement = Arrangement.Center,modifier = Modifier
+            .fillMaxWidth(0.8f)
+            .height(50.dp)
+            .align(Alignment.Center)){
+            Icon(Icons.Default.Add, tint = background_color,contentDescription = "", modifier = Modifier.size(30.dp).align(Alignment.CenterVertically))
+            Text("Item", color = background_color,fontSize = 30.sp,
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = shadow_color,
+                        offset = Offset(0f, 4f),
+                        blurRadius = 4f
+                    ),
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier.align(Alignment.CenterVertically)
+                    .clickable { onClick() })
+        }
+    }
+}
+
 
