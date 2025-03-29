@@ -295,7 +295,7 @@ fun account_list(modifier: Modifier = Modifier){
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = "Accounts",
                     fontSize = 24.sp,
-                    color = account_list_title_color, modifier = Modifier.padding(vertical = 2.dp))
+                    color = account_list_title_color, modifier = Modifier.padding(vertical = 10.dp))
 
                 account_list_type_selector()
                 account_list_table()
