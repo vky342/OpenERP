@@ -76,7 +76,7 @@ fun modifyBillScreen(){
                         .padding(vertical = 2.dp)
                         .height(45.dp)
                 ) {
-                    Text(text = "New sale", color = New_account_title_color,fontSize = 32.sp, modifier = Modifier.align(
+                    Text(text = "Old sale : " + "4578", color = New_account_title_color,fontSize = 24.sp, modifier = Modifier.align(
                         Alignment.CenterStart).padding(horizontal = sidePadding.dp))
                 }
                 // Name
@@ -137,7 +137,7 @@ fun modifyBillScreen(){
                         .padding(vertical = 2.dp)
                         .height(45.dp)
                 ) {
-                    Text(text = "New purchase", color = New_account_title_color,fontSize = 32.sp, modifier = Modifier.align(
+                    Text(text = "Old purchase : " + "5748", color = New_account_title_color,fontSize = 24.sp, modifier = Modifier.align(
                         Alignment.CenterStart).padding(horizontal = sidePadding.dp))
                 }
                 // Name

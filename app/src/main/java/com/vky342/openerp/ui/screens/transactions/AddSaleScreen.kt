@@ -64,7 +64,7 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                     .padding(vertical = 2.dp)
                     .height(45.dp)
             ) {
-                Text(text = "New sale", color = New_account_title_color,fontSize = 32.sp, modifier = Modifier.align(
+                Text(text = "New sale : " + "4629", color = New_account_title_color,fontSize = 24.sp, modifier = Modifier.align(
                     Alignment.CenterStart).padding(horizontal = sidePadding.dp))
             }
             // Name

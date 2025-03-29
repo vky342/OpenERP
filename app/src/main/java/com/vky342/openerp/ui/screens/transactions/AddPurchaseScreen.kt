@@ -66,7 +66,7 @@ fun AddPurchaseScreen(viewModel : Add_purchase_VM = hiltViewModel()){
                     .padding(vertical = 2.dp)
                     .height(45.dp)
             ) {
-                Text(text = "New purchase", color = New_account_title_color,fontSize = 32.sp, modifier = Modifier.align(
+                Text(text = "New purchase : " + "8721", color = New_account_title_color,fontSize = 24.sp, modifier = Modifier.align(
                     Alignment.CenterStart).padding(horizontal = sidePadding.dp))
             }
             // Name
