@@ -16,7 +16,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Settings
@@ -74,7 +79,11 @@ import com.vky342.openerp.ui.theme.edit_item_card_shadow_color
 import com.vky342.openerp.ui.theme.edit_item_container_colour
 import com.vky342.openerp.ui.theme.edit_item_content_color
 
-
+data class AccountItem(
+    val name : String,
+    val balance : Int,
+    val balanceType : String
+)
 
 @Preview
 @Composable
@@ -262,7 +271,7 @@ fun account_list(modifier: Modifier = Modifier){
     Column (modifier = modifier
         .padding(vertical = 10.dp)
         .fillMaxWidth()
-        .height(500.dp)) {
+        .height(650.dp)) {
 
         Box (modifier = Modifier
             .wrapContentHeight()
@@ -303,14 +312,27 @@ fun account_list(modifier: Modifier = Modifier){
 @Composable
 fun account_list_table(modifier: Modifier = Modifier){
 
-    val accounts_list: Map<String, Pair<Int, String>> = mapOf(
-        "Priyansh Singh" to Pair(2000, "Cr"),
-        "Sarwang sinha" to Pair(10000, "Dr"),
-        "Ajit Sidar" to Pair(18000, "Cr"),
-        "Ankit Agarwal" to Pair(1000, "Cr"),
-        "Rahul Sharma" to Pair(50000, "Dr"),
-        "Jangde" to Pair(100000, "Dr"),
-        "Manan Chauhan" to Pair(786000, "Dr")
+    val accounts = listOf(
+        AccountItem("Cash", 5000, "Credit"),
+        AccountItem("Bank", 12000, "Debit"),
+        AccountItem("Expenses", 2000, "Debit"),
+        AccountItem("Income", 8000, "Credit"),
+        AccountItem("Loan", 15000, "Credit"),
+        AccountItem("Savings", 25000, "Debit"),
+        AccountItem("Investments", 30000, "Credit"),
+        AccountItem("Credit Card", 10000, "Debit"),
+        AccountItem("Rent", 5000, "Debit"),
+        AccountItem("Utilities", 3000, "Debit"),
+        AccountItem("Insurance", 7000, "Debit"),
+        AccountItem("Groceries", 4000, "Debit"),
+        AccountItem("Entertainment", 3500, "Debit"),
+        AccountItem("Education", 12000, "Debit"),
+        AccountItem("Taxes", 18000, "Debit"),
+        AccountItem("Business Revenue", 40000, "Credit"),
+        AccountItem("Freelance Income", 15000, "Credit"),
+        AccountItem("Dividends", 6000, "Credit"),
+        AccountItem("Mortgage", 20000, "Debit"),
+        AccountItem("Car Loan", 12000, "Debit")
     )
 
 
@@ -326,7 +348,7 @@ fun account_list_table(modifier: Modifier = Modifier){
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .height(50.dp)
                 .background(color = Color.White)
         ) {
 
@@ -381,86 +403,10 @@ fun account_list_table(modifier: Modifier = Modifier){
             }
         }
 
-        repeat(7) {
+        LazyColumn (modifier = Modifier.fillMaxWidth()){ itemsIndexed(accounts){
+            index, item ->  account_list_table_single_row(account = item, sr = index)
+        }
 
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(color = Color.LightGray)
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .background(color = Color.White)
-            ) {
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth()
-                ) {
-                    //Srn
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .fillMaxWidth()
-                            .weight(0.1f)
-                            .background(color = Color.White)
-                    ) {
-                        Text(
-                            text = (it + 1).toString(),
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
-
-                    // Name
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .fillMaxWidth()
-                            .weight(0.25f)
-                            .background(color = Color.White)
-                    ) {
-                        Text(
-                            text = accounts_list.keys.toList()[it],
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.align(Alignment.CenterStart)
-                        )
-                    }
-
-                    // balance
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .fillMaxWidth()
-                            .weight(0.25f)
-                            .background(color = Color.White)
-                    ) {
-                        Text(
-                            text = accounts_list.values.toList()[it].first.toString(),
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
-
-                    // balance type
-                    Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .fillMaxWidth()
-                            .weight(0.15f)
-                            .background(color = Color.White)
-                    ) {
-                        Text(
-                            text = accounts_list.values.toList()[it].second,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
-                }
-            }
         }
         Spacer(
             modifier = Modifier
@@ -469,6 +415,93 @@ fun account_list_table(modifier: Modifier = Modifier){
                 .background(color = Color.LightGray)
         )
     }
+
+}
+
+@Preview
+@Composable
+fun account_list_table_single_row(modifier: Modifier = Modifier, account : AccountItem = AccountItem(name = "", balanceType = "Cr", balance = 0), sr : Int = 0){
+
+    Spacer(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(1.dp)
+            .background(color = Color.LightGray)
+    )
+
+    Row (modifier = modifier.fillMaxWidth()) { Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp)
+            .weight(1f)
+            .background(color = Color.White)
+    ) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth()
+        ) {
+            //Srn
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .weight(0.1f)
+                    .background(color = Color.White)
+            ) {
+                Text(
+                    text = (sr + 1).toString(),
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+            // Name
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .weight(0.25f)
+                    .background(color = Color.White)
+            ) {
+                Text(
+                    text = account.name,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.align(Alignment.CenterStart)
+                )
+            }
+
+            // balance
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .weight(0.25f)
+                    .background(color = Color.White)
+            ) {
+                Text(
+                    text = account.balance.toString(),
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+            // balance type
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .weight(0.15f)
+                    .background(color = Color.White)
+            ) {
+                Text(
+                    text = account.balanceType,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
+    } }
+
 
 }
 
