@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
@@ -55,6 +57,7 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import com.vky342.openerp.ui.screens.ACCOUNTS.account_list_table_single_row
 import com.vky342.openerp.ui.theme.amount_stat_border_color
 import com.vky342.openerp.ui.theme.amount_text_color
 import com.vky342.openerp.ui.theme.background_color
@@ -106,6 +109,7 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
     {
         Column(
             modifier = Modifier
+                .padding(bottom = 60.dp)
                 .fillMaxSize()
                 .background(color = background_color)
                 .verticalScroll(rememberScrollState())
@@ -241,50 +245,62 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                 }
             }
 
+            // Search Bar (20% → Adjusted to fixed 100.dp)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .wrapContentWidth()
+                        .padding(horizontal = sidePadding.dp)
+                ) {
+                    Searchbar("Search items...",onVC = {
+                        // on value change of search Bar
+                    })
+                }
+            }
+
             // Search Bar and Recent Items Table (80% → Adjusted to 500.dp)
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(500.dp)
             ) {
-                val items: Map<String, Pair<Int, Int>> = mapOf(
-                    "Apple" to Pair(10, 30),
-                    "Banana" to Pair(5, 10),
-                    "Orange" to Pair(8, 20),
-                    "Milk" to Pair(2, 40),
-                    "Bread" to Pair(1, 20)
+
+                val recentItems = listOf(
+                    RecentItem("Laptop", 2, 50000),
+                    RecentItem("Smartphone", 5, 30000),
+                    RecentItem("Headphones", 10, 5000),
+                    RecentItem("Tablet", 3, 20000),
+                    RecentItem("Smartwatch", 4, 10000),
+                    RecentItem("Keyboard", 6, 4000),
+                    RecentItem("Mouse", 8, 2500),
+                    RecentItem("Monitor", 2, 15000),
+                    RecentItem("Speaker", 3, 7000),
+                    RecentItem("Charger", 12, 1200),
+                    RecentItem("USB Drive", 15, 800),
+                    RecentItem("Camera", 2, 45000),
+                    RecentItem("Printer", 1, 25000),
+                    RecentItem("External HDD", 4, 9000),
+                    RecentItem("Gaming Console", 3, 40000)
                 )
 
-                // Search Bar (20% → Adjusted to fixed 100.dp)
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .wrapContentHeight()
-                            .wrapContentWidth()
-                            .padding(horizontal = sidePadding.dp)
-                    ) {
-                        Searchbar("Search items...",onVC = {
-                            // on value change of search Bar
-                        })
-                    }
-                }
 
                 // Recent Items Table (75% → Adjusted to 380.dp)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(300.dp),
+                        .height(500.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     table_for_recent_items(
                         modifier = Modifier
                             .padding(horizontal = (sidePadding + 7).dp),
-                        items = items
+                        items = recentItems
                     )
                 }
             }
@@ -466,7 +482,7 @@ fun VariableAmountRow(modifier: Modifier = Modifier) {
 
 
 @Composable
-fun table_for_recent_items(modifier: Modifier = Modifier, items : Map<String, Pair<Int, Int>>){
+fun table_for_recent_items(modifier: Modifier = Modifier, items : List<RecentItem>){
 
     // overall body
     Column(modifier = modifier.fillMaxHeight(0.95f).fillMaxWidth(1f)) {
@@ -479,7 +495,7 @@ fun table_for_recent_items(modifier: Modifier = Modifier, items : Map<String, Pa
             .shadow(elevation = 3.dp, shape = RoundedCornerShape(topEnd = 20f, topStart = 20f))
             .background(color = item_table_container_colour, shape = RoundedCornerShape(topEnd = 20f, topStart = 20f))) {
 
-            Box (modifier = Modifier.wrapContentHeight().padding(10.dp).wrapContentWidth().align(Alignment.Center)) {
+            Box (modifier = Modifier.wrapContentHeight().padding(4.dp).wrapContentWidth().align(Alignment.Center)) {
                 Text(text = "Inventory", fontSize = 18.sp, color = item_table_content_color)
             }
 
@@ -490,7 +506,7 @@ fun table_for_recent_items(modifier: Modifier = Modifier, items : Map<String, Pa
         Box (modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .weight(0.9f)) {
+            .weight(0.98f)) {
 
             Column (modifier = Modifier
                 .fillMaxWidth()
@@ -498,7 +514,7 @@ fun table_for_recent_items(modifier: Modifier = Modifier, items : Map<String, Pa
                 .border(BorderStroke(width = 1.dp, color = Color.White),shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f))
                 .shadow(elevation = 3.dp, shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f))
                 .background(color = Color.White, shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f))) {
-                Box (modifier = Modifier.fillMaxWidth().weight(1f).background(color = Color.White)) {
+                Box (modifier = Modifier.fillMaxWidth().height(50.dp).background(color = Color.White)) {
 
                     Row (modifier = Modifier.fillMaxHeight().fillMaxWidth()){
                         //Srn
@@ -523,35 +539,13 @@ fun table_for_recent_items(modifier: Modifier = Modifier, items : Map<String, Pa
                     }
                 }
 
-                repeat(5){
+                LazyColumn (modifier = Modifier.fillMaxWidth()){
 
-                    Spacer(modifier = Modifier.fillMaxWidth().height(1.dp).background(color = Color.LightGray))
-
-                    Box (modifier = Modifier.fillMaxWidth().weight(1f).background(color = Color.White)) {
-
-                        Row (modifier = Modifier.fillMaxHeight().fillMaxWidth()){
-                            //Srn
-                            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.1f).background(color = Color.White)) {
-                                Text(text = (it + 1).toString(), modifier = Modifier.align(Alignment.Center))
-                            }
-
-                            //Name
-                            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.25f).background(color = Color.White)) {
-                                Text(text = items.keys.toList()[it], modifier = Modifier.align(Alignment.Center))
-                            }
-
-                            //Pcs
-                            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
-                                Text(text = items.values.toList()[it].first.toString(), modifier = Modifier.align(Alignment.Center), color = Calculate_color_of_pieces(items.values.toList()[it].first))
-                            }
-
-                            //Price
-                            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
-                                Text(text = items.values.toList()[it].second.toString(), modifier = Modifier.align(Alignment.Center))
-                            }
-                        }
+                    itemsIndexed(items){
+                        index, item ->  recent_item_table_row(item = item, sr = index)
                     }
                 }
+
                 Spacer(modifier = Modifier.fillMaxWidth().height(1.dp).background(color = Color.LightGray))
             }
         }

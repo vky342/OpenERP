@@ -3,12 +3,10 @@ package com.vky342.openerp.ui.screens.HOMES
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,16 +23,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,10 +42,6 @@ import com.vky342.openerp.ui.theme.edit_item_border_color
 import com.vky342.openerp.ui.theme.edit_item_card_shadow_color
 import com.vky342.openerp.ui.theme.edit_item_container_colour
 import com.vky342.openerp.ui.theme.edit_item_content_color
-import com.vky342.openerp.ui.theme.root_container_color
-import com.vky342.openerp.ui.theme.sale_button_background_color
-import com.vky342.openerp.ui.theme.sale_button_box_color
-import com.vky342.openerp.ui.theme.sale_icon_color
 import com.vky342.openerp.ui.theme.var_amount_row_colour
 
 
@@ -122,7 +115,10 @@ fun homePrev(){
                         ambientColor = edit_item_card_shadow_color,
                         spotColor = edit_item_card_shadow_color
                     )
-                    .background(color = edit_item_container_colour, shape = RoundedCornerShape(20f))
+                    .background(
+                        color = edit_item_container_colour,
+                        shape = RoundedCornerShape(20f)
+                    )
                     .border(1.dp, edit_item_border_color, RoundedCornerShape(20f))
                     .align(Alignment.Center)
             ) {
@@ -164,7 +160,10 @@ fun homePrev(){
                         ambientColor = edit_item_card_shadow_color,
                         spotColor = edit_item_card_shadow_color
                     )
-                    .background(color = edit_item_container_colour, shape = RoundedCornerShape(20f))
+                    .background(
+                        color = edit_item_container_colour,
+                        shape = RoundedCornerShape(20f)
+                    )
                     .border(1.dp, edit_item_border_color, RoundedCornerShape(20f))
                     .align(Alignment.Center)
             ) {
@@ -196,12 +195,23 @@ fun homePrev(){
                 .fillMaxWidth()
                 .height(500.dp)
         ) {
-            val items: Map<String, Pair<Int, Int>> = mapOf(
-                "Apple" to Pair(10, 30),
-                "Banana" to Pair(5, 10),
-                "Orange" to Pair(8, 20),
-                "Milk" to Pair(2, 40),
-                "Bread" to Pair(1, 20)
+
+            val recentItems = listOf(
+                RecentItem("Laptop", 2, 50000),
+                RecentItem("Smartphone", 5, 30000),
+                RecentItem("Headphones", 10, 5000),
+                RecentItem("Tablet", 3, 20000),
+                RecentItem("Smartwatch", 4, 10000),
+                RecentItem("Keyboard", 6, 4000),
+                RecentItem("Mouse", 8, 2500),
+                RecentItem("Monitor", 2, 15000),
+                RecentItem("Speaker", 3, 7000),
+                RecentItem("Charger", 12, 1200),
+                RecentItem("USB Drive", 15, 800),
+                RecentItem("Camera", 2, 45000),
+                RecentItem("Printer", 1, 25000),
+                RecentItem("External HDD", 4, 9000),
+                RecentItem("Gaming Console", 3, 40000)
             )
 
             // Search Bar (20% → Adjusted to fixed 100.dp)
@@ -227,40 +237,65 @@ fun homePrev(){
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(380.dp),
+                    .height(600.dp),
                 contentAlignment = Alignment.Center
             ) {
                 table_for_recent_items(
                     modifier = Modifier
                         .padding(horizontal = (sidePadding + 7).dp),
-                    items = items
+                    items = recentItems
                 )
             }
         }
 
-        // Sale Button (Fixed Height: 60.dp)
-        Box(
-            modifier = Modifier
-                .height(60.dp)
-                .fillMaxWidth()
-                .background(color = sale_button_box_color),
-            contentAlignment = Alignment.Center
-        ) {
+    }
 
 
-            Box( modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .fillMaxHeight(0.9f)
-                .background(color = sale_button_background_color, shape = RoundedCornerShape(
-                    CornerSize(20f)))){
-                Icon(
-                    imageVector = Icons.Default.ShoppingCart,
-                    contentDescription = "",
-                    tint = sale_icon_color,
-                    modifier = Modifier.size(50.dp).align(Alignment.Center)
-                )
+}
+
+data class RecentItem(
+    val name : String,
+    val pcs : Int,
+    val price : Int
+)
+
+@Preview
+@Composable
+fun recent_item_table_row(modifier: Modifier = Modifier, item : RecentItem = RecentItem(name = "apple", pcs = 50, price = 80), sr : Int = 0){
+
+    Spacer(modifier = Modifier.fillMaxWidth().height(1.dp).background(color = Color.LightGray))
+
+    Box (modifier = Modifier.fillMaxWidth().height(50.dp).background(color = Color.White)) {
+
+        Row (modifier = Modifier.fillMaxHeight().fillMaxWidth()){
+            //Srn
+            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.1f).background(color = Color.White)) {
+                Text(text = (sr + 1).toString(), modifier = Modifier.align(Alignment.Center))
             }
 
+            //Name
+            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.25f).background(color = Color.White)) {
+                Text(text = item.name,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.align(Alignment.Center))
+            }
+
+            //Pcs
+            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
+                Text(text = item.pcs.toString(),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.align(Alignment.Center), color = Calculate_color_of_pieces(item.pcs))
+            }
+
+            //Price
+            Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
+                Text(text = item.price.toString(),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.align(Alignment.Center))
+            }
         }
     }
 
