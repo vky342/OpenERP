@@ -35,10 +35,10 @@ import com.vky342.openerp.ui.theme.background_color
 @Composable
 fun ModifyAccountScreen( viewModel: modify_Account_vm = hiltViewModel() ){
 
-    val old_Account = Account(0,"","",0, "")
+    val old_Account = Account(0,"","","", "")
     Log.d("OLD ACCOUNT 18" , old_Account.toString())
     
-    val new_Account : MutableState<Account> = remember{mutableStateOf(Account(0,"","",0, ""))}
+    val new_Account : MutableState<Account> = remember{mutableStateOf(Account(0,"","","", ""))}
 
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val sidePadding = width.value * 0.08

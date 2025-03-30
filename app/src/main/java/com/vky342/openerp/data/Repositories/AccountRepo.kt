@@ -11,7 +11,7 @@ class AccountRepo (private val openERPDataBase: OpenERPDataBase) {
     private val ledgerdao = openERPDataBase.getLedgerDao()
 
     suspend fun insert_Account(name : String, address : String, contact : String, type: String){
-        accountdao.insert(Account(0,name, address, contact.toInt(), type))
+        accountdao.insert(Account(0,name, address, contact, type))
         ledgerdao.insert(ledger = Ledger(0,0,name))
     }
 

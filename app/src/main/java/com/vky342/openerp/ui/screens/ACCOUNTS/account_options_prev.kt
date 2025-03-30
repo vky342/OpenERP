@@ -433,7 +433,6 @@ fun account_list_table_single_row(modifier: Modifier = Modifier, account : Accou
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp)
-            .weight(1f)
             .background(color = Color.White)
     ) {
 

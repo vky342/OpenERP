@@ -9,6 +9,6 @@ data class Account(
     val id : Int,
     val name : String,
     val address : String,
-    val contact : Int,
+    val contact : String,
     val type : String
 )

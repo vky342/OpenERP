@@ -1,6 +1,8 @@
 package com.vky342.openerp.ui.screens.ACCOUNTS
 
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,6 +37,8 @@ import com.vky342.openerp.ui.theme.background_color
 @Composable
 fun Add_Account_Screen( viewModel: Add_Account_VM = hiltViewModel()){
 
+    val context : Context = LocalContext.current
+
     val name = remember{ mutableStateOf("")}
 
     var address by remember {
@@ -41,6 +46,10 @@ fun Add_Account_Screen( viewModel: Add_Account_VM = hiltViewModel()){
     }
     var contact by remember {
         mutableStateOf("")
+    }
+
+    var type by remember {
+        mutableStateOf("customer")
     }
 
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
@@ -77,7 +86,7 @@ fun Add_Account_Screen( viewModel: Add_Account_VM = hiltViewModel()){
                     .padding(vertical = 16.dp)
                     .height(70.dp)
             ) {
-                account_registration_type_selector()
+                account_registration_type_selector(selected_type = type, customer_click = {type = "customer"}, supplier_click = {type = "supplier"}, regular_click = {type = "regular"})
             }
 
             // Name
@@ -117,7 +126,20 @@ fun Add_Account_Screen( viewModel: Add_Account_VM = hiltViewModel()){
                     .height(70.dp)
 
             ) {
-                Save_button(modifier = Modifier.align(Alignment.Center), label = "Save")
+                Save_button(modifier = Modifier.align(Alignment.Center), onClick = {
+                    viewModel.save_account( name = name.value,address = address,contact=contact,type= type )
+
+                    if(name.value != "" && address != "" && contact != ""){
+                        Toast.makeText(context,"Account saved", Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+                        Toast.makeText(context,"Please fill the form", Toast.LENGTH_SHORT).show()
+                    }
+
+                    name.value = ""
+                    address = ""
+                    contact = ""
+                    type = "customer" }, label = "Save")
             }
         }
     }
