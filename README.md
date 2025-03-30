@@ -76,17 +76,17 @@ object DatabaseModule {
 🚀 **Phase 1: Database & Architecture**
 - [x] Design Database Schema 📌
 - [x] Implement Room Database 🏗️
-- [ ] Create Repository & Interfaces ⚙️
-- [ ] Implement ViewModel & UI Integration 🖥️
+- [x] Create Repository & Interfaces ⚙️
+- [x] Implement ViewModel & UI Integration 🖥️
 
 🚀 **Phase 2: UI & Navigation**
-- [ ] Design and Implement UI Screens 🎨
-- [ ] Implement Navigation (NavGraph & NavHost) 🔄
-- [ ] Enhance UI with animations and styling ✨
+- [x] Design and Implement UI Screens 🎨
+- [x] Implement Navigation (NavGraph & NavHost) 🔄
+- [x] Enhance UI with animations and styling ✨
 
 🚀 **Phase 3: Business Logic & Optimization**
 - [ ] Implement business logic in Repositories 📊
-- [ ] Set up Dependency Injection for better modularity 🏗️
+- [x] Set up Dependency Injection for better modularity 🏗️
 - [ ] Optimize performance & fix bugs 🛠️
 
 🚀 **Phase 4: Beta Testing & Release**
