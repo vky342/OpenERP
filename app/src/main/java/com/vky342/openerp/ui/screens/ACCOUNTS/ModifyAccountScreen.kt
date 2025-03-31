@@ -43,7 +43,6 @@ import com.vky342.openerp.data.ViewModels.Account.modify_Account_vm
 import com.vky342.openerp.ui.theme.New_account_title_color
 import com.vky342.openerp.ui.theme.background_color
 
-
 @Composable
 fun ModifyAccountScreen( viewModel: modify_Account_vm = hiltViewModel() ){
 
@@ -173,15 +172,9 @@ fun ModifyAccountScreen( viewModel: modify_Account_vm = hiltViewModel() ){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Account_selector(selectedOptionText : String, onClick: (String) -> Unit, onVC : (String) -> Unit, defaultOption : Account, options : List<Account> = listOf(
-    Account(id = 1, name = "John Doe", address = "123 Main St, NY", contact = "9876543210", type = "Customer"),
-    Account(id = 2, name = "Alice Smith", address = "456 Elm St, CA", contact = "8765432109", type = "Customer"),
-    Account(id = 3, name = "Bob Johnson", address = "789 Pine St, TX", contact = "7654321098", type = "Supplier"),
-    Account(id = 4, name = "Emma Brown", address = "101 Oak St, FL", contact = "6543210987", type = "Regular"),
-    Account(id = 5, name = "David Wilson", address = "202 Cedar St, IL", contact = "5432109876", type = "Supplier"),
-    Account(id = 6, name = "Sophia Davis", address = "303 Maple St, WA", contact = "4321098765", type = "Regular"),
-    Account(id = 7, name = "Michael Miller", address = "404 Birch St, CO", contact = "3210987654", type = "Regular"),
-    Account(id = 8, name = "Olivia Taylor", address = "505 Walnut St, AZ", contact = "2109876543", type = "Customer")
+fun Account_selector(selectedOptionText : String, onClick: (String) -> Unit,
+                     onVC : (String) -> Unit,
+                     defaultOption : Account, options : List<Account> = listOf(Account(id = 8, name = "Olivia Taylor", address = "505 Walnut St, AZ", contact = "2109876543", type = "Customer")
 ), onSelect : (Account) -> Unit) {
 
     var expanded by remember { mutableStateOf(false) }
