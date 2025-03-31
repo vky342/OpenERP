@@ -1,5 +1,6 @@
 package com.vky342.openerp.ui.screens.HOMES
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -258,8 +259,8 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                         .wrapContentWidth()
                         .padding(horizontal = sidePadding.dp)
                 ) {
-                    Searchbar("Search items...",onVC = {
-                        // on value change of search Bar
+                    Searchbar(modifier = Modifier,current_value = "", label = "Search items...",onVC = {
+
                     })
                 }
             }
@@ -348,20 +349,20 @@ fun Calculate_color_of_pieces(int: Int) : Color{
 
 
 @Composable
-fun Searchbar(label : String,onVC : (MutableList<String>)-> Unit ) {
-    val current_value = remember{mutableStateOf("")}
+fun Searchbar(modifier: Modifier,current_value : String,label : String,onVC : (String)-> Unit ) {
+
 
     TextField(
         singleLine = true,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(0.95f)
             .border(width = 1.dp, color = search_item_border_color, shape = CircleShape.copy(
                 CornerSize(20f)))
             .shadow(elevation = 5.dp, shape = CircleShape.copy(CornerSize(20f)), ambientColor = search_item_card_shadow_color, spotColor = search_item_card_shadow_color),
-        value = current_value.value,
+        value = current_value,
         placeholder = { Text(label, color = search_item_content_color)},
         onValueChange = {
-            current_value.value = it
+            onVC(it)
 
         },
         trailingIcon = { Icon(Icons.Default.Search, contentDescription = "", tint = search_item_content_color)},
@@ -408,6 +409,7 @@ fun AmountSection(title: String, amount: String, modifier: Modifier = Modifier) 
     }
 }
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun AutoResizeText(
     text: String,
@@ -416,26 +418,22 @@ fun AutoResizeText(
     textAlign: TextAlign,
     modifier: Modifier = Modifier
 ) {
-    var textSize by remember { mutableStateOf(24.sp) } // Default font size
+    var textSize by remember { mutableStateOf(22.sp) } // Default font size
 
     BoxWithConstraints(modifier = modifier) {
         val maxWidth = constraints.maxWidth.toFloat()
-
         Text(
             text = text,
             style = style.copy(fontSize = textSize),
             color = color,
             textAlign = textAlign,
             modifier = Modifier.layout { measurable, constraints ->
-                var newFontSize = textSize.value // Convert to Float
-
-                // Measure text width
+                var newFontSize = textSize.value
                 val placeable = measurable.measure(constraints)
                 if (placeable.width > maxWidth) {
-                    newFontSize *= maxWidth / placeable.width // Reduce font size dynamically
+                    newFontSize *= maxWidth / placeable.width
                 }
-
-                textSize = newFontSize.coerceAtLeast(12f).sp // Fix: Convert Float to TextUnit
+                textSize = newFontSize.coerceAtLeast(20f).sp
                 layout(placeable.width, placeable.height) { placeable.placeRelative(0, 0) }
             }
         )

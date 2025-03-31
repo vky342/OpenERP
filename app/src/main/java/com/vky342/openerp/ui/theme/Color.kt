@@ -135,7 +135,7 @@ val background_color = Color(0xFFFBF5DD)
 
 //modify account screen
 val search_account_content_color_for_edit_account = Color(0xFFFBF5DD)
-val search_account_icon_color_for_edit_account = Color(0xFF000000)
+val search_account_icon_color_for_edit_account = Color(0xFFFBF5DD)
 val search_account_border_color_for_edit_account = Color(0xFF000000)
 val search_account_focused_container_color_for_edit_account = Color(0xFFA6CDC6)
 val search_account_container_color_for_edit_account = Color(0xFF16404D)

@@ -95,7 +95,7 @@ fun add_acc_screen_prev(){
                 .padding(vertical = 16.dp)
                 .height(70.dp)
         ) {
-            account_registration_type_selector()
+            account_registration_type_selector(selected_type = "customer")
         }
 
         // Name
@@ -173,9 +173,9 @@ fun form_fields(modifier: Modifier = Modifier, onVc : (String) -> Unit = {},valu
     )
 }
 
-@Preview
+
 @Composable
-fun account_registration_type_selector(modifier: Modifier = Modifier, selected_type : String = "customer",customer_click : () -> Unit = {}, supplier_click : () -> Unit = {}, regular_click : () -> Unit = {}){
+fun account_registration_type_selector(modifier: Modifier = Modifier, selected_type : String ,customer_click : () -> Unit = {}, supplier_click : () -> Unit = {}, regular_click : () -> Unit = {}){
 
     val context : Context = LocalContext.current
 
@@ -360,7 +360,7 @@ fun Save_button(modifier: Modifier = Modifier, onClick : () -> Unit = {},enabled
         enabled = enabled,
         onClick = {
             onClick()
-            Toast.makeText(context,"Account saved", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context,"Account saved", Toast.LENGTH_SHORT).show()
             }
     ) {
         Text(label, color = Color.White)

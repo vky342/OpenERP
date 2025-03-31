@@ -217,7 +217,7 @@ fun modifyBillScreen(){
                             .wrapContentWidth()
                             .padding(horizontal = sidePadding.dp)
                     ) {
-                        Searchbar("Invoice ID...",onVC = {
+                        Searchbar(modifier = Modifier, current_value = "", label = "Invoice ID...",onVC = {
                             // on value change of search Bar
                         })
                     }

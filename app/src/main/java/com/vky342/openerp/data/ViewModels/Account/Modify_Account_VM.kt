@@ -1,7 +1,9 @@
 package com.vky342.openerp.data.ViewModels.Account
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +12,8 @@ import com.vky342.openerp.data.Repositories.AccountRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -56,12 +60,15 @@ class modify_Account_vm @Inject constructor(private val accountRepo: AccountRepo
         }
     }
 
-    fun update_Account( new_Account: Account){
-       if(validateInput(new_Account.name, new_Account.address, new_Account.contact.toString())){
-           update_Account_private(account_to_modify, new_Account)
-       }
+    fun update_Account( new_Account: Account) : Boolean{
+
+        if(validateInput(account_to_modify.name, account_to_modify.address, account_to_modify.contact.toString()) && validateInput(new_Account.name, new_Account.address, new_Account.contact.toString())){
+            update_Account_private(account_to_modify, new_Account)
+            return true
+        }
         else{
             Log.e("ERROR","error validating new account")
+            return false
         }
     }
 

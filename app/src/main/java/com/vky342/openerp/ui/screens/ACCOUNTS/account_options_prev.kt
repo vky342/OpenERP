@@ -120,7 +120,7 @@ fun account_search_bar(modifier: Modifier = Modifier){
                 .wrapContentHeight()
                 .wrapContentWidth()
         ) {
-            Searchbar("Search accounts...",onVC = {
+            Searchbar(modifier = Modifier, current_value = "", label = "Search accounts...",onVC = {
                 // on value change of search Bar
             })
         }

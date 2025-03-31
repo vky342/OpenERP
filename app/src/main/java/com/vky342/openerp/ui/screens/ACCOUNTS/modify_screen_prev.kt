@@ -78,7 +78,7 @@ fun modify_screen_prev(){
                 .padding(vertical = 16.dp)
                 .height(70.dp)
         ) {
-            account_search_bar_for_edit_account()
+            //account_search_bar_for_edit_account()
         }
 
         // Name
@@ -129,9 +129,9 @@ fun modify_screen_prev(){
 
 
 
-@Preview
+//@Preview
 @Composable
-fun account_search_bar_for_edit_account(modifier: Modifier = Modifier){
+fun account_search_bar_for_edit_account(modifier: Modifier = Modifier,onVc : (String) -> Unit,current_value: String){
     // Search Bar (20% → Adjusted to fixed 100.dp)
     Box(
         modifier = Modifier
@@ -144,17 +144,36 @@ fun account_search_bar_for_edit_account(modifier: Modifier = Modifier){
                 .wrapContentHeight()
                 .wrapContentWidth()
         ) {
-            Searchbar_for_edit_account("Select account",onVC = {
-                // on value change of search Bar
-            })
+//            Searchbar_for_edit_account("Select account", current_value = current_value,onVC = {
+//                // on value change of search Bar
+//                onVc(it)
+//            })
+            TextField(
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth(0.95f)
+                    .border(width = 1.dp, color = search_account_border_color_for_edit_account, shape = CircleShape.copy(
+                        CornerSize(20f)
+                    ))
+                    .shadow(elevation = 5.dp, shape = CircleShape.copy(CornerSize(20f)), ambientColor = search_item_card_shadow_color, spotColor = search_item_card_shadow_color),
+                value = current_value,
+                placeholder = { Text("Select account", color = search_account_content_color_for_edit_account)},
+                onValueChange = {
+                    onVc(it)
+                },
+                trailingIcon = { Icon(Icons.Default.Check, contentDescription = "", tint = search_account_icon_color_for_edit_account) },
+                colors = TextFieldDefaults.colors().copy(
+                    focusedTextColor = search_account_focused_text_color_for_edit_account,
+                    unfocusedTextColor = search_account_unfocused_text_color_for_edit_account,
+                    focusedContainerColor = search_account_focused_container_color_for_edit_account,
+                    unfocusedContainerColor = search_account_container_color_for_edit_account))
         }
     }
 }
 
 
 @Composable
-fun Searchbar_for_edit_account(label : String,onVC : (MutableList<String>)-> Unit ) {
-    val current_value = remember{ mutableStateOf("") }
+fun Searchbar_for_edit_account(label : String,onVC : (String) -> Unit = {} , current_value: String = "") {
 
     TextField(
         singleLine = true,
@@ -164,11 +183,10 @@ fun Searchbar_for_edit_account(label : String,onVC : (MutableList<String>)-> Uni
                 CornerSize(20f)
             ))
             .shadow(elevation = 5.dp, shape = CircleShape.copy(CornerSize(20f)), ambientColor = search_item_card_shadow_color, spotColor = search_item_card_shadow_color),
-        value = current_value.value,
+        value = current_value,
         placeholder = { Text(label, color = search_account_content_color_for_edit_account)},
         onValueChange = {
-            current_value.value = it
-
+            onVC(it)
         },
         trailingIcon = { Icon(Icons.Default.Check, contentDescription = "", tint = search_account_icon_color_for_edit_account) },
         colors = TextFieldDefaults.colors().copy(

@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Accounts")
 data class Account(
     @PrimaryKey(autoGenerate = true)
-    val id : Int,
-    val name : String,
-    val address : String,
-    val contact : String,
-    val type : String
+    var id : Int,
+    var name : String,
+    var address : String,
+    var contact : String,
+    var type : String
 )
