@@ -14,11 +14,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -131,7 +133,7 @@ fun modify_screen_prev(){
 
 //@Preview
 @Composable
-fun account_search_bar_for_edit_account(modifier: Modifier = Modifier,onVc : (String) -> Unit,current_value: String){
+fun account_search_bar_for_edit_account(onReset : () -> Unit,enabled : Boolean = true,modifier: Modifier = Modifier,onVc : (String) -> Unit,current_value: String){
     // Search Bar (20% → Adjusted to fixed 100.dp)
     Box(
         modifier = Modifier
@@ -148,7 +150,7 @@ fun account_search_bar_for_edit_account(modifier: Modifier = Modifier,onVc : (St
 //                // on value change of search Bar
 //                onVc(it)
 //            })
-            TextField(
+            TextField(enabled = enabled,
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth(0.95f)
@@ -161,7 +163,15 @@ fun account_search_bar_for_edit_account(modifier: Modifier = Modifier,onVc : (St
                 onValueChange = {
                     onVc(it)
                 },
-                trailingIcon = { Icon(Icons.Default.Check, contentDescription = "", tint = search_account_icon_color_for_edit_account) },
+                trailingIcon = {
+                    Box {
+                        IconButton(
+                            onClick = { onReset() },
+                            enabled = true // Keep icon active
+                        ) {
+                            Icon(Icons.Default.Lock, contentDescription = "", tint = search_account_icon_color_for_edit_account)
+                        } }
+                               },
                 colors = TextFieldDefaults.colors().copy(
                     focusedTextColor = search_account_focused_text_color_for_edit_account,
                     unfocusedTextColor = search_account_unfocused_text_color_for_edit_account,

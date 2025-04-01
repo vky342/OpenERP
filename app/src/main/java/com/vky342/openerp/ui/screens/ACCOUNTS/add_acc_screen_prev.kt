@@ -95,7 +95,7 @@ fun add_acc_screen_prev(){
                 .padding(vertical = 16.dp)
                 .height(70.dp)
         ) {
-            account_registration_type_selector(selected_type = "customer")
+            account_registration_type_selector(enabled = true,selected_type = "customer")
         }
 
         // Name
@@ -149,9 +149,9 @@ fun add_acc_screen_prev(){
 
 @Preview
 @Composable
-fun form_fields(modifier: Modifier = Modifier, onVc : (String) -> Unit = {},value : String = "",label:String = "label",icon : ImageVector = Icons.Default.Person){
+fun form_fields(enabled: Boolean = true,modifier: Modifier = Modifier, onVc : (String) -> Unit = {},value : String = "",label:String = "label",icon : ImageVector = Icons.Default.Person){
 
-    OutlinedTextField(
+    OutlinedTextField(enabled = enabled,
         modifier = modifier
             .fillMaxWidth(),
         value = value,
@@ -175,9 +175,8 @@ fun form_fields(modifier: Modifier = Modifier, onVc : (String) -> Unit = {},valu
 
 
 @Composable
-fun account_registration_type_selector(modifier: Modifier = Modifier, selected_type : String ,customer_click : () -> Unit = {}, supplier_click : () -> Unit = {}, regular_click : () -> Unit = {}){
+fun account_registration_type_selector(enabled: Boolean = true,modifier: Modifier = Modifier, selected_type : String ,customer_click : () -> Unit = {}, supplier_click : () -> Unit = {}, regular_click : () -> Unit = {}){
 
-    val context : Context = LocalContext.current
 
     var customer_type_txt_color = account_list_type_selector_unselected_txt_color
     var customer_type_button_color = account_type_selector_unselected_button_color
@@ -243,9 +242,9 @@ fun account_registration_type_selector(modifier: Modifier = Modifier, selected_t
 
             // customer
             Box (modifier = Modifier
-                .clickable {
+                .clickable(enabled = enabled) {
                     customer_click()
-                    Toast.makeText(context,"Customer selected", Toast.LENGTH_SHORT).show()
+
                 }
                 .weight(1f)
                 .fillMaxHeight()
@@ -281,9 +280,9 @@ fun account_registration_type_selector(modifier: Modifier = Modifier, selected_t
 
             // supplier
             Box (modifier = Modifier
-                .clickable {
+                .clickable(enabled = enabled) {
                     supplier_click()
-                    Toast.makeText(context,"Supplier selected", Toast.LENGTH_SHORT).show()
+
                 }
                 .weight(1f)
                 .fillMaxHeight()
@@ -314,9 +313,9 @@ fun account_registration_type_selector(modifier: Modifier = Modifier, selected_t
 
             // regular
             Box (modifier = Modifier
-                .clickable {
+                .clickable(enabled = enabled) {
                     regular_click()
-                    Toast.makeText(context,"Regular selected", Toast.LENGTH_SHORT).show()
+
                 }
                 .weight(1f)
                 .fillMaxHeight()
