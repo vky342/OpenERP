@@ -18,6 +18,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,20 +28,37 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.vky342.openerp.data.Entities.Account
+import com.vky342.openerp.data.ViewModels.Account.modify_Account_vm
+import com.vky342.openerp.data.ViewModels.HomeViewModel
 import com.vky342.openerp.ui.Graphs.AccountScreens
 import com.vky342.openerp.ui.Graphs.Graph
 import com.vky342.openerp.ui.theme.background_color
-
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 fun AllOptionsScreen(
-    navController: NavHostController
+    navController: NavHostController,viewModel: modify_Account_vm = hiltViewModel()
 ) {
 
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
 
     val sidePadding = width.value * 0.05
+
+    var selectedType = remember { mutableStateOf("customer") }
+
+    var searchText = remember { mutableStateOf("") }
+
+    var accountList = remember { mutableStateOf(viewModel.old_Account_list.value) }
+
+    if (searchText.value != "") {
+       accountList.value =  accountList.value.filter { it.name.contains(searchText.value, ignoreCase = true) || it.address.contains(searchText.value, ignoreCase = true) || it.contact.contains(searchText.value, ignoreCase = true)}
+    }
+    if (searchText.value == ""){
+        accountList.value = viewModel.old_Account_list.value
+    }
 
     Box(
         modifier = Modifier
@@ -58,8 +77,10 @@ fun AllOptionsScreen(
 
             add_account_button(onClick = {navController.navigate(AccountScreens.ADD)})
             edit_account_button(onClick = {navController.navigate(AccountScreens.MODIFY)})
-            account_search_bar(modifier = Modifier.padding(horizontal = sidePadding.dp))
-            account_list()
+
+            account_search_bar(onClear = {searchText.value = ""},modifier = Modifier.padding(horizontal = sidePadding.dp), value = searchText.value, onVC = {searchText.value = it})
+
+            account_list(accountList = accountList.value.filter { it.type == selectedType.value },selectedType = selectedType.value, customerClick = {selectedType.value = it}, regularClick = {selectedType.value = it}, supplierClick = {selectedType.value = it})
         }
     }
 }

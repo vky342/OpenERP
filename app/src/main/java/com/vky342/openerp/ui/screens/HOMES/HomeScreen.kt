@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -28,6 +29,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
@@ -349,7 +351,7 @@ fun Calculate_color_of_pieces(int: Int) : Color{
 
 
 @Composable
-fun Searchbar(modifier: Modifier,current_value : String,label : String,onVC : (String)-> Unit ) {
+fun Searchbar(modifier: Modifier,current_value : String,label : String,onVC : (String)-> Unit , onClear : () -> Unit = {}) {
 
 
     TextField(
@@ -365,7 +367,9 @@ fun Searchbar(modifier: Modifier,current_value : String,label : String,onVC : (S
             onVC(it)
 
         },
-        trailingIcon = { Icon(Icons.Default.Search, contentDescription = "", tint = search_item_content_color)},
+        trailingIcon = { Icon(Icons.Default.Clear,modifier = Modifier.clickable{
+            onClear()
+        }, contentDescription = "", tint = search_item_content_color)},
         colors = TextFieldDefaults.colors().copy(focusedContainerColor = search_item_focused_container_colour, unfocusedContainerColor = search_item_container_colour))
 
 }

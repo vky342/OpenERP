@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vky342.openerp.data.Entities.Account
 import com.vky342.openerp.ui.screens.HOMES.Calculate_color_of_pieces
 import com.vky342.openerp.ui.screens.HOMES.Searchbar
 import com.vky342.openerp.ui.theme.account_add_border_color
@@ -101,13 +102,12 @@ fun account_options_prev(){
         add_account_button()
         edit_account_button()
         account_search_bar(modifier = Modifier.padding(horizontal = sidePadding.dp))
-        account_list()
     }
 }
 
-@Preview
+
 @Composable
-fun account_search_bar(modifier: Modifier = Modifier){
+fun account_search_bar(modifier: Modifier = Modifier,onVC : (String) -> Unit = {},value : String = "", onClear : () -> Unit = {}){
     // Search Bar (20% → Adjusted to fixed 100.dp)
     Box(
         modifier = Modifier
@@ -120,8 +120,8 @@ fun account_search_bar(modifier: Modifier = Modifier){
                 .wrapContentHeight()
                 .wrapContentWidth()
         ) {
-            Searchbar(modifier = Modifier, current_value = "", label = "Search accounts...",onVC = {
-                // on value change of search Bar
+            Searchbar(onClear = onClear,modifier = Modifier, current_value = value, label = "Search accounts...",onVC = {
+                onVC(it)
             })
         }
     }
@@ -264,9 +264,9 @@ fun edit_account_button(modifier: Modifier = Modifier, onClick: () -> Unit = {})
 
 }
 
-@Preview
+
 @Composable
-fun account_list(modifier: Modifier = Modifier){
+fun account_list(accountList: List<Account>, modifier: Modifier = Modifier, selectedType : String = "customer", customerClick : (String) -> Unit, supplierClick : (String) -> Unit, regularClick : (String) -> Unit){
 
     Column (modifier = modifier
         .padding(vertical = 10.dp)
@@ -297,8 +297,15 @@ fun account_list(modifier: Modifier = Modifier){
                     fontSize = 24.sp,
                     color = account_list_title_color, modifier = Modifier.padding(vertical = 10.dp))
 
-                account_list_type_selector()
-                account_list_table()
+                account_registration_type_selector(enabled = true,
+                    selected_type = selectedType,
+                    customer_click = {customerClick("customer")},
+                    supplier_click = {supplierClick("supplier")},
+                    regular_click = {regularClick("regular")})
+
+                Spacer(modifier.fillMaxWidth().height(20.dp))
+
+                account_list_table(accountList = accountList)
             }
 
         }
@@ -310,31 +317,7 @@ fun account_list(modifier: Modifier = Modifier){
 
 @Preview
 @Composable
-fun account_list_table(modifier: Modifier = Modifier){
-
-    val accounts = listOf(
-        AccountItem("Cash", 5000, "Credit"),
-        AccountItem("Bank", 12000, "Debit"),
-        AccountItem("Expenses", 2000, "Debit"),
-        AccountItem("Income", 8000, "Credit"),
-        AccountItem("Loan", 15000, "Credit"),
-        AccountItem("Savings", 25000, "Debit"),
-        AccountItem("Investments", 30000, "Credit"),
-        AccountItem("Credit Card", 10000, "Debit"),
-        AccountItem("Rent", 5000, "Debit"),
-        AccountItem("Utilities", 3000, "Debit"),
-        AccountItem("Insurance", 7000, "Debit"),
-        AccountItem("Groceries", 4000, "Debit"),
-        AccountItem("Entertainment", 3500, "Debit"),
-        AccountItem("Education", 12000, "Debit"),
-        AccountItem("Taxes", 18000, "Debit"),
-        AccountItem("Business Revenue", 40000, "Credit"),
-        AccountItem("Freelance Income", 15000, "Credit"),
-        AccountItem("Dividends", 6000, "Credit"),
-        AccountItem("Mortgage", 20000, "Debit"),
-        AccountItem("Car Loan", 12000, "Debit")
-    )
-
+fun account_list_table(modifier: Modifier = Modifier, accountList : List<Account> = listOf()){
 
     Column(
         modifier = modifier
@@ -379,7 +362,7 @@ fun account_list_table(modifier: Modifier = Modifier){
                     Text(text = "Name", modifier = Modifier.align(Alignment.CenterStart))
                 }
 
-                //balance
+                //contac
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -387,23 +370,14 @@ fun account_list_table(modifier: Modifier = Modifier){
                         .weight(0.25f)
                         .background(color = Color.White)
                 ) {
-                    Text(text = "balance", modifier = Modifier.align(Alignment.Center))
+                    Text(text = "Contact", modifier = Modifier.align(Alignment.Center))
                 }
 
-                // balance type
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth()
-                        .weight(0.15f)
-                        .background(color = Color.White)
-                ) {
-                    Text(text = "Cr/Dr", modifier = Modifier.align(Alignment.Center))
-                }
+
             }
         }
 
-        LazyColumn (modifier = Modifier.fillMaxWidth()){ itemsIndexed(accounts){
+        LazyColumn (modifier = Modifier.fillMaxWidth()){ itemsIndexed(accountList){
             index, item ->  account_list_table_single_row(account = item, sr = index)
         }
 
@@ -420,7 +394,7 @@ fun account_list_table(modifier: Modifier = Modifier){
 
 @Preview
 @Composable
-fun account_list_table_single_row(modifier: Modifier = Modifier, account : AccountItem = AccountItem(name = "", balanceType = "Cr", balance = 0), sr : Int = 0){
+fun account_list_table_single_row(modifier: Modifier = Modifier, account : Account = Account(0,"","","",""), sr : Int = 0){
 
     Spacer(
         modifier = Modifier
@@ -471,7 +445,7 @@ fun account_list_table_single_row(modifier: Modifier = Modifier, account : Accou
                 )
             }
 
-            // balance
+            // contact
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -480,24 +454,11 @@ fun account_list_table_single_row(modifier: Modifier = Modifier, account : Accou
                     .background(color = Color.White)
             ) {
                 Text(
-                    text = account.balance.toString(),
+                    text = account.contact,
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
 
-            // balance type
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth()
-                    .weight(0.15f)
-                    .background(color = Color.White)
-            ) {
-                Text(
-                    text = account.balanceType,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
         }
     } }
 

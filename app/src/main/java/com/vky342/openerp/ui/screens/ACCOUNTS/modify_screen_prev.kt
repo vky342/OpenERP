@@ -146,10 +146,6 @@ fun account_search_bar_for_edit_account(onReset : () -> Unit,enabled : Boolean =
                 .wrapContentHeight()
                 .wrapContentWidth()
         ) {
-//            Searchbar_for_edit_account("Select account", current_value = current_value,onVC = {
-//                // on value change of search Bar
-//                onVc(it)
-//            })
             TextField(enabled = enabled,
                 singleLine = true,
                 modifier = Modifier
