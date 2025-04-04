@@ -80,7 +80,7 @@ fun add_sale_prev(){
                 .fillMaxWidth(1f)
                 .align(Alignment.Top)
                 .height(43.dp)){
-                DatePickerComposable (label = "Date"){  }
+                DatePickerComposable (label = "Date")
             }
         }
         Column (modifier = Modifier

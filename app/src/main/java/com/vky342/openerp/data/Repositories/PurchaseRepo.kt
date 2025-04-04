@@ -14,6 +14,8 @@ class PurchaseRepo (private val openERPDataBase: OpenERPDataBase) {
 
     private val itemInventoryDao = openERPDataBase.getItemInventoryDao()
 
+    private val accountDao = openERPDataBase.getAccountDao()
+
     // public function to add purchase
     suspend fun AddPurchase (account_name : String, purchase : Purcahase, list_of_purchaseEntry : List<PurchaseEntry>) {
 
@@ -21,6 +23,8 @@ class PurchaseRepo (private val openERPDataBase: OpenERPDataBase) {
         add_purchase_entry(list_of_purchaseEntry)
 
     }
+
+    suspend fun getAccounts() = accountDao.getAllAccounts()
 
 
     // function to be used within AddPurchase

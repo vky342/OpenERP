@@ -14,8 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Person
@@ -149,7 +153,7 @@ fun add_acc_screen_prev(){
 
 @Preview
 @Composable
-fun form_fields(enabled: Boolean = true,modifier: Modifier = Modifier, onVc : (String) -> Unit = {},value : String = "",label:String = "label",icon : ImageVector = Icons.Default.Person){
+fun form_fields(suffix : String = "", prefix : String = "",keyboardActions: KeyboardActions = KeyboardActions.Default, keyboardOptions: KeyboardOptions = KeyboardOptions.Default, onTrailingIconClick : () -> Unit = {}, trailing_icon_enabled : Boolean = true, trailing_icon : ImageVector = Icons.Default.Search, enabled: Boolean = true, modifier: Modifier = Modifier, onVc : (String) -> Unit = {}, value : String = "", label:String = "label", icon : ImageVector = Icons.Default.Person){
 
     OutlinedTextField(enabled = enabled,
         modifier = modifier
@@ -167,8 +171,18 @@ fun form_fields(enabled: Boolean = true,modifier: Modifier = Modifier, onVc : (S
             focusedLeadingIconColor = form_focused_leading_icon_color,
             unfocusedLeadingIconColor = form_unfocused_leading_icon_color,
         ),
+        prefix = {Text(prefix)},
+        suffix = {Text(suffix)},
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        trailingIcon = {
+            Icon(modifier = Modifier.clickable(enabled = true){
+                onTrailingIconClick()
+            },imageVector = trailing_icon, contentDescription = "")
+                       },
         singleLine = true,
-        leadingIcon = { Icon(imageVector = icon, contentDescription = "")},
+        leadingIcon = { Icon(imageVector = icon, contentDescription = "")
+                      },
 
     )
 }

@@ -1,5 +1,8 @@
 package com.vky342.openerp.ui.screens.transactions
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -62,6 +65,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -73,6 +78,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -84,6 +90,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.vky342.openerp.data.Entities.PurchaseEntry
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.screens.HOMES.AmountSection
 import com.vky342.openerp.ui.screens.HOMES.AutoResizeText
@@ -112,6 +119,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import kotlin.math.sin
+import kotlin.text.toDouble
 
 @Preview
 @Composable
@@ -166,7 +174,7 @@ fun add_purchase_screen_prev(){
                 .fillMaxWidth(1f)
                 .align(Alignment.Top)
                 .height(43.dp)){
-                DatePickerComposable (label = "Date"){  }
+                DatePickerComposable (label = "Date")
             }
         }
         Column (modifier = Modifier
@@ -194,9 +202,9 @@ fun add_purchase_screen_prev(){
 
 
 // payment mode selector
-//@Preview
+@Preview
 @Composable
-fun payment_mode_type_selector(modifier: Modifier = Modifier){
+fun payment_mode_type_selector(enabled : Boolean = true,onCash : (String) -> Unit = {}, onCredit : (String) -> Unit = {}, payment_mode : String = "Cash", modifier: Modifier = Modifier){
 
     val selected_type = remember { mutableStateOf(0) }
 
@@ -208,7 +216,7 @@ fun payment_mode_type_selector(modifier: Modifier = Modifier){
     var supplier_type_button_color = account_type_selector_unselected_button_color
     var supplier_type_elevation = 0.dp
 
-    if (selected_type.value == 0){
+    if (payment_mode == "Cash"){
 
         customer_type_txt_color = account_list_type_selector_selected_txt_color
         customer_type_button_color = account_type_selector_selected_button_color
@@ -216,7 +224,7 @@ fun payment_mode_type_selector(modifier: Modifier = Modifier){
 
     }
 
-    if (selected_type.value == 1){
+    if (payment_mode == "Credit"){
 
         supplier_type_txt_color = account_list_type_selector_selected_txt_color
         supplier_type_button_color = account_type_selector_selected_button_color
@@ -228,10 +236,11 @@ fun payment_mode_type_selector(modifier: Modifier = Modifier){
         modifier = modifier
             .fillMaxWidth(0.5f)
             .height(60.dp)
+
     ) {
         Row (modifier = modifier
             .fillMaxWidth(0.9f)
-            .height(60.dp)
+            .height(58.dp)
             .align(Alignment.Center)
             .shadow(
                 elevation = 4.dp,
@@ -258,7 +267,7 @@ fun payment_mode_type_selector(modifier: Modifier = Modifier){
 
             // cash
             Box (modifier = Modifier
-                .clickable { selected_type.value = 0 }
+                .clickable(enabled = enabled) { onCash("Cash") }
                 .weight(1f)
                 .fillMaxHeight()
                 .shadow(
@@ -294,7 +303,7 @@ fun payment_mode_type_selector(modifier: Modifier = Modifier){
 
             // Credit
             Box (modifier = Modifier
-                .clickable { selected_type.value = 1 }
+                .clickable(enabled = enabled) { onCredit("Credit") }
                 .weight(1f)
                 .fillMaxHeight()
                 .shadow(
@@ -328,9 +337,10 @@ fun payment_mode_type_selector(modifier: Modifier = Modifier){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerComposable(
-    label: String = "Select Date",
-    onDateSelected: (String) -> Unit
+fun DatePickerComposable(enabled: Boolean = true,modifier : Modifier = Modifier,
+                         label: String = "Select Date",
+                         onDateSelected: (String) -> Unit = {},
+                         value : String = ""
 ) {
     var selectedDate by remember { mutableStateOf("") }
     var showDatePicker by remember { mutableStateOf(false) }
@@ -340,7 +350,7 @@ fun DatePickerComposable(
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },
             confirmButton = {
-                TextButton(onClick = {
+                TextButton(enabled = enabled,onClick = {
                     datePickerState.selectedDateMillis?.let {
                         val localDate = Instant.ofEpochMilli(it)
                             .atZone(ZoneId.systemDefault())
@@ -358,16 +368,15 @@ fun DatePickerComposable(
         }
     }
 
-    OutlinedTextField(
-        value = selectedDate,
+    OutlinedTextField(enabled = enabled,
+        value = value,
         onValueChange = {},
-        readOnly = true,
         label = { Text(label) },
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { showDatePicker = true },
         trailingIcon = {
-            IconButton(onClick = { showDatePicker = true }) {
+            IconButton(enabled = enabled,onClick = { showDatePicker = true }) {
                 Icon(imageVector = Icons.Default.DateRange, contentDescription = "Select Date")
             }
         }
@@ -377,9 +386,13 @@ fun DatePickerComposable(
 
 //@Preview
 @Composable
-fun item_Card(modifier: Modifier = Modifier){
+fun item_Card(quantity : Int = 0,name : String = "", price : Double = 0.00, discount : Double = 0.00,modifier: Modifier = Modifier,onDelete : () -> Unit = {},onQuantityDecrease : () -> Unit = {}, onQuantityIncrease : () -> Unit = {},onAmountChange : (Double) -> Unit = {}) : Pair<Double, PurchaseEntry> {
 
-    val quality = remember { mutableStateOf(10) }
+    val quantity = remember { mutableStateOf(quantity) }
+
+    var item_name = remember { mutableStateOf(name) }
+
+    var totalAmount = remember { derivedStateOf { ( quantity.value.toDouble() *  ( price.toDouble() - ( discount * (price.toDouble() / 100) ) ) ) } }
 
         Box (modifier = modifier
             .height(200.dp)
@@ -408,7 +421,7 @@ fun item_Card(modifier: Modifier = Modifier){
                         ) {
                             Image(
                                 Icons.Default.Refresh,
-                                contentDescription = "",
+                                contentDescription = "Item Pic",
                                 modifier = Modifier.align(Alignment.Center)
                             )
                         }
@@ -429,7 +442,7 @@ fun item_Card(modifier: Modifier = Modifier){
                                     .padding(horizontal = 6.dp)
                                     .fillMaxWidth()
                                     .weight(1f)){
-                                    Text("24x36x45 R/B",
+                                    Text(item_name.value,
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 22.sp,
                                         maxLines = 1,
@@ -449,7 +462,7 @@ fun item_Card(modifier: Modifier = Modifier){
                                     .fillMaxWidth()
                                     .weight(1f)){
                                     Text("Price", fontWeight = FontWeight.Light, fontSize = 14.sp, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
-                                    Text("24.60 $",
+                                    Text("₹ " + price.toString(),
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 22.sp,
                                         maxLines = 1,
@@ -469,7 +482,7 @@ fun item_Card(modifier: Modifier = Modifier){
                                     .fillMaxWidth()
                                     .weight(1f)){
                                     Text("Discount", fontWeight = FontWeight.Light, fontSize = 14.sp, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
-                                    Text("12 %",
+                                    Text("% " + discount.toString(),
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 22.sp,
                                         maxLines = 1,
@@ -489,7 +502,7 @@ fun item_Card(modifier: Modifier = Modifier){
                                     .fillMaxWidth()
                                     .weight(1f)){
                                     Text("Total", fontWeight = FontWeight.Light, fontSize = 14.sp, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
-                                    Text("480.00 $",
+                                    Text("₹ " + totalAmount.value,
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 22.sp,
                                         maxLines = 1,
@@ -524,8 +537,11 @@ fun item_Card(modifier: Modifier = Modifier){
                                     CornerSize(20f)
                                 )
                             )
-
-                            .align(Alignment.CenterVertically)){
+                            .align(Alignment.CenterVertically)
+                            .clickable {
+                                onDelete()
+                            }
+                        ){
 
                             Icon(
                                 imageVector = Icons.Filled.Delete,
@@ -558,9 +574,11 @@ fun item_Card(modifier: Modifier = Modifier){
                                         .weight(1f)
                                         .align(Alignment.CenterVertically)
                                         .clickable {
-                                            // Decrease the quality by 1
-                                            if (quality.value > 1) {
-                                                quality.value -= 1
+                                            // Decrease the quantity by 1
+                                            if (quantity.value > 1) {
+                                                quantity.value -= 1
+                                                onQuantityDecrease()
+                                                onAmountChange(totalAmount.value)
                                             }
 
                                         })
@@ -569,13 +587,16 @@ fun item_Card(modifier: Modifier = Modifier){
                                     .weight(2.8f)
                                     .align(Alignment.CenterVertically)) {
 
-                                    //Text("20", modifier = Modifier.align(Alignment.Center), fontSize = 26.sp)
                                     BasicTextField(keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),textStyle = TextStyle(fontSize = 25.sp,textAlign = TextAlign.Center),singleLine = true,
-                                        value = quality.value.toString(), onValueChange = {
-                                            try {quality.value = it.toInt()}
+                                        value = quantity.value.toString(),
+                                        onValueChange = {
+                                            try {quantity.value = it.toInt()}
                                             catch ( e : Exception){
-                                                quality.value = 0
-                                            }},modifier = Modifier.align(Alignment.Center))
+                                                quantity.value = 0
+                                            }
+                                                        },
+                                        modifier = Modifier.align(Alignment.Center)
+                                    )
 
                                 }
 
@@ -584,8 +605,10 @@ fun item_Card(modifier: Modifier = Modifier){
                                         .weight(1f)
                                         .align(Alignment.CenterVertically)
                                         .clickable {
-                                            // increase the quality by 1
-                                            quality.value += 1
+                                            // increase the quantity by 1
+                                            quantity.value += 1
+                                            onQuantityIncrease()
+                                            onAmountChange(totalAmount.value)
                                         }
                                 )
 
@@ -596,6 +619,8 @@ fun item_Card(modifier: Modifier = Modifier){
                 }
             }
         }
+
+    return Pair((totalAmount.value), PurchaseEntry(0,quantity.value,price,discount,(totalAmount.value),item_name.value,0))
 
 }
 
@@ -616,7 +641,21 @@ fun floating_add_button(modifier: Modifier = Modifier,onClick : () -> Unit = {})
 
 @Preview
 @Composable
-fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, onDone : () -> Unit = {}) {
+fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, onDone : (item_popup) -> Unit = {}){
+
+    //var itemPopup = remember { mutableStateOf(item_popup("",0.00,0.00,0)) }
+
+    val context : Context = LocalContext.current
+
+    var name = remember { mutableStateOf("") }
+
+    var price = remember { mutableStateOf("") }
+
+    var discount = remember { mutableStateOf("") }
+
+    var quantity = remember { mutableStateOf("") }
+
+
     Box(
         modifier = modifier
             .height(300.dp)
@@ -633,16 +672,13 @@ fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, o
                 .fillMaxHeight()
                 .weight(5f)){
                 Column (modifier = Modifier.fillMaxSize()){
-//                    //Title
-//                    Box (modifier = Modifier.fillMaxWidth().weight(0.5f)){
-//                        Text("Add new item", fontSize = 18.sp,modifier = Modifier.padding(horizontal = 20.dp).align(Alignment.CenterStart))
-//                    }
 
-                    // Item name
                     Box (modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)){
-                        form_fields(icon = Icons.Default.Search,label = "item name",modifier = Modifier
+                        form_fields(value = name.value, onVc = {
+                            name.value = it
+                                                               },icon = Icons.Default.Search,label = "item name",modifier = Modifier
                             .padding(horizontal = 10.dp)
                             .fillMaxWidth())
                     }
@@ -651,19 +687,30 @@ fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, o
                     Box (modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)){
+
                             // Price
                             Box (modifier = Modifier
                                 .padding(horizontal = 10.dp)
                                 .fillMaxWidth(0.8f)
                                 .fillMaxHeight()
                                 .align(Alignment.CenterStart)){
-                                form_fields(icon = Icons.Default.KeyboardArrowUp,label = "Price$",modifier = Modifier
-                                    .fillMaxWidth()
-                                    .align(Alignment.Center))
+                                form_fields(
+                                    suffix = "₹",
+                                    keyboardOptions = KeyboardOptions(
+                                        autoCorrect = false,
+                                        keyboardType = KeyboardType.Decimal),
+                                    value = price.value,
+                                    onVc = {
+                                        price.value = it
+                                           },
+                                    icon = Icons.Default.KeyboardArrowUp,label = "price ₹",modifier = Modifier
+                                        .fillMaxWidth()
+                                        .align(Alignment.Center))
                             }
 
 
                     }
+
                     // Item price and discount
                     Box (modifier = Modifier
                         .fillMaxWidth()
@@ -674,9 +721,17 @@ fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, o
                                 .fillMaxWidth(0.8f)
                                 .fillMaxHeight()
                                 .align(Alignment.CenterStart)){
-                                form_fields(icon = Icons.Default.KeyboardArrowDown,label = "Disc%",modifier = Modifier
-                                    .fillMaxWidth()
-                                    .align(Alignment.Center))
+                                form_fields(
+                                    suffix = "%",
+                                    keyboardOptions = KeyboardOptions(
+                                    autoCorrect = false,
+                                    keyboardType = KeyboardType.Decimal),
+                                    value = discount.value,
+                                    onVc = {
+                                        discount.value = it
+                                    },icon = Icons.Default.KeyboardArrowDown,label = "discount %",modifier = Modifier
+                                        .fillMaxWidth()
+                                        .align(Alignment.Center))
                             }
 
                     }
@@ -691,9 +746,17 @@ fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, o
                             .fillMaxWidth(0.8f)
                             .fillMaxHeight()
                             .align(Alignment.CenterStart)){
-                            form_fields(icon = Icons.Default.Info,label = "Quantity",modifier = Modifier
-                                .fillMaxWidth()
-                                .align(Alignment.Center))
+                            form_fields(
+                                keyboardOptions = KeyboardOptions(
+                                    autoCorrect = false,
+                                    keyboardType = KeyboardType.Decimal),
+                                value = quantity.value,
+                                onVc = {
+                                    quantity.value = it
+                                },
+                                icon = Icons.Default.Info,label = "quantity",modifier = Modifier
+                                    .fillMaxWidth()
+                                    .align(Alignment.Center))
                         }
 
                     }
@@ -718,7 +781,10 @@ fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, o
                             shape = RoundedCornerShape(20f)
                         )
                         .align(Alignment.CenterHorizontally)
-                        .clickable { onCancel() }){
+                        .clickable {
+                            onCancel()
+                        }
+                    ){
                         Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "",modifier = Modifier
                             .size(50.dp)
                             .align(Alignment.Center))
@@ -735,7 +801,25 @@ fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, o
                             shape = RoundedCornerShape(20f)
                         )
                         .align(Alignment.CenterHorizontally)
-                        .clickable { onDone() }){
+                        .clickable {
+
+                            if (name.value == "" || price.value == "" || discount.value == "" || quantity.value == "") {
+                                Toast.makeText(context, "field is empty", Toast.LENGTH_SHORT).show()
+                            }else{
+                                onDone(
+                                    item_popup(
+                                        name = name.value,
+                                        price = price.value.toDouble(),
+                                        disc = discount.value.toDouble(),
+                                        quantity = quantity.value.toInt(),
+                                        totalAmount = mutableStateOf(quantity.value.toDouble() *  ( price.value.toDouble() - ( discount.value.toDouble() * (price.value.toDouble() / 100) ) ))
+                                    )
+                                )
+                                Log.d("pop_UP","totalAmount : " + (quantity.value.toDouble() *  ( price.value.toDouble() - ( discount.value.toDouble() * (price.value.toDouble() / 100) ) ))).toString()
+                            }
+
+                        }
+                    ){
                         Icon(Icons.Default.Check, contentDescription = "",modifier = Modifier
                             .size(50.dp)
                             .align(Alignment.Center)
@@ -793,10 +877,7 @@ fun Amount_Section_2(title: String = "Total amount", amount: String = "56,900 $"
 
 @Preview
 @Composable
-fun Variable_Amount_Row_2(modifier: Modifier = Modifier) {
-    // Mutable state for the amounts
-    val total_item by remember { mutableStateOf("34") }
-    val total_amount by remember { mutableStateOf("40,00,000") }
+fun Variable_Amount_Row_2(totalItems : Int = 0, totalAmount : Double = 0.00,modifier: Modifier = Modifier) {
 
     Row(
         modifier = modifier
@@ -807,7 +888,7 @@ fun Variable_Amount_Row_2(modifier: Modifier = Modifier) {
         // Left section: Today's Sale
         Amount_Section_2(
             title = "Total items",
-            amount = total_item,
+            amount = totalItems.toString(),
             modifier = Modifier
                 .weight(1f)
                 .align(Alignment.CenterVertically)
@@ -825,7 +906,7 @@ fun Variable_Amount_Row_2(modifier: Modifier = Modifier) {
         // Right section: Today's Receipts
         AmountSection(
             title = "Total amount",
-            amount = total_amount,
+            amount = totalAmount.toString(),
             modifier = Modifier
                 .weight(1f)
                 .align(Alignment.CenterVertically)
@@ -844,7 +925,9 @@ fun checkout_Strip(){
             .fillMaxWidth(0.8f)
             .height(50.dp)
             .align(Alignment.Center)){
-            Icon(Icons.AutoMirrored.Filled.ExitToApp, tint = title_color,contentDescription = "", modifier = Modifier.size(30.dp).align(Alignment.CenterVertically))
+            Icon(Icons.AutoMirrored.Filled.ExitToApp, tint = title_color,contentDescription = "", modifier = Modifier
+                .size(30.dp)
+                .align(Alignment.CenterVertically))
             Text("Save", color = title_color,fontSize = 30.sp,
                 style = TextStyle(
                     shadow = Shadow(
@@ -870,7 +953,9 @@ fun Add_button_Strip(onClick: () -> Unit = {}){
             .fillMaxWidth(0.8f)
             .height(50.dp)
             .align(Alignment.Center)){
-            Icon(Icons.Default.Add, tint = background_color,contentDescription = "", modifier = Modifier.size(30.dp).align(Alignment.CenterVertically))
+            Icon(Icons.Default.Add, tint = background_color,contentDescription = "", modifier = Modifier
+                .size(30.dp)
+                .align(Alignment.CenterVertically))
             Text("Item", color = background_color,fontSize = 30.sp,
                 style = TextStyle(
                     shadow = Shadow(
@@ -880,7 +965,8 @@ fun Add_button_Strip(onClick: () -> Unit = {}){
                     ),
                     fontWeight = FontWeight.Bold
                 ),
-                modifier = Modifier.align(Alignment.CenterVertically)
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
                     .clickable { onClick() })
         }
     }

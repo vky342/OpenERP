@@ -1,9 +1,14 @@
 package com.vky342.openerp.data.ViewModels.transaction
 
+import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vky342.openerp.data.Entities.Account
 import com.vky342.openerp.data.Entities.Purcahase
 import com.vky342.openerp.data.Entities.PurchaseEntry
+import com.vky342.openerp.data.Repositories.AccountRepo
 import com.vky342.openerp.data.Repositories.PurchaseRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -12,9 +17,17 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class Add_purchase_VM @Inject constructor(private val purchaseRepo: PurchaseRepo) : ViewModel() {
+class Add_purchase_VM @Inject constructor(private val purchaseRepo: PurchaseRepo, private val accountRepo: AccountRepo) : ViewModel() {
 
-
+    val old_Account_list : MutableState<List<Account>> = mutableStateOf(listOf())
+    init {
+        viewModelScope.launch {
+            accountRepo.get_every_Account().collect(){
+                    newData -> old_Account_list.value = newData
+                Log.d("STATUS", "collected accounts line 24 -vm")
+            }
+        }
+    }
 
     val samplePurchaseEntries = listOf(
             PurchaseEntry(
@@ -132,8 +145,16 @@ class Add_purchase_VM @Inject constructor(private val purchaseRepo: PurchaseRepo
         }
     }
 
-    fun ini_test(){
-        Save_Purchase(account_name = "kunal", purchase = Purcahase(0,"something",0,1000), list_of_purEntries = samplePurchaseEntries)
+
+
+    fun add_purchase(name : String, purchase: Purcahase, listOfEntry: List<PurchaseEntry>){
+
+        Save_Purchase(name,purchase,listOfEntry)
+
     }
+
+//    fun ini_test(){
+//        Save_Purchase(account_name = "kunal", purchase = Purcahase(0,"something",0,1000), list_of_purEntries = samplePurchaseEntries)
+//    }
 
 }

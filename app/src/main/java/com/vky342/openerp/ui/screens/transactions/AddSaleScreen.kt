@@ -89,7 +89,7 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                 payment_mode_type_selector(modifier = Modifier.align(Alignment.CenterVertically).fillMaxHeight())
 
                 Box (modifier = Modifier.fillMaxWidth(1f).align(Alignment.Top).height(43.dp)){
-                    DatePickerComposable (label = "Date"){  }
+                    DatePickerComposable (label = "Date")
                 }
             }
             Column (modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(top = 25.dp)){
