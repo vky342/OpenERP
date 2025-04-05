@@ -7,6 +7,7 @@ import androidx.navigation.navigation
 import com.vky342.openerp.ui.screens.Inventory.InventoryList
 import com.vky342.openerp.ui.screens.Inventory.ItemEdit
 import com.vky342.openerp.ui.screens.Inventory.inventoryOptionsScreen
+import com.vky342.openerp.ui.screens.Inventory.newItem
 
 fun NavGraphBuilder.InvontoryNavigationGraph(navController: NavHostController){
     navigation(startDestination = InventoryScreens.InventoryOptions, route = Graph.INVENTORY){
@@ -19,6 +20,9 @@ fun NavGraphBuilder.InvontoryNavigationGraph(navController: NavHostController){
         composable(route = InventoryScreens.ItemEdit){
             ItemEdit()
         }
+        composable(route = InventoryScreens.NewItem){
+            newItem()
+        }
     }
 }
 
@@ -26,4 +30,5 @@ object InventoryScreens {
     val InventoryOptions = "inventoryOptions"
     val InvontoryList = "inventoryList"
     val ItemEdit = "itemEdit"
+    val NewItem = "newItem"
 }

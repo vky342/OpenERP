@@ -3,6 +3,7 @@ package com.vky342.openerp.data.Repositories
 import com.vky342.openerp.data.Entities.Item
 import com.vky342.openerp.data.Modules.OpenERPDataBase
 import kotlinx.coroutines.flow.Flow
+import kotlin.jvm.Throws
 
 class InventoryRepo (private val openERPDataBase: OpenERPDataBase) {
 
@@ -16,5 +17,10 @@ class InventoryRepo (private val openERPDataBase: OpenERPDataBase) {
         for (item in list_of_item) {
             inventoryDao.insert(item)
         }
+    }
+
+    suspend fun addNewItem(item: Item){
+        inventoryDao.insert(item)
+
     }
 }

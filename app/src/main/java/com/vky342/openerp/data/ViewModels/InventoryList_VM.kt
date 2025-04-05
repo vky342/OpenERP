@@ -1,7 +1,11 @@
 package com.vky342.openerp.data.ViewModels
 
+import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vky342.openerp.data.Entities.Account
 import com.vky342.openerp.data.Entities.Item
 import com.vky342.openerp.data.Repositories.InventoryRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,6 +17,15 @@ import javax.inject.Inject
 @HiltViewModel
 class InventoryList_VM @Inject constructor( private val inventoryRepo: InventoryRepo) : ViewModel() {
 
+    val item_list : MutableState<List<Item>> = mutableStateOf(listOf())
+    init {
+        viewModelScope.launch {
+            inventoryRepo.retrun_All_items_in_inventory().collect(){
+                    newData -> item_list.value = newData
+                Log.d("STATUS", "collected items line 25 -vm")
+            }
+        }
+    }
 
     val sampleItems = listOf(
         Item(
@@ -83,7 +96,19 @@ class InventoryList_VM @Inject constructor( private val inventoryRepo: Inventory
         }
     }
 
-    fun init_Start () {
-        inventoryRepo.retrun_All_items_in_inventory()
+    fun NewItem(item: Item) : String{
+
+        if (item in item_list.value ){
+            return "Error"
+        }
+        try {
+            viewModelScope.launch {
+                inventoryRepo.addNewItem(item)
+            }
+        }catch (e : Exception){
+            return "Error"
+        }
+        return ""
+
     }
 }

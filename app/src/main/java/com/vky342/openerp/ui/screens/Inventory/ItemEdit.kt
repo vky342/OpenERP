@@ -43,8 +43,6 @@ fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val topPadding = height.value * 0.1
 
-    viewModel.Add_Item_to_inventory()
-
     Column (modifier = Modifier
         .fillMaxSize()
         .background(color = GreyeHome)

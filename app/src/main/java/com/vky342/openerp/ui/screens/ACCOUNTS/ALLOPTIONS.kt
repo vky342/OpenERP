@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.vky342.openerp.data.Entities.Account
 import com.vky342.openerp.data.ViewModels.Account.modify_Account_vm
@@ -87,7 +88,7 @@ fun AllOptionsScreen(
 
 @Composable
 fun new_card(
-    navController: NavHostController,
+    navController: NavController,
     to_location: String,
     main_title: String,
     sub_title: String,

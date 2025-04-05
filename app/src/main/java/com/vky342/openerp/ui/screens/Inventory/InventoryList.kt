@@ -32,8 +32,6 @@ import com.vky342.openerp.ui.theme.SaleiconPin
 @Composable
 fun InventoryList(viewModel : InventoryList_VM = hiltViewModel()){
 
-    viewModel.Add_Item_to_inventory()
-
     val sampleData = listOf(
         InventoryListItem("Apple", 50),
         InventoryListItem("Banana", 30),
