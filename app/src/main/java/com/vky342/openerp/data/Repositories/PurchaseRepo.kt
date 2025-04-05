@@ -53,15 +53,15 @@ class PurchaseRepo (private val openERPDataBase: OpenERPDataBase) {
 
     private suspend fun item_Stock_update (itemName : String, itemQuantity : Int, itemNewPurchasePrice : Double) {
 
-        val all_Items = itemInventoryDao.getAllItemInInventory()
-
-        for (item in all_Items){
-            if (item.itemName == itemName){
-                /// function to increase item stock in inventory
-                itemInventoryDao.update(item = item.copy(itemQuantity = item.itemQuantity + itemQuantity, itemPurchasePrice = itemNewPurchasePrice))
-            }
-
-        }
+//        val all_Items = itemInventoryDao.getAllItemInInventory()
+//
+//        for (item in all_Items){
+//            if (item.itemName == itemName){
+//                /// function to increase item stock in inventory
+//                itemInventoryDao.update(item = item.copy(itemQuantity = item.itemQuantity + itemQuantity, itemPurchasePrice = itemNewPurchasePrice))
+//            }
+//
+//        }
     }
 
 

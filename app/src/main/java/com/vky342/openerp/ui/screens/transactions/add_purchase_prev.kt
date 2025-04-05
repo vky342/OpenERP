@@ -641,7 +641,7 @@ fun floating_add_button(modifier: Modifier = Modifier,onClick : () -> Unit = {})
 
 @Preview
 @Composable
-fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, onDone : (item_popup) -> Unit = {}){
+fun item_fill_popUp(onVC : (String) -> Unit = {}, modifier: Modifier = Modifier, onCancel : () -> Unit = {}, onDone : (item_popup) -> Unit = {}){
 
     //var itemPopup = remember { mutableStateOf(item_popup("",0.00,0.00,0)) }
 
@@ -673,10 +673,14 @@ fun item_fill_popUp(modifier: Modifier = Modifier, onCancel : () -> Unit = {}, o
                 .weight(5f)){
                 Column (modifier = Modifier.fillMaxSize()){
 
+                    //Name
                     Box (modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f)){
+                        .height(60.dp)){
+
+
                         form_fields(value = name.value, onVc = {
+                            onVC(it)
                             name.value = it
                                                                },icon = Icons.Default.Search,label = "item name",modifier = Modifier
                             .padding(horizontal = 10.dp)

@@ -90,9 +90,15 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
 
     var selectedOptionText by remember { mutableStateOf("") }
 
+    var selectedItemText by remember { mutableStateOf("") }
+
     var options = viewModel.old_Account_list.value
 
+    var item_options = viewModel.all_items_in_inventory
+
     var expanded = remember { mutableStateOf(false) }
+
+    var expanded_item_name_suggestion = remember { mutableStateOf(false) }
 
     var itemsList = remember { mutableStateListOf<item_popup>() }
 
@@ -105,6 +111,10 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
             selectedOptionText,
             ignoreCase = true
         ) || it.contact.contains(selectedOptionText, ignoreCase = true)
+    }
+
+    var filtering_items_Options = item_options.value.filter {
+        it.itemName.contains(selectedItemText, ignoreCase = true)
     }
 
     var partyEnabled = remember { mutableStateOf(true) }
@@ -299,7 +309,10 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
 
             }
 
-            item_fill_popUp(
+            item_fill_popUp(onVC = {
+                selectedItemText = it
+                expanded_item_name_suggestion.value = true
+                                   },
                 modifier = Modifier
                     .padding(horizontal = 10.dp, vertical = 40.dp)
                     .align(Alignment.TopCenter),
@@ -344,6 +357,38 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                                 partyEnabled.value = false
                                 Toast.makeText(context, "Account selected", Toast.LENGTH_SHORT)
                                     .show()
+                            })
+                }
+            }
+        }
+
+        if (expanded_item_name_suggestion.value){
+
+            BackHandler(enabled = expanded.value) {
+                expanded_item_name_suggestion.value = false
+            }
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 300.dp)
+                    .padding(top = 177.dp)
+                    .padding(horizontal = (sidePadding).dp)
+                    .align(Alignment.TopCenter)
+                    .shadow(elevation = 4.dp, shape = RoundedCornerShape(10f))
+                    .background(color = Color.White, shape = RoundedCornerShape(10f))
+            ) {
+                items(filtering_items_Options) { item ->
+                    Text(
+                        text = item.itemName + " " + "(" + item.itemQuantity + " psc )",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight(350),
+                        modifier = Modifier
+                            .padding(vertical = 1.dp, horizontal = 4.dp)
+                            .fillMaxWidth()
+                            .clickable {
+                                selectedItemText = item.itemName
+                                expanded_item_name_suggestion.value = false
                             })
                 }
             }

@@ -48,14 +48,14 @@ class SaleRepo @Inject constructor(private val openERPDataBase: OpenERPDataBase)
 
     private suspend fun item_Stock_Update (itemName : String, itemQuantity : Int) {
 
-        val all_Items = itemInventoryDao.getAllItemInInventory()
-
-        for (item in all_Items) {
-            if (item.itemName == itemName){
-                // function to decrease item stock in inventory
-                itemInventoryDao.update(item = item.copy(itemQuantity = item.itemQuantity - itemQuantity))
-            }
-        }
+//        val all_Items = itemInventoryDao.getAllItemInInventory()
+//
+//        for (item in all_Items) {
+//            if (item.itemName == itemName){
+//                // function to decrease item stock in inventory
+//                itemInventoryDao.update(item = item.copy(itemQuantity = item.itemQuantity - itemQuantity))
+//            }
+//        }
 
     }
 

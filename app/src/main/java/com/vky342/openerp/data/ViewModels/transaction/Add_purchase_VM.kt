@@ -6,9 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vky342.openerp.data.Entities.Account
+import com.vky342.openerp.data.Entities.Item
 import com.vky342.openerp.data.Entities.Purcahase
 import com.vky342.openerp.data.Entities.PurchaseEntry
 import com.vky342.openerp.data.Repositories.AccountRepo
+import com.vky342.openerp.data.Repositories.InventoryRepo
 import com.vky342.openerp.data.Repositories.PurchaseRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,14 +19,29 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class Add_purchase_VM @Inject constructor(private val purchaseRepo: PurchaseRepo, private val accountRepo: AccountRepo) : ViewModel() {
+class Add_purchase_VM @Inject constructor(
+    private val purchaseRepo: PurchaseRepo,
+    private val accountRepo: AccountRepo,
+    private val inventoryRepo: InventoryRepo
+) : ViewModel() {
 
     val old_Account_list : MutableState<List<Account>> = mutableStateOf(listOf())
+    val all_items_in_inventory : MutableState<List<Item>> = mutableStateOf(listOf())
+
     init {
         viewModelScope.launch {
             accountRepo.get_every_Account().collect(){
                     newData -> old_Account_list.value = newData
                 Log.d("STATUS", "collected accounts line 24 -vm")
+            }
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            inventoryRepo.retrun_All_items_in_inventory().collect(){
+                    newData -> all_items_in_inventory.value = newData
+                Log.d("STATUS", "collected items line 40 -vm")
             }
         }
     }
@@ -144,8 +161,6 @@ class Add_purchase_VM @Inject constructor(private val purchaseRepo: PurchaseRepo
 
         }
     }
-
-
 
     fun add_purchase(name : String, purchase: Purcahase, listOfEntry: List<PurchaseEntry>){
 
