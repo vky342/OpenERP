@@ -64,7 +64,8 @@ import com.vky342.openerp.ui.theme.background_color
 fun inventoryOptionsScreen(navController: NavController) {
 
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
-    val topPadding = height.value * 0.1
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()

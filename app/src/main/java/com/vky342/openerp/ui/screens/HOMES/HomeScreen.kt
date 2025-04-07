@@ -198,7 +198,7 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                             tint = edit_item_content_color
                         )
                         Text(
-                            text = "Edit Items",
+                            text = "Inventory",
                             fontSize = 20.sp,
                             color = edit_item_content_color,
                             modifier = Modifier.padding(start = 10.dp)
