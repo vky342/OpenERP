@@ -18,6 +18,7 @@ import javax.inject.Inject
 class InventoryList_VM @Inject constructor( private val inventoryRepo: InventoryRepo) : ViewModel() {
 
     val item_list : MutableState<List<Item>> = mutableStateOf(listOf())
+    var item_to_modify : Item = Item("",0.0,0.0,0)
     init {
         viewModelScope.launch {
             inventoryRepo.retrun_All_items_in_inventory().collect(){
@@ -93,6 +94,12 @@ class InventoryList_VM @Inject constructor( private val inventoryRepo: Inventory
     fun Add_Item_to_inventory (list_of_item : List<Item> = sampleItems) {
         viewModelScope.launch (Dispatchers.IO) {
             inventoryRepo.insert_item_into_inventory(list_of_item)
+        }
+    }
+
+    fun updateItem(newItem : Item){
+        viewModelScope.launch {
+            inventoryRepo.updateItem(item_to_modify,newItem)
         }
     }
 

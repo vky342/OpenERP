@@ -19,6 +19,11 @@ class InventoryRepo (private val openERPDataBase: OpenERPDataBase) {
         }
     }
 
+    suspend fun updateItem(oldItem : Item, newItem : Item){
+        inventoryDao.delete(oldItem)
+        inventoryDao.insert(newItem)
+    }
+
     suspend fun addNewItem(item: Item){
         inventoryDao.insert(item)
 

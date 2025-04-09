@@ -130,8 +130,6 @@ fun modify_screen_prev(){
 }
 
 
-
-//@Preview
 @Composable
 fun account_search_bar_for_edit_account(onReset : () -> Unit,enabled : Boolean = true,modifier: Modifier = Modifier,onVc : (String) -> Unit,current_value: String){
     // Search Bar (20% → Adjusted to fixed 100.dp)

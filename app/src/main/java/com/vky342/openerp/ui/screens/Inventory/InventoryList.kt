@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
@@ -18,6 +20,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -33,6 +37,7 @@ import com.vky342.openerp.data.Entities.Account
 import com.vky342.openerp.data.Entities.Item
 import com.vky342.openerp.data.ViewModels.InventoryList_VM
 import com.vky342.openerp.ui.screens.ACCOUNTS.account_list_table_single_row
+import com.vky342.openerp.ui.screens.HOMES.Searchbar
 import com.vky342.openerp.ui.theme.New_account_title_color
 import com.vky342.openerp.ui.theme.background_color
 
@@ -42,6 +47,17 @@ fun InventoryList(viewModel : InventoryList_VM = hiltViewModel()){
 
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val sidePadding = width.value * 0.08
+
+    var searchText = remember { mutableStateOf("") }
+
+    var itemList = remember { mutableStateOf(viewModel.item_list.value) }
+
+    if (searchText.value != "") {
+       itemList.value =  itemList.value.filter { it.itemName.contains(searchText.value, ignoreCase = true) }
+    }
+    if (searchText.value == ""){
+        itemList.value = viewModel.item_list.value
+    }
 
     Box(
         modifier = Modifier
@@ -67,15 +83,39 @@ fun InventoryList(viewModel : InventoryList_VM = hiltViewModel()){
                 Text(text = "Inventory Status", fontWeight = FontWeight.Bold,color = New_account_title_color,fontSize = 32.sp, modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = sidePadding.dp))
             }
 
+            //searchBar
+            inventory_search_bar(onClear = {searchText.value = ""},modifier = Modifier.padding(horizontal = sidePadding.dp), value = searchText.value, onVC = {searchText.value = it})
+
             // List
             Box(modifier = Modifier.fillMaxWidth().heightIn(max = 1200.dp)) {
-                item_list_table(modifier = Modifier.align(Alignment.Center), itemList = viewModel.item_list.value)
+                item_list_table(modifier = Modifier.align(Alignment.Center), itemList = itemList.value)
             }
 
         }
     }
 }
 
+
+@Composable
+fun inventory_search_bar(modifier: Modifier = Modifier,onVC : (String) -> Unit = {},value : String = "", onClear : () -> Unit = {}){
+    // Search Bar (20% → Adjusted to fixed 100.dp)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = modifier
+                .wrapContentHeight()
+                .wrapContentWidth()
+        ) {
+            Searchbar(onClear = onClear,modifier = Modifier, current_value = value, label = "Search Inventory",onVC = {
+                onVC(it)
+            })
+        }
+    }
+}
 
 
 @Preview
