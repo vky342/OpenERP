@@ -27,6 +27,7 @@ class Add_purchase_VM @Inject constructor(
 
     val old_Account_list : MutableState<List<Account>> = mutableStateOf(listOf())
     val all_items_in_inventory : MutableState<List<Item>> = mutableStateOf(listOf())
+    val purchaseID : MutableState<Int> = mutableStateOf(0)
 
     init {
         viewModelScope.launch {
@@ -43,6 +44,13 @@ class Add_purchase_VM @Inject constructor(
                     newData -> all_items_in_inventory.value = newData
                 Log.d("STATUS", "collected items line 40 -vm")
             }
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            purchaseID.value = purchaseRepo.getLatestPurchaseID()
+            Log.d("STATUS", "fetched latest purchase ID")
         }
     }
 

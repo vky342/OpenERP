@@ -36,6 +36,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,6 +54,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEachReversed
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.vky342.openerp.data.Entities.Account
+import com.vky342.openerp.data.Entities.Item
+import com.vky342.openerp.data.Entities.Purcahase
+import com.vky342.openerp.data.Entities.PurchaseEntry
 import com.vky342.openerp.data.ViewModels.transaction.Add_purchase_VM
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.theme.New_account_title_color
@@ -67,7 +71,7 @@ data class item_popup(
     var price : Double,
     var disc : Double,
     var quantity : Int,
-    var totalAmount : MutableState<Double>
+    var totalAmount : MutableState<Double> = mutableStateOf(quantity * (price - (price * disc /100)))
 )
 
 @Composable
@@ -80,9 +84,9 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
 
     val item_fill_popUp_status = remember { mutableStateOf(false) }
 
-    var ID = remember { mutableStateOf("") }
+    var ID = remember { viewModel.purchaseID }
 
-    var account = remember { mutableStateOf((Account(0, "", "", "", ""))) }
+    var selectedAccount = remember { mutableStateOf((Account(0, "", "", "", ""))) }
 
     var payment_mode = remember { mutableStateOf("") }
 
@@ -90,7 +94,11 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
 
     var selectedOptionText by remember { mutableStateOf("") }
 
-    var selectedItemText by remember { mutableStateOf("") }
+    // itemForm popUP props
+    var selectedItemName = remember { mutableStateOf("") }
+    var selectedItemPrice = remember { mutableStateOf("") }
+    var selectedItemDiscount = remember { mutableStateOf("") }
+    var selectedItemQuantity = remember { mutableStateOf("") }
 
     var options = viewModel.old_Account_list.value
 
@@ -98,9 +106,15 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
 
     var expanded = remember { mutableStateOf(false) }
 
+    var addItemEnabled = remember { mutableStateOf(false)}
+
     var expanded_item_name_suggestion = remember { mutableStateOf(false) }
 
     var itemsList = remember { mutableStateListOf<item_popup>() }
+
+    val checkOutEnabled by remember {
+        derivedStateOf { itemsList.isNotEmpty() }
+    }
 
     LaunchedEffect(itemsList.size) {
         Log.d("Items", "Current List: ${itemsList.map { it.name }}")
@@ -114,7 +128,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
     }
 
     var filtering_items_Options = item_options.value.filter {
-        it.itemName.contains(selectedItemText, ignoreCase = true)
+        it.itemName.contains(selectedItemName.value, ignoreCase = true)
     }
 
     var partyEnabled = remember { mutableStateOf(true) }
@@ -181,13 +195,18 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                     .height(70.dp)
             ) {
                 form_fields(
+                    trailing_icon_enabled = if(selectedAccount == Account(0, "", "", "", "")) false else{true},
                     onTrailingIconClick = {
-                    selectedOptionText = ""
-                    partyEnabled.value = true
-                    payment_mode.value = ""
-                }, enabled = partyEnabled.value, onVc = {
-                    selectedOptionText = it
-                    expanded.value = true
+                        Log.d("Status", "on Trailing Icon Clicked")
+                        addItemEnabled.value = false
+                        selectedOptionText = ""
+                        partyEnabled.value = true
+                        payment_mode.value = ""
+                        selectedAccount.value = Account(0, "", "", "", "")
+                }, enabled = partyEnabled.value,
+                    onVc = {
+                        selectedOptionText = it
+                        expanded.value = true
                 },
                     value = selectedOptionText,
                     icon = Icons.Outlined.Person,
@@ -247,9 +266,30 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
 
                 Variable_Amount_Row_2(totalAmount = totalAmount.value, totalItems = totalItems,modifier = Modifier.background(color = var_amount_row_colour))
 
-                checkout_Strip()
+                checkout_Strip(enabled = checkOutEnabled, onClick = {
 
-                Add_button_Strip(onClick = { item_fill_popUp_status.value = true })
+                    if (selectedDate.value != ""){
+                        viewModel.add_purchase(
+                            name = selectedAccount.value.name,
+                            purchase = Purcahase(purchaseId = 0, purchaseDate = selectedDate.value, ledgerId = 0, purchaseAmount = totalAmount.value),
+                            listOfEntry = itemsList.map { item ->
+                                PurchaseEntry(
+                                    entryId = 0,
+                                    entryQuantity = item.quantity,
+                                    entryPrice = item.price,
+                                    discount = item.disc,
+                                    finalPrice = item.totalAmount.value,
+                                    itemName = item.name,
+                                    purchaseId = 0
+                                )
+                            }
+                        )
+                    }
+
+
+                })
+
+                Add_button_Strip(addItemEnabled.value,onClick = { item_fill_popUp_status.value = true })
 
 
                 // Items List
@@ -309,17 +349,50 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
 
             }
 
-            item_fill_popUp(onVC = {
-                selectedItemText = it
-                expanded_item_name_suggestion.value = true
-                                   },
+            item_fill_popUp(
+                name = selectedItemName.value,
+                price = selectedItemPrice.value,
+                discount = selectedItemDiscount.value,
+                quantity = selectedItemQuantity.value,
+                onNameChange = {expanded_item_name_suggestion.value = true; selectedItemName.value = it},
+                onPriceChange = {selectedItemPrice.value = it},
+                onDiscountChange = {selectedItemDiscount.value = it},
+                onQuantityChange = {selectedItemQuantity.value = it},
                 modifier = Modifier
                     .padding(horizontal = 10.dp, vertical = 40.dp)
                     .align(Alignment.TopCenter),
-                onCancel = { item_fill_popUp_status.value = false },
-                onDone = {
+                onCancel = {
                     item_fill_popUp_status.value = false
-                    itemsList.add(it)
+                    selectedItemName.value = ""
+                    selectedItemPrice.value = ""
+                    selectedItemDiscount.value = ""
+                    selectedItemQuantity.value = ""
+                           },
+                onDone = {
+
+                    if (item_options.value.any{ item -> item.itemName == selectedItemName.value}){
+                        item_fill_popUp_status.value = false
+
+                        itemsList.add(item_popup(
+                            name = selectedItemName.value,
+                            price = selectedItemPrice.value.toDouble(),
+                            disc = selectedItemDiscount.value.toDoubleOrNull() ?: 0.0,
+                            quantity = selectedItemQuantity.value.toInt())
+                        )
+
+                        selectedItemName.value = ""
+                        selectedItemPrice.value = ""
+                        selectedItemDiscount.value = ""
+                        selectedItemQuantity.value = ""
+                    }
+                    else{
+                        Toast.makeText(context, "No Item found named " + selectedItemName.value, Toast.LENGTH_SHORT).show()
+                        selectedItemName.value = ""
+                        selectedItemPrice.value = ""
+                        selectedItemDiscount.value = ""
+                        selectedItemQuantity.value = ""
+                    }
+
                 }
             )
 
@@ -327,6 +400,8 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
 
         }
 
+
+        // account suggestion
         if (expanded.value) {
 
             BackHandler(enabled = expanded.value) {
@@ -355,6 +430,8 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                                 selectedOptionText = account.name
                                 expanded.value = false
                                 partyEnabled.value = false
+                                addItemEnabled.value = true
+                                selectedAccount.value = account
                                 Toast.makeText(context, "Account selected", Toast.LENGTH_SHORT)
                                     .show()
                             })
@@ -371,10 +448,11 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(max = 300.dp)
-                    .padding(top = 177.dp)
-                    .padding(horizontal = (sidePadding).dp)
-                    .align(Alignment.TopCenter)
+                    .heightIn(max = ((height.value / 2) - 110).dp)
+                    .padding(top = 110.dp)
+                    .padding(end = (width.value / 6).dp)
+                    .padding(horizontal = 10.dp)
+                    .align(Alignment.TopStart)
                     .shadow(elevation = 4.dp, shape = RoundedCornerShape(10f))
                     .background(color = Color.White, shape = RoundedCornerShape(10f))
             ) {
@@ -387,7 +465,8 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                             .padding(vertical = 1.dp, horizontal = 4.dp)
                             .fillMaxWidth()
                             .clickable {
-                                selectedItemText = item.itemName
+                                selectedItemName.value = item.itemName
+                                selectedItemPrice.value = item.itemSellingPrice.toString()
                                 expanded_item_name_suggestion.value = false
                             })
                 }

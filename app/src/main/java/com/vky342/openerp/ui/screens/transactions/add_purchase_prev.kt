@@ -641,19 +641,13 @@ fun floating_add_button(modifier: Modifier = Modifier,onClick : () -> Unit = {})
 
 @Preview
 @Composable
-fun item_fill_popUp(onVC : (String) -> Unit = {}, modifier: Modifier = Modifier, onCancel : () -> Unit = {}, onDone : (item_popup) -> Unit = {}){
+fun item_fill_popUp(name: String = "", price: String = "", discount: String = "", quantity: String = "",
+                    onNameChange : (String) -> Unit = {}, onPriceChange : (String) -> Unit = {}, onDiscountChange : (String) -> Unit = {}, onQuantityChange : (String) -> Unit = {},
+                    onVC : (String) -> Unit = {}, modifier: Modifier = Modifier, onCancel : () -> Unit = {}, onDone : () -> Unit = {}){
 
     //var itemPopup = remember { mutableStateOf(item_popup("",0.00,0.00,0)) }
 
     val context : Context = LocalContext.current
-
-    var name = remember { mutableStateOf("") }
-
-    var price = remember { mutableStateOf("") }
-
-    var discount = remember { mutableStateOf("") }
-
-    var quantity = remember { mutableStateOf("") }
 
 
     Box(
@@ -679,10 +673,9 @@ fun item_fill_popUp(onVC : (String) -> Unit = {}, modifier: Modifier = Modifier,
                         .height(60.dp)){
 
 
-                        form_fields(value = name.value, onVc = {
-                            onVC(it)
-                            name.value = it
-                                                               },icon = Icons.Default.Search,label = "item name",modifier = Modifier
+                        form_fields(value = name,
+                            onVc = { onNameChange(it) },
+                            icon = Icons.Default.Search,label = "item name",modifier = Modifier
                             .padding(horizontal = 10.dp)
                             .fillMaxWidth())
                     }
@@ -703,9 +696,9 @@ fun item_fill_popUp(onVC : (String) -> Unit = {}, modifier: Modifier = Modifier,
                                     keyboardOptions = KeyboardOptions(
                                         autoCorrect = false,
                                         keyboardType = KeyboardType.Decimal),
-                                    value = price.value,
+                                    value = price,
                                     onVc = {
-                                        price.value = it
+                                        onPriceChange(it)
                                            },
                                     icon = Icons.Default.KeyboardArrowUp,label = "price ₹",modifier = Modifier
                                         .fillMaxWidth()
@@ -730,9 +723,9 @@ fun item_fill_popUp(onVC : (String) -> Unit = {}, modifier: Modifier = Modifier,
                                     keyboardOptions = KeyboardOptions(
                                     autoCorrect = false,
                                     keyboardType = KeyboardType.Decimal),
-                                    value = discount.value,
+                                    value = discount,
                                     onVc = {
-                                        discount.value = it
+                                        onDiscountChange(it)
                                     },icon = Icons.Default.KeyboardArrowDown,label = "discount %",modifier = Modifier
                                         .fillMaxWidth()
                                         .align(Alignment.Center))
@@ -754,9 +747,9 @@ fun item_fill_popUp(onVC : (String) -> Unit = {}, modifier: Modifier = Modifier,
                                 keyboardOptions = KeyboardOptions(
                                     autoCorrect = false,
                                     keyboardType = KeyboardType.Decimal),
-                                value = quantity.value,
+                                value = quantity,
                                 onVc = {
-                                    quantity.value = it
+                                    onQuantityChange(it)
                                 },
                                 icon = Icons.Default.Info,label = "quantity",modifier = Modifier
                                     .fillMaxWidth()
@@ -807,19 +800,11 @@ fun item_fill_popUp(onVC : (String) -> Unit = {}, modifier: Modifier = Modifier,
                         .align(Alignment.CenterHorizontally)
                         .clickable {
 
-                            if (name.value == "" || price.value == "" || discount.value == "" || quantity.value == "") {
+                            if (name == "" || price == "" || price == "0.0" || quantity == "" || quantity == "0") {
                                 Toast.makeText(context, "field is empty", Toast.LENGTH_SHORT).show()
                             }else{
-                                onDone(
-                                    item_popup(
-                                        name = name.value,
-                                        price = price.value.toDouble(),
-                                        disc = discount.value.toDouble(),
-                                        quantity = quantity.value.toInt(),
-                                        totalAmount = mutableStateOf(quantity.value.toDouble() *  ( price.value.toDouble() - ( discount.value.toDouble() * (price.value.toDouble() / 100) ) ))
-                                    )
-                                )
-                                Log.d("pop_UP","totalAmount : " + (quantity.value.toDouble() *  ( price.value.toDouble() - ( discount.value.toDouble() * (price.value.toDouble() / 100) ) ))).toString()
+                                onDone()
+                               // Log.d("pop_UP","totalAmount : " + (quantity.value.toDouble() *  ( price.value.toDouble() - ( discount.value.toDouble() * (price.value.toDouble() / 100) ) ))).toString()
                             }
 
                         }
@@ -920,7 +905,7 @@ fun Variable_Amount_Row_2(totalItems : Int = 0, totalAmount : Double = 0.00,modi
 
 @Preview
 @Composable
-fun checkout_Strip(){
+fun checkout_Strip(enabled: Boolean = true,onClick: () -> Unit = {}){
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(60.dp)
@@ -931,7 +916,8 @@ fun checkout_Strip(){
             .align(Alignment.Center)){
             Icon(Icons.AutoMirrored.Filled.ExitToApp, tint = title_color,contentDescription = "", modifier = Modifier
                 .size(30.dp)
-                .align(Alignment.CenterVertically))
+                .align(Alignment.CenterVertically)
+                .clickable(enabled = enabled) { onClick() })
             Text("Save", color = title_color,fontSize = 30.sp,
                 style = TextStyle(
                     shadow = Shadow(
@@ -941,14 +927,16 @@ fun checkout_Strip(){
                     ),
                     fontWeight = FontWeight.Bold
                 ),
-                modifier = Modifier.align(Alignment.CenterVertically))
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .clickable(enabled = enabled) { onClick() })
         }
     }
 }
 
 @Preview
 @Composable
-fun Add_button_Strip(onClick: () -> Unit = {}){
+fun Add_button_Strip(enabled: Boolean = true,onClick: () -> Unit = {}){
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(60.dp)
@@ -959,7 +947,8 @@ fun Add_button_Strip(onClick: () -> Unit = {}){
             .align(Alignment.Center)){
             Icon(Icons.Default.Add, tint = background_color,contentDescription = "", modifier = Modifier
                 .size(30.dp)
-                .align(Alignment.CenterVertically))
+                .align(Alignment.CenterVertically)
+                .clickable(enabled = enabled) { onClick() })
             Text("Item", color = background_color,fontSize = 30.sp,
                 style = TextStyle(
                     shadow = Shadow(
@@ -971,7 +960,7 @@ fun Add_button_Strip(onClick: () -> Unit = {}){
                 ),
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .clickable { onClick() })
+                    .clickable(enabled = enabled) { onClick() })
         }
     }
 }

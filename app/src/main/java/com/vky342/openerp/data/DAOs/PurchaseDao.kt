@@ -25,6 +25,6 @@ interface PurchaseDao {
     fun getPurchaseByLedgerId(ledgerId : Int) : List<Purcahase>
 
     @Query("SELECT * FROM Purchases WHERE purchaseId = (SELECT max(purchaseId) FROM Purchases)")
-    fun getLastPurchase() : Purcahase
+    suspend fun getLastPurchase() : Purcahase
 
 }

@@ -1,5 +1,6 @@
 package com.vky342.openerp.data.Repositories
 
+import android.util.Log
 import com.vky342.openerp.data.Entities.Purcahase
 import com.vky342.openerp.data.Entities.PurchaseEntry
 import com.vky342.openerp.data.Modules.OpenERPDataBase
@@ -22,9 +23,23 @@ class PurchaseRepo (private val openERPDataBase: OpenERPDataBase) {
         add_purchase(account_name, purchase)
         add_purchase_entry(list_of_purchaseEntry)
 
+        /*
+            to be added later
+            update net balance of account
+        */
     }
 
-    suspend fun getAccounts() = accountDao.getAllAccounts()
+    suspend fun getLatestPurchaseID() : Int{
+
+        try {
+            val pid = purchaseDao.getLastPurchase().purchaseId
+            return pid
+        } catch (e: Exception){
+            Log.d("STATUS","No previous purchase found; returning id as 0")
+            return 0
+        }
+
+    }
 
 
     // function to be used within AddPurchase
