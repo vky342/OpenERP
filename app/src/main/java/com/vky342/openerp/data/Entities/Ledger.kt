@@ -8,6 +8,6 @@ import androidx.room.PrimaryKey
 data class Ledger(
     @PrimaryKey(autoGenerate = true)
     val ledgerId : Int,
-    val ledgerNetBalance: Int,
+    val ledgerNetBalance: Double,
     val accountName : String,
 )

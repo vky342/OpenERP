@@ -11,4 +11,5 @@ data class Purcahase(
     var purchaseDate : String,
     var ledgerId  : Int,
     var purchaseAmount : Double,
+    var purchaseType : String
     )

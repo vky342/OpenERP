@@ -148,7 +148,7 @@ class Add_purchase_VM @Inject constructor(
         )
 
 
-    private fun Save_Purchase(account_name : String, purchase : Purcahase, list_of_purEntries : List<PurchaseEntry>){
+    private fun Save_Purchase(account_name : String,purchase : Purcahase, list_of_purEntries : List<PurchaseEntry>){
 
         /*
         *
@@ -170,7 +170,7 @@ class Add_purchase_VM @Inject constructor(
         }
     }
 
-    fun add_purchase(name : String, purchase: Purcahase, listOfEntry: List<PurchaseEntry>){
+    fun add_purchase(name : String,purchase: Purcahase, listOfEntry: List<PurchaseEntry>){
 
         Save_Purchase(name,purchase,listOfEntry)
 

@@ -81,6 +81,8 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
     val sidePadding = width.value * 0.08
 
     val context: Context = LocalContext.current
+    var options = viewModel.old_Account_list.value
+    var item_options = viewModel.all_items_in_inventory
 
     val item_fill_popUp_status = remember { mutableStateOf(false) }
 
@@ -92,53 +94,22 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
 
     var selectedDate = remember { mutableStateOf("") }
 
-    var selectedOptionText by remember { mutableStateOf("") }
+    var selectedAccountText by remember { mutableStateOf("") }
 
-    // itemForm popUP props
+    // itemForm popUP
     var selectedItemName = remember { mutableStateOf("") }
     var selectedItemPrice = remember { mutableStateOf("") }
     var selectedItemDiscount = remember { mutableStateOf("") }
     var selectedItemQuantity = remember { mutableStateOf("") }
 
-    var options = viewModel.old_Account_list.value
-
-    var item_options = viewModel.all_items_in_inventory
-
-    var expanded = remember { mutableStateOf(false) }
-
-    var addItemEnabled = remember { mutableStateOf(false)}
-
-    var expanded_item_name_suggestion = remember { mutableStateOf(false) }
-
     var itemsList = remember { mutableStateListOf<item_popup>() }
 
-    val checkOutEnabled by remember {
-        derivedStateOf { itemsList.isNotEmpty() }
-    }
-
-    LaunchedEffect(itemsList.size) {
-        Log.d("Items", "Current List: ${itemsList.map { it.name }}")
-    }
-
-    var filteringOptions = options.filter {
-        it.name.contains(selectedOptionText, ignoreCase = true) || it.address.contains(
-            selectedOptionText,
-            ignoreCase = true
-        ) || it.contact.contains(selectedOptionText, ignoreCase = true)
-    }
-
-    var filtering_items_Options = item_options.value.filter {
-        it.itemName.contains(selectedItemName.value, ignoreCase = true)
-    }
-
+    val checkOutEnabled by remember { derivedStateOf { itemsList.isNotEmpty() } }
     var partyEnabled = remember { mutableStateOf(true) }
+    var addItemEnabled = remember { mutableStateOf(false)}
 
     // purchase summary
-
-    val totalItems by remember {
-        derivedStateOf { itemsList.size }
-    }
-
+    val totalItems by remember { derivedStateOf { itemsList.size } }
     var totalAmount = remember {derivedStateOf { itemsList.sumOf { it.totalAmount.value } } }
 
 
@@ -147,6 +118,19 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
     LaunchedEffect(itemsList.size) {
         listState.scrollToItem(0)
     }
+
+    //Suggestions
+    var filteringOptions = options.filter {
+        it.name.contains(selectedAccountText, ignoreCase = true) || it.address.contains(
+            selectedAccountText,
+            ignoreCase = true
+        ) || it.contact.contains(selectedAccountText, ignoreCase = true)
+    }
+    var filtering_items_Options = item_options.value.filter {
+        it.itemName.contains(selectedItemName.value, ignoreCase = true)
+    }
+    var expanded_item_name_suggestion = remember { mutableStateOf(false) }
+    var expanded = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -199,16 +183,16 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                     onTrailingIconClick = {
                         Log.d("Status", "on Trailing Icon Clicked")
                         addItemEnabled.value = false
-                        selectedOptionText = ""
+                        selectedAccountText = ""
                         partyEnabled.value = true
                         payment_mode.value = ""
                         selectedAccount.value = Account(0, "", "", "", "")
                 }, enabled = partyEnabled.value,
                     onVc = {
-                        selectedOptionText = it
+                        selectedAccountText = it
                         expanded.value = true
                 },
-                    value = selectedOptionText,
+                    value = selectedAccountText,
                     icon = Icons.Outlined.Person,
                     trailing_icon = if (partyEnabled.value) Icons.Default.Search else Icons.Default.Lock,
                     label = "Party",
@@ -271,7 +255,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                     if (selectedDate.value != ""){
                         viewModel.add_purchase(
                             name = selectedAccount.value.name,
-                            purchase = Purcahase(purchaseId = 0, purchaseDate = selectedDate.value, ledgerId = 0, purchaseAmount = totalAmount.value),
+                            purchase = Purcahase(purchaseId = 0, purchaseDate = selectedDate.value, ledgerId = 0, purchaseAmount = totalAmount.value, purchaseType = payment_mode.value),
                             listOfEntry = itemsList.map { item ->
                                 PurchaseEntry(
                                     entryId = 0,
@@ -284,6 +268,12 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                                 )
                             }
                         )
+                        itemsList.clear()
+                        selectedAccountText = ""
+                        selectedAccount.value = Account(0,"","","","")
+                        selectedDate.value = ""
+                        payment_mode.value = ""
+                        partyEnabled.value = true
                     }
 
 
@@ -427,7 +417,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                             .padding(vertical = 1.dp, horizontal = 4.dp)
                             .fillMaxWidth()
                             .clickable {
-                                selectedOptionText = account.name
+                                selectedAccountText = account.name
                                 expanded.value = false
                                 partyEnabled.value = false
                                 addItemEnabled.value = true

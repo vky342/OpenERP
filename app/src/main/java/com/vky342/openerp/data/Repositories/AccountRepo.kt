@@ -12,7 +12,7 @@ class AccountRepo (private val openERPDataBase: OpenERPDataBase) {
 
     suspend fun insert_Account(name : String, address : String, contact : String, type: String){
         accountdao.insert(Account(0,name, address, contact, type))
-        ledgerdao.insert(ledger = Ledger(0,0,name))
+        ledgerdao.insert(ledger = Ledger(0,0.0,name))
     }
 
     private suspend fun get_Ledger_by_accountName(name : String) : Ledger{

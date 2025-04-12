@@ -1,6 +1,8 @@
 package com.vky342.openerp.data.Repositories
 
 import android.util.Log
+import com.vky342.openerp.data.Entities.Account
+import com.vky342.openerp.data.Entities.Item
 import com.vky342.openerp.data.Entities.Purcahase
 import com.vky342.openerp.data.Entities.PurchaseEntry
 import com.vky342.openerp.data.Modules.OpenERPDataBase
@@ -18,7 +20,7 @@ class PurchaseRepo (private val openERPDataBase: OpenERPDataBase) {
     private val accountDao = openERPDataBase.getAccountDao()
 
     // public function to add purchase
-    suspend fun AddPurchase (account_name : String, purchase : Purcahase, list_of_purchaseEntry : List<PurchaseEntry>) {
+    suspend fun AddPurchase (account_name : String,purchase : Purcahase, list_of_purchaseEntry : List<PurchaseEntry>) {
 
         add_purchase(account_name, purchase)
         add_purchase_entry(list_of_purchaseEntry)
@@ -42,6 +44,10 @@ class PurchaseRepo (private val openERPDataBase: OpenERPDataBase) {
     }
 
 
+    private suspend fun updateNetBalance(){
+
+    }
+
     // function to be used within AddPurchase
     private suspend fun add_purchase_entry (list_of_purchaseEntry: List<PurchaseEntry>) {
 
@@ -49,7 +55,7 @@ class PurchaseRepo (private val openERPDataBase: OpenERPDataBase) {
 
         for (purchaseEntry in list_of_purchaseEntry){
 
-            item_Stock_update(purchaseEntry.itemName, purchaseEntry.entryQuantity, purchaseEntry.finalPrice)
+            item_Stock_update_purchase(itemName = purchaseEntry.itemName, purchaseEntry.entryQuantity)
             purchaseEntryDao.insert(purchaseEntry.copy(purchaseId = latestPurchase.purchaseId))
 
 
@@ -62,21 +68,18 @@ class PurchaseRepo (private val openERPDataBase: OpenERPDataBase) {
 
         val ledger = ledgerDao.getLedgerByAccountName(name)
 
+        if (purchase.purchaseType == "Credit"){
+            ledgerDao.update(ledger.copy(ledgerNetBalance = ledger.ledgerNetBalance + purchase.purchaseAmount))
+        }
+
         purchaseDao.insert(purchase.copy(ledgerId = ledger.ledgerId))
+
     }
 
 
-    private suspend fun item_Stock_update (itemName : String, itemQuantity : Int, itemNewPurchasePrice : Double) {
-
-//        val all_Items = itemInventoryDao.getAllItemInInventory()
-//
-//        for (item in all_Items){
-//            if (item.itemName == itemName){
-//                /// function to increase item stock in inventory
-//                itemInventoryDao.update(item = item.copy(itemQuantity = item.itemQuantity + itemQuantity, itemPurchasePrice = itemNewPurchasePrice))
-//            }
-//
-//        }
+    private suspend fun item_Stock_update_purchase (itemName : String, itemQuantity : Int) {
+        var item = itemInventoryDao.getItemByName(itemName)
+        itemInventoryDao.update(item.copy(itemQuantity = item.itemQuantity + itemQuantity))
     }
 
 
