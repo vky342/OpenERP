@@ -130,7 +130,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
         it.itemName.contains(selectedItemName.value, ignoreCase = true)
     }
     var expanded_item_name_suggestion = remember { mutableStateOf(false) }
-    var expanded = remember { mutableStateOf(false) }
+    var expanded_account_suggestion = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -147,8 +147,8 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                 .verticalScroll(rememberScrollState())
                 .pointerInput(Unit) {
                     detectTapGestures(
-                        onTap = { expanded.value = false },
-                        onPress = { expanded.value = false }
+                        onTap = { expanded_account_suggestion.value = false },
+                        onPress = { expanded_account_suggestion.value = false }
                     )
                 }
         ) {
@@ -190,7 +190,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                 }, enabled = partyEnabled.value,
                     onVc = {
                         selectedAccountText = it
-                        expanded.value = true
+                        expanded_account_suggestion.value = true
                 },
                     value = selectedAccountText,
                     icon = Icons.Outlined.Person,
@@ -392,10 +392,10 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
 
 
         // account suggestion
-        if (expanded.value) {
+        if (expanded_account_suggestion.value) {
 
-            BackHandler(enabled = expanded.value) {
-                expanded.value = false
+            BackHandler(enabled = expanded_account_suggestion.value) {
+                expanded_account_suggestion.value = false
             }
 
             LazyColumn(
@@ -418,7 +418,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                             .fillMaxWidth()
                             .clickable {
                                 selectedAccountText = account.name
-                                expanded.value = false
+                                expanded_account_suggestion.value = false
                                 partyEnabled.value = false
                                 addItemEnabled.value = true
                                 selectedAccount.value = account
@@ -431,7 +431,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
 
         if (expanded_item_name_suggestion.value){
 
-            BackHandler(enabled = expanded.value) {
+            BackHandler(enabled = expanded_account_suggestion.value) {
                 expanded_item_name_suggestion.value = false
             }
 

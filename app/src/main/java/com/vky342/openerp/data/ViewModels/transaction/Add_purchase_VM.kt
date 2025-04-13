@@ -54,100 +54,6 @@ class Add_purchase_VM @Inject constructor(
         }
     }
 
-    val samplePurchaseEntries = listOf(
-            PurchaseEntry(
-                entryId = 0,
-                entryQuantity = 10,
-                entryPrice = 15.50,
-                discount = 2.50,
-                finalPrice = 13.00,
-                itemName = "Notebook",
-                purchaseId = 101
-            ),
-            PurchaseEntry(
-                entryId = 0,
-                entryQuantity = 5,
-                entryPrice = 50.00,
-                discount = 0.0,
-                finalPrice = 50.00,
-                itemName = "Wireless Mouse",
-                purchaseId = 102
-            ),
-            PurchaseEntry(
-                entryId = 0,
-                entryQuantity = 20,
-                entryPrice = 2.75,
-                discount = 1.50,
-                finalPrice = 1.25,
-                itemName = "Pen",
-                purchaseId = 103
-            ),
-            PurchaseEntry(
-                entryId = 0,
-                entryQuantity = 8,
-                entryPrice = 100.00,
-                discount = 10.00,
-                finalPrice = 90.00,
-                itemName = "Headphones",
-                purchaseId = 104
-            ),
-            PurchaseEntry(
-                entryId = 0,
-                entryQuantity = 15,
-                entryPrice = 30.00,
-                discount = 5.00,
-                finalPrice = 25.00,
-                itemName = "USB Drive",
-                purchaseId = 105
-            ),
-            PurchaseEntry(
-                entryId = 0,
-                entryQuantity = 3,
-                entryPrice = 250.00,
-                discount = 25.00,
-                finalPrice = 225.00,
-                itemName = "External Hard Drive",
-                purchaseId = 106
-            ),
-            PurchaseEntry(
-                entryId = 0,
-                entryQuantity = 12,
-                entryPrice = 7.50,
-                discount = 0.75,
-                finalPrice = 6.75,
-                itemName = "Notebook",
-                purchaseId = 107
-            ),
-            PurchaseEntry(
-                entryId = 0,
-                entryQuantity = 2,
-                entryPrice = 500.00,
-                discount = 50.00,
-                finalPrice = 450.00,
-                itemName = "Monitor",
-                purchaseId = 108
-            ),
-            PurchaseEntry(
-                entryId = 0,
-                entryQuantity = 7,
-                entryPrice = 35.00,
-                discount = 0.0,
-                finalPrice = 35.00,
-                itemName = "Keyboard",
-                purchaseId = 109
-            ),
-            PurchaseEntry(
-                entryId = 0,
-                entryQuantity = 6,
-                entryPrice = 60.00,
-                discount = 6.00,
-                finalPrice = 54.00,
-                itemName = "Bluetooth Speaker",
-                purchaseId = 110
-            )
-        )
-
-
     private fun Save_Purchase(account_name : String,purchase : Purcahase, list_of_purEntries : List<PurchaseEntry>){
 
         /*
@@ -176,8 +82,5 @@ class Add_purchase_VM @Inject constructor(
 
     }
 
-//    fun ini_test(){
-//        Save_Purchase(account_name = "kunal", purchase = Purcahase(0,"something",0,1000), list_of_purEntries = samplePurchaseEntries)
-//    }
 
 }

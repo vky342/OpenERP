@@ -12,6 +12,6 @@ data class Sale(
     var saleId : Int,
     var saleDate : String,
     var ledgerId  : Int,
-    var saleAmount : Int,
-
+    var saleAmount : Double,
+    var saleType : String
     )
