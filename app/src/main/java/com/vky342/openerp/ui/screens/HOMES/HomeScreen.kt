@@ -61,6 +61,7 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.vky342.openerp.ui.Graphs.InventoryScreens
+import com.vky342.openerp.ui.Graphs.LedgerScreens
 import com.vky342.openerp.ui.screens.ACCOUNTS.account_list_table_single_row
 import com.vky342.openerp.ui.theme.amount_stat_border_color
 import com.vky342.openerp.ui.theme.amount_text_color
@@ -229,6 +230,9 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                         )
                         .border(1.dp, edit_item_border_color, RoundedCornerShape(20f))
                         .align(Alignment.Center)
+                        .clickable{
+                            navController.navigate(LedgerScreens.AccountLedger)
+                        }
                 ) {
                     Row(
                         modifier = Modifier.fillMaxSize(),

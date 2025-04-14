@@ -25,11 +25,11 @@ interface receiptDao {
     // Function for screening
 
     @Query("SELECT * FROM Receipts")
-    fun getAllPayments() : List<Receipt>
+    fun getAllReceipts() : List<Receipt>
 
     @Query("SELECT * FROM Receipts WHERE receiptDate = :date")
-    fun getAllPaymentOnDate(date: String) : List<Receipt>
+    fun getAllReceiptsOnDate(date: String) : List<Receipt>
 
     @Query("SELECT * FROM Receipts WHERE ledgerId = :ledgerId")
-    fun getAllPaymentsInLedger(ledgerId : Int) : List<Receipt>
+    fun getAllReceiptsInLedger(ledgerId : Int) : List<Receipt>
 }

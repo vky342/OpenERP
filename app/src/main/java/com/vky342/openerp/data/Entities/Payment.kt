@@ -8,6 +8,6 @@ data class Payment(
     @PrimaryKey(autoGenerate = true)
     val paymentId : Int,
     val paymentDate : String,
-    val paymentAmount : Int,
+    val paymentAmount : Double,
     val ledgerId : Int
 )

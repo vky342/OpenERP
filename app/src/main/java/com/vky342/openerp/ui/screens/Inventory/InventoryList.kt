@@ -207,13 +207,7 @@ fun item_list_table_single_row(modifier: Modifier = Modifier, item : Item = Item
             .background(color = Color.LightGray)
     )
 
-    Row (modifier = modifier.fillMaxWidth()) {
-        Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp)
-            .background(color = Color.White)
-    ) {
+    Row (modifier = modifier.fillMaxWidth().height(45.dp)) {
 
         Row(
             modifier = Modifier
@@ -263,8 +257,6 @@ fun item_list_table_single_row(modifier: Modifier = Modifier, item : Item = Item
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
-
         }
-    } }
-
+    }
 }

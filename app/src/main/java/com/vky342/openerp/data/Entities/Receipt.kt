@@ -9,6 +9,6 @@ data class Receipt(
     @PrimaryKey(autoGenerate = true)
     val receiptId : Int,
     val receiptDate : String,
-    val receiptAmount : Int,
+    val receiptAmount : Double,
     val ledgerId : String
 )
