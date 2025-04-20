@@ -72,6 +72,7 @@ fun AllTransactionOptionsScreen(
         add_purchase_button(onClick = {navController.navigate(TransactionScreen.AddPurchase)})
 
         modify_bill_button(onClick = {navController.navigate(TransactionScreen.modifyBill)})
+            payment_bill_button(onClick = {navController.navigate(TransactionScreen.addPayment)})
         }
     }
 
@@ -279,7 +280,74 @@ fun add_sale_button(modifier: Modifier = Modifier, onClick : () -> Unit = {}){
             }
         }
     }
+}
 
+
+
+@Preview
+@Composable
+fun payment_bill_button(modifier: Modifier = Modifier, onClick : () -> Unit = {}){
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(80.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .height(65.dp)
+                .shadow(
+                    elevation = 4.dp,
+                    shape = RoundedCornerShape(20f),
+                    ambientColor = account_add_shadow_color,
+                    spotColor = account_add_shadow_color
+                )
+                .background(
+                    color = add_purchase_button_container_color,
+                    shape = RoundedCornerShape(20f)
+                )
+                .border(1.dp, account_add_border_color, RoundedCornerShape(20f))
+                .align(Alignment.Center)
+                .clickable { onClick() }
+        ) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start
+            ) {
+                Icon(
+                    Icons.Default.Create,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(75.dp)
+                        .padding(3.dp),
+                    tint = account_add_content_color
+                )
+                Box (modifier = Modifier
+                    .height(40.dp)
+                    .align(Alignment.CenterVertically)) {
+                    Text(
+                        text = "Payment",
+                        fontSize = 20.sp,
+                        color = account_add_title_color,
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                            .align(Alignment.TopStart)
+
+                    )
+                    Text(
+                        text = "add payment done to parties",
+                        fontSize = 12.sp,
+                        color = account_add_subtitle_color,
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                            .align(Alignment.BottomStart)
+                    )
+                }
+
+            }
+        }
+    }
 
 }
+
 

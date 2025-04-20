@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Ledgers")
 data class Ledger(
     @PrimaryKey(autoGenerate = true)
-    val ledgerId : Int,
-    val ledgerNetBalance: Double,
-    val accountName : String,
+    var ledgerId : Int,
+    var ledgerNetBalance: Double,
+    var accountName : String,
 )
