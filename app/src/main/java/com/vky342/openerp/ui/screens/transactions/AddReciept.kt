@@ -37,23 +37,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vky342.openerp.data.Entities.Account
-import com.vky342.openerp.data.Entities.Ledger
 import com.vky342.openerp.data.ViewModels.transaction.Add_Payment_Vm
+import com.vky342.openerp.data.ViewModels.transaction.Add_Receipt_Vm
 import com.vky342.openerp.ui.screens.ACCOUNTS.Save_button
 import com.vky342.openerp.ui.screens.ACCOUNTS.account_search_bar_for_edit_account
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.theme.New_account_title_color
 import com.vky342.openerp.ui.theme.background_color
 
-
 @Composable
-fun addPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
+fun AddReceipt(viewModel : Add_Receipt_Vm = hiltViewModel()){
     val context : Context = LocalContext.current
 
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
@@ -162,7 +159,7 @@ fun addPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
             ) {
                 form_fields(trailing_icon = Icons.Default.Clear,keyboardOptions = KeyboardOptions(autoCorrect = false, keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
                     enabled = old_Account != Account(0,"","","",""),onVc = {amount = it},value = amount,icon = Icons.Default.Create,label = "Amount",modifier = Modifier.padding(horizontal = sidePadding.dp).align(
-                    Alignment.CenterStart))
+                        Alignment.CenterStart))
             }
             // save button
             Box(
@@ -174,7 +171,7 @@ fun addPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
             ) {
                 Save_button(enabled = old_Account != Account(0,"","","",""),onClick = {
 
-                    if(viewModel.AddPayment(old_Account.name, Date = selectedDate.value, amount = amount.toDouble())){
+                    if(viewModel.AddReceipt(old_Account.name, Date = selectedDate.value, amount = amount.toDouble())){
                         Toast.makeText(context,"Payment saved", Toast.LENGTH_SHORT).show()
                     }else{Toast.makeText(context,"Payment Invalid", Toast.LENGTH_SHORT).show()}
                     old_Account = Account(0,"","","","")
@@ -208,7 +205,9 @@ fun addPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
                     Text(text = account.name + " " + "(" +account.type+ ")",
                         fontSize = 18.sp,
                         fontWeight = FontWeight(350),
-                        modifier = Modifier.padding(vertical = 1.dp, horizontal = 2.dp).fillMaxWidth()
+                        modifier = Modifier
+                            .padding(vertical = 1.dp, horizontal = 2.dp)
+                            .fillMaxWidth()
                             .clickable{
                                 old_Account = account
                                 selectedOptionText = account.name + " " + "(" +account.type+ ")"
@@ -216,7 +215,8 @@ fun addPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
                                 expanded.value= false
                                 viewModel.load_balance(account.name)
                                 Toast.makeText(context,"Account selected", Toast.LENGTH_SHORT).show()
-                            })
+                            }
+                    )
                 }
             }
         }

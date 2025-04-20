@@ -7,8 +7,8 @@ import java.sql.Date
 @Entity(tableName = "Receipts")
 data class Receipt(
     @PrimaryKey(autoGenerate = true)
-    val receiptId : Int,
-    val receiptDate : String,
-    val receiptAmount : Double,
-    val ledgerId : String
+    var receiptId : Int,
+    var receiptDate : String,
+    var receiptAmount : Double,
+    var ledgerId : Int
 )

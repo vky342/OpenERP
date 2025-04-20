@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.vky342.openerp.ui.screens.transactions.AddPurchaseScreen
+import com.vky342.openerp.ui.screens.transactions.AddReceipt
 import com.vky342.openerp.ui.screens.transactions.AddSaleScreen
 import com.vky342.openerp.ui.screens.transactions.AllTransactionOptionsScreen
 import com.vky342.openerp.ui.screens.transactions.addPayment
@@ -30,6 +31,10 @@ fun NavGraphBuilder.TransactionNavGraph(navController: NavHostController){
         composable ( route = TransactionScreen.addPayment){
             addPayment()
         }
+        composable ( route = TransactionScreen.addReceipt){
+            AddReceipt()
+        }
+
     }
 }
 
@@ -40,4 +45,5 @@ object TransactionScreen{
     val AddPurchase = "addPurchase"
     val modifyBill = "modifySale"
     val addPayment = "Payment"
+    val addReceipt = "Receipt"
 }

@@ -29,6 +29,7 @@ import com.vky342.openerp.data.Repositories.InventoryRepo
 import com.vky342.openerp.data.Repositories.LedgerRepo
 import com.vky342.openerp.data.Repositories.PaymentRepo
 import com.vky342.openerp.data.Repositories.PurchaseRepo
+import com.vky342.openerp.data.Repositories.ReceiptRepo
 import com.vky342.openerp.data.Repositories.SaleRepo
 import dagger.Module
 import dagger.Provides
@@ -92,6 +93,13 @@ object AppModule{
     fun providePaymentRep(openDb: OpenERPDataBase) : PaymentRepo{
         return PaymentRepo(openDb)
     }
+
+    @Provides
+    @Singleton
+    fun provideReceiptRep(openDb: OpenERPDataBase) : ReceiptRepo{
+        return ReceiptRepo(openDb)
+    }
+
 
 }
 
