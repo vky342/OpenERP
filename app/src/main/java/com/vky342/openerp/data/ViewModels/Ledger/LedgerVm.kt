@@ -52,6 +52,17 @@ class LedgerVm @Inject constructor( private val ledgerRepo: LedgerRepo, private 
         }
     }
 
+    suspend fun getAccountBalance() : Double{
+        return try {
+            withContext(Dispatchers.IO) {
+                ledgerRepo.getBalanceOfSpecificAccount(selectedAccount.name)
+            }
+        } catch (e: Exception) {
+            Log.e("ERROR", "Ledger Repo was unable to load account Balance: ${e.message}")
+            0.0
+        }
+    }
+
     fun reset() : List<AccountLedgerItem>{
         selectedAccount = Account(0,"","","","")
         return listOf<AccountLedgerItem>()

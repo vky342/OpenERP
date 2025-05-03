@@ -148,7 +148,7 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                     .height(45.dp)
             ) {
                 Text(
-                    text = "New purchase : " + ID.value,
+                    text = "New sale : " + ID.value,
                     color = New_account_title_color,
                     fontSize = 24.sp,
                     modifier = Modifier

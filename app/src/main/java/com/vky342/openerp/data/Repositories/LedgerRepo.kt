@@ -8,11 +8,11 @@ import java.time.format.DateTimeFormatter
 
 class LedgerRepo (private val openERPDataBase: OpenERPDataBase) {
 
-    val purchaseDao = openERPDataBase.getPurchaseDao()
-    val saleDao = openERPDataBase.getSaleDao()
-    val paymentsDao = openERPDataBase.getPaymentDao()
-    val receiptDao = openERPDataBase.getReceiptDao()
-    val ledgerDao = openERPDataBase.getLedgerDao()
+    private val purchaseDao = openERPDataBase.getPurchaseDao()
+    private val saleDao = openERPDataBase.getSaleDao()
+    private val paymentsDao = openERPDataBase.getPaymentDao()
+    private val receiptDao = openERPDataBase.getReceiptDao()
+    private val ledgerDao = openERPDataBase.getLedgerDao()
 
     // Function to convert date string to LocalDate
     private fun parseDate(dateStr: String): LocalDate {
@@ -33,7 +33,7 @@ class LedgerRepo (private val openERPDataBase: OpenERPDataBase) {
             AccountLedgerItem(it.purchaseDate, "Purchase", it.purchaseAmount, CashOrCredit = it.purchaseType)
         }
         sales.mapTo(ledgerItems) {
-            AccountLedgerItem(it.saleDate, "Sales", it.saleAmount, CashOrCredit = it.saleType)
+            AccountLedgerItem(it.saleDate, "Sale", it.saleAmount, CashOrCredit = it.saleType)
         }
         payments.mapTo(ledgerItems) {
             AccountLedgerItem(it.paymentDate, "Payment", it.paymentAmount)
@@ -43,6 +43,10 @@ class LedgerRepo (private val openERPDataBase: OpenERPDataBase) {
         }
         val sortedLedgerItems = ledgerItems.sortedBy { parseDate(it.BillDate) }
         return sortedLedgerItems
+    }
+
+    suspend fun getBalanceOfSpecificAccount(name : String) : Double {
+        return ledgerDao.getLedgerByAccountName(name).ledgerNetBalance
     }
 
 }

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -53,12 +54,13 @@ import com.vky342.openerp.ui.screens.HOMES.Searchbar
 import com.vky342.openerp.ui.screens.Inventory.inventory_search_bar
 import com.vky342.openerp.ui.theme.New_account_title_color
 import com.vky342.openerp.ui.theme.background_color
+import com.vky342.openerp.ui.theme.var_amount_row_colour
 
 data class AccountLedgerItem(
     val BillDate    : String,
     val BillType    : String,
     val BillAmount  : Double,
-    val CashOrCredit : String = ""
+    val CashOrCredit : String = "",
 )
 
 
@@ -74,6 +76,8 @@ fun AccountLedgerScreen( viewModel: LedgerVm = hiltViewModel() ){
     var selected_Account by remember { mutableStateOf(Account(0,"","","","")) }
 
     var accountLedgerItemList = remember { mutableStateOf(listOf<AccountLedgerItem>()) }
+
+    var accountBalance = remember { mutableStateOf(0.0) }
 
     var old_Account by remember { mutableStateOf(Account(0,"","","","")) }
 
@@ -92,6 +96,7 @@ fun AccountLedgerScreen( viewModel: LedgerVm = hiltViewModel() ){
 
     LaunchedEffect(!select_account_selected_enalbled.value) {
         accountLedgerItemList.value = viewModel.getSpecificAccountLedger()
+        accountBalance.value = viewModel.getAccountBalance()
     }
 
     Box(
@@ -143,8 +148,19 @@ fun AccountLedgerScreen( viewModel: LedgerVm = hiltViewModel() ){
                     })
             }
 
+            Box(modifier = Modifier.fillMaxWidth().height(50.dp).background(color = var_amount_row_colour)) {
+                if (accountBalance.value < 0){
+                    var balance = accountBalance.value * -1
+                    Text(balance.toString() + " Dr", fontSize = 20.sp,modifier = Modifier.align(Alignment.Center))
+                }
+                else{
+                    Text( accountBalance.value.toString() + " Cr", fontSize = 20.sp,modifier = Modifier.align(Alignment.Center))
+                }
+
+            }
+
             // List
-            Box(modifier = Modifier.fillMaxWidth().heightIn(max = 1200.dp)) {
+            Box(modifier = Modifier.fillMaxWidth().heightIn(max = 750.dp)) {
                 accountLedger_list_table(modifier = Modifier.padding(horizontal = (sidePadding/2).dp),LegderItemList = accountLedgerItemList.value)
             }
         }
@@ -236,16 +252,6 @@ fun accountLedger_list_table(modifier: Modifier = Modifier, LegderItemList : Lis
                     .fillMaxHeight()
                     .fillMaxWidth()
             ) {
-                //Srn
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth()
-                        .weight(0.1f)
-                        .background(color = Color.White)
-                ) {
-                    Text(text = "Sr", fontWeight = FontWeight.Bold,modifier = Modifier.align(Alignment.Center))
-                }
 
                 // Bill Date
                 Box(
@@ -279,23 +285,37 @@ fun accountLedger_list_table(modifier: Modifier = Modifier, LegderItemList : Lis
                 ) {
                     Text(text = "Amount",fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.Center))
                 }
-                // type
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth()
-                        .weight(0.25f)
-                        .background(color = Color.White)
-                ) {
-                    Text(text = "Type",fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.Center))
-                }
-
 
             }
         }
 
-        LazyColumn(modifier = Modifier.fillMaxWidth()){ itemsIndexed(LegderItemList){
-                index, item ->  accountLedger_list_table_single_row(item = item, sr = index)
+        var localBalance = 0.0
+        LazyColumn(reverseLayout = true,modifier = Modifier.fillMaxWidth()){ itemsIndexed(LegderItemList){
+                index, item ->
+
+            if (item.BillType == "Receipt"){
+                accountLedger_list_table_single_row(item = item, effectiveBalance = localBalance + item.BillAmount)
+                localBalance += item.BillAmount
+            }
+            else if (item.BillType == "Payment" ){
+                accountLedger_list_table_single_row(item = item, effectiveBalance = localBalance - item.BillAmount)
+                localBalance -= item.BillAmount
+            }
+            else if (item.BillType == "Purchase" && item.CashOrCredit == "Credit"){
+                accountLedger_list_table_single_row(item = item, effectiveBalance = localBalance + item.BillAmount)
+                localBalance += item.BillAmount
+            }
+            else if (item.BillType == "Sale" && item.CashOrCredit == "Credit"){
+                accountLedger_list_table_single_row(item = item, effectiveBalance = localBalance - item.BillAmount)
+                localBalance -= item.BillAmount
+            }
+            else if (item.BillType == "Purchase" && item.CashOrCredit == "Cash"){
+                accountLedger_list_table_single_row(item = item, effectiveBalance = localBalance)
+            }
+            else if (item.BillType == "Sale" && item.CashOrCredit == "Cash"){
+                accountLedger_list_table_single_row(item = item, effectiveBalance = localBalance)
+            }
+
         }
 
         }
@@ -308,9 +328,9 @@ fun accountLedger_list_table(modifier: Modifier = Modifier, LegderItemList : Lis
     }
 }
 
-
+@Preview
 @Composable
-fun accountLedger_list_table_single_row(modifier: Modifier = Modifier, item : AccountLedgerItem = AccountLedgerItem("12/6/2025","Purchase",1000.00), sr : Int = 1) {
+fun accountLedger_list_table_single_row(modifier: Modifier = Modifier, item : AccountLedgerItem = AccountLedgerItem("12/6/2025","Purchase",1000.00), effectiveBalance : Double = 0.0) {
 
     Spacer(
         modifier = Modifier
@@ -319,86 +339,113 @@ fun accountLedger_list_table_single_row(modifier: Modifier = Modifier, item : Ac
             .background(color = Color.LightGray)
     )
 
-    Row(modifier = modifier.fillMaxWidth().height(45.dp)) {
+    Row(modifier = modifier.fillMaxWidth().height(90.dp)) {
 
         Row(
             modifier = Modifier
                 .fillMaxHeight()
                 .fillMaxWidth()
         ) {
-            //Srn
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth()
-                    .weight(0.1f)
-                    .background(color = Color.White)
-            ) {
-                Text(
-                    text = (sr + 1).toString(),
-                    modifier = Modifier.align(Alignment.Center),
-                    color = Color.Black
-                )
+
+            Column (modifier = Modifier.fillMaxHeight().fillMaxWidth()){
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
+                    // Bill Date
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth()
+                            .weight(0.18f)
+                            .background(color = Color.White)
+                    ) {
+                        Text(
+                            text = item.BillDate,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+
+                    // Bill Type
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth()
+                            .weight(0.23f)
+                            .background(color = Color.White)
+                    ) {
+                        Text(
+                            text = item.BillType,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+
+                    // Bill Amount
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth()
+                            .weight(0.25f)
+                            .background(color = Color.White)
+                    ) {
+                        Text(
+                            text = "₹" + item.BillAmount.toString(),
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+                }
+
+                Row(
+                    modifier = Modifier
+                        .weight(0.8f)
+                        .fillMaxWidth()
+                ) {
+                    // Cash/Credit
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth()
+                            .weight(0.7f)
+                            .background(color = Color.White)
+                    ) {
+                        Text(
+                            text =  "~ " + item.CashOrCredit,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.align(Alignment.CenterStart)
+                                .padding(start = 12.dp)
+                        )
+                    }
+
+
+                    // Bill after effect balance
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .background(color = Color.White)
+                    ) {
+                        if (effectiveBalance < 0){
+                            var localBalance = effectiveBalance * -1
+                            Text("~ Balance : ₹" + localBalance.toString() + " Dr",
+                                modifier = Modifier.align(Alignment.CenterStart)
+                            )
+                        }
+                        else{
+                            Text("~ Balance : ₹" + effectiveBalance.toString() + " Cr",
+                                modifier = Modifier.align(Alignment.CenterStart)
+                            )
+                        }
+                    }
+                }
             }
 
-            // Bill Date
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth()
-                    .weight(0.18f)
-                    .background(color = Color.White)
-            ) {
-                Text(
-                    text = item.BillDate,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-
-            // Bill Type
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth()
-                    .weight(0.23f)
-                    .background(color = Color.White)
-            ) {
-                Text(
-                    text = item.BillType,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-
-            // Bill Amount
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth()
-                    .weight(0.25f)
-                    .background(color = Color.White)
-            ) {
-                Text(
-                    text = "₹" + item.BillAmount.toString(),
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-            // Bill Amount
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth()
-                    .weight(0.25f)
-                    .background(color = Color.White)
-            ) {
-                Text(
-                    text = item.CashOrCredit,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
         }
     }
 }
