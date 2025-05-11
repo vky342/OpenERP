@@ -1,6 +1,10 @@
 package com.vky342.openerp.ui.screens.HOMES
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,9 +33,11 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
@@ -58,6 +64,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.vky342.openerp.ui.Graphs.InventoryScreens
@@ -84,6 +91,8 @@ import com.vky342.openerp.ui.theme.search_item_content_color
 import com.vky342.openerp.ui.theme.search_item_focused_container_colour
 import com.vky342.openerp.ui.theme.shadow_color
 import com.vky342.openerp.ui.theme.var_amount_row_colour
+import com.vky342.openerp.utility.backupDatabaseToUri
+import com.vky342.openerp.utility.restoreDatabaseFromUri
 
 
 data class list_item(
@@ -105,6 +114,24 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
     var Today_Receipt = remember { mutableStateOf(1000000) }
 
     var Items_to_show = remember { mutableStateOf(initial_item_list) }
+
+    val context = LocalContext.current
+
+    // SAF Launchers inside composable!
+    val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument()) { uri: Uri? ->
+        uri?.let {
+            val success = backupDatabaseToUri(context, it)
+            Toast.makeText(context, if (success) "Backup done" else "Backup failed", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        uri?.let {
+            val success = restoreDatabaseFromUri(context, it)
+            Toast.makeText(context, if (success) "Restore done" else "Restore failed", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -248,6 +275,100 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                         )
                         Text(
                             text = "Account Ledger",
+                            fontSize = 20.sp,
+                            color = edit_item_content_color,
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                    }
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(56.dp)
+                        .shadow(
+                            elevation = 4.dp,
+                            shape = RoundedCornerShape(20f),
+                            ambientColor = edit_item_card_shadow_color,
+                            spotColor = edit_item_card_shadow_color
+                        )
+                        .background(
+                            color = edit_item_container_colour,
+                            shape = RoundedCornerShape(20f)
+                        )
+                        .border(1.dp, edit_item_border_color, RoundedCornerShape(20f))
+                        .align(Alignment.Center)
+                        .clickable{
+                            // backup initiator
+                            backupLauncher.launch("OpenERPDB_backup.db")
+                        }
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.Default.CheckCircle,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(30.dp)
+                                .padding(5.dp),
+                            tint = edit_item_content_color
+                        )
+                        Text(
+                            text = "Backup 💾",
+                            fontSize = 20.sp,
+                            color = edit_item_content_color,
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                    }
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(56.dp)
+                        .shadow(
+                            elevation = 4.dp,
+                            shape = RoundedCornerShape(20f),
+                            ambientColor = edit_item_card_shadow_color,
+                            spotColor = edit_item_card_shadow_color
+                        )
+                        .background(
+                            color = edit_item_container_colour,
+                            shape = RoundedCornerShape(20f)
+                        )
+                        .border(1.dp, edit_item_border_color, RoundedCornerShape(20f))
+                        .align(Alignment.Center)
+                        .clickable{
+                            // restore initiator
+                            restoreLauncher.launch(arrayOf("*/*"))
+                        }
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.Default.Refresh,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(30.dp)
+                                .padding(5.dp),
+                            tint = edit_item_content_color
+                        )
+                        Text(
+                            text = "Restore 💾",
                             fontSize = 20.sp,
                             color = edit_item_content_color,
                             modifier = Modifier.padding(start = 10.dp)
