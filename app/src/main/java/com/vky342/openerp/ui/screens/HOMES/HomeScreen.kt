@@ -38,7 +38,6 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -47,7 +46,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -61,6 +59,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.vky342.openerp.data.ViewModels.HomeViewModel
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.layout
@@ -69,10 +68,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.vky342.openerp.ui.Graphs.InventoryScreens
 import com.vky342.openerp.ui.Graphs.LedgerScreens
-import com.vky342.openerp.ui.screens.ACCOUNTS.account_list_table_single_row
+import com.vky342.openerp.ui.theme.GreyeHome
+import com.vky342.openerp.ui.theme.Purple80
 import com.vky342.openerp.ui.theme.amount_stat_border_color
 import com.vky342.openerp.ui.theme.amount_text_color
 import com.vky342.openerp.ui.theme.background_color
+import com.vky342.openerp.ui.theme.bottom_bar_selected_txt_color
 import com.vky342.openerp.ui.theme.card_shadow_color
 import com.vky342.openerp.ui.theme.edit_item_border_color
 import com.vky342.openerp.ui.theme.edit_item_card_shadow_color
@@ -90,6 +91,7 @@ import com.vky342.openerp.ui.theme.search_item_container_colour
 import com.vky342.openerp.ui.theme.search_item_content_color
 import com.vky342.openerp.ui.theme.search_item_focused_container_colour
 import com.vky342.openerp.ui.theme.shadow_color
+import com.vky342.openerp.ui.theme.title_color
 import com.vky342.openerp.ui.theme.var_amount_row_colour
 import com.vky342.openerp.utility.backupDatabaseToUri
 import com.vky342.openerp.utility.restoreDatabaseFromUri
@@ -116,6 +118,8 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
     var Items_to_show = remember { mutableStateOf(initial_item_list) }
 
     val context = LocalContext.current
+
+    var restorePopUpEnabled = remember { mutableStateOf(false) }
 
     // SAF Launchers inside composable!
     val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument()) { uri: Uri? ->
@@ -282,99 +286,106 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                     }
                 }
             }
+
+            // Data backup and restore
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(80.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .height(56.dp)
-                        .shadow(
-                            elevation = 4.dp,
-                            shape = RoundedCornerShape(20f),
-                            ambientColor = edit_item_card_shadow_color,
-                            spotColor = edit_item_card_shadow_color
-                        )
-                        .background(
-                            color = edit_item_container_colour,
-                            shape = RoundedCornerShape(20f)
-                        )
-                        .border(1.dp, edit_item_border_color, RoundedCornerShape(20f))
-                        .align(Alignment.Center)
-                        .clickable{
-                            // backup initiator
-                            backupLauncher.launch("OpenERPDB_backup.db")
-                        }
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically
+
+                Row(modifier = Modifier.fillMaxHeight().fillMaxWidth(0.8f).align(Alignment.Center)){
+
+                    // Backup Button
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(56.dp)
+                            .shadow(
+                                elevation = 4.dp,
+                                shape = RoundedCornerShape(20f),
+                                ambientColor = edit_item_card_shadow_color,
+                                spotColor = edit_item_card_shadow_color
+                            )
+                            .background(
+                                color = bottom_bar_selected_txt_color,
+                                shape = RoundedCornerShape(20f)
+                            )
+                            .border(1.dp, edit_item_border_color, RoundedCornerShape(20f))
+                            .align(Alignment.CenterVertically)
+                            .clickable{
+                                // backup initiator
+                                backupLauncher.launch("OpenERPDB_backup.db")
+                            }
                     ) {
-                        Icon(
-                            Icons.Default.CheckCircle,
-                            contentDescription = "",
-                            modifier = Modifier
-                                .size(30.dp)
-                                .padding(5.dp),
-                            tint = edit_item_content_color
-                        )
-                        Text(
-                            text = "Backup 💾",
-                            fontSize = 20.sp,
-                            color = edit_item_content_color,
-                            modifier = Modifier.padding(start = 10.dp)
-                        )
+                        Row(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                Icons.Default.CheckCircle,
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .size(30.dp)
+                                    .padding(5.dp),
+                                tint = edit_item_content_color
+                            )
+                            Text(
+                                text = "Backup ☁️",
+                                fontSize = 20.sp,
+                                color = edit_item_content_color,
+                                modifier = Modifier.padding(start = 10.dp)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(56.dp).width(5.dp))
+
+                    // Restore Button
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(56.dp)
+                            .shadow(
+                                elevation = 4.dp,
+                                shape = RoundedCornerShape(20f),
+                                ambientColor = edit_item_card_shadow_color,
+                                spotColor = edit_item_card_shadow_color
+                            )
+                            .background(
+                                color = bottom_bar_selected_txt_color,
+                                shape = RoundedCornerShape(20f)
+                            )
+                            .border(1.dp, edit_item_border_color, RoundedCornerShape(20f))
+                            .align(Alignment.CenterVertically)
+                            .clickable{
+                                // restore initiator
+                            restorePopUpEnabled.value = true
+
+                            }
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                Icons.Default.Refresh,
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .size(30.dp)
+                                    .padding(5.dp),
+                                tint = edit_item_content_color
+                            )
+                            Text(
+                                text = "Restore 📲",
+                                fontSize = 20.sp,
+                                color = edit_item_content_color,
+                                modifier = Modifier.padding(start = 10.dp)
+                            )
+                        }
                     }
                 }
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .height(56.dp)
-                        .shadow(
-                            elevation = 4.dp,
-                            shape = RoundedCornerShape(20f),
-                            ambientColor = edit_item_card_shadow_color,
-                            spotColor = edit_item_card_shadow_color
-                        )
-                        .background(
-                            color = edit_item_container_colour,
-                            shape = RoundedCornerShape(20f)
-                        )
-                        .border(1.dp, edit_item_border_color, RoundedCornerShape(20f))
-                        .align(Alignment.Center)
-                        .clickable{
-                            // restore initiator
-                            restoreLauncher.launch(arrayOf("*/*"))
-                        }
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Default.Refresh,
-                            contentDescription = "",
-                            modifier = Modifier
-                                .size(30.dp)
-                                .padding(5.dp),
-                            tint = edit_item_content_color
-                        )
-                        Text(
-                            text = "Restore 💾",
-                            fontSize = 20.sp,
-                            color = edit_item_content_color,
-                            modifier = Modifier.padding(start = 10.dp)
-                        )
-                    }
-                }
+
             }
 
             // Search Bar (20% → Adjusted to fixed 100.dp)
@@ -464,6 +475,28 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
             }
 
         }
+
+        if (restorePopUpEnabled.value == true){
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = Color.DarkGray.copy(alpha = 0.5f))
+                    .clickable { }) {
+
+                // touch barrier
+
+            }
+            restorePopUp(modifier = Modifier.align(Alignment.Center), onYes = {
+                restorePopUpEnabled.value = false
+                restoreLauncher.launch(arrayOf("*/*"))
+                Toast.makeText(context, "Restore Successful", Toast.LENGTH_SHORT).show()
+                                                                              },
+                onNo = {
+                    restorePopUpEnabled.value = false
+                    Toast.makeText(context, "Restore Cancelled", Toast.LENGTH_SHORT).show()
+            })
+        }
+
     }
 
 }
@@ -682,4 +715,25 @@ fun table_for_recent_items(modifier: Modifier = Modifier, items : List<RecentIte
         }
     }
 
+}
+
+@Preview
+@Composable
+fun restorePopUp(modifier: Modifier = Modifier, onYes : () -> Unit = {}, onNo : () -> Unit = {}){
+    Box (modifier = modifier.fillMaxWidth(0.9f).height(150.dp).background(color = title_color, shape = RoundedCornerShape(20f))){
+        Column(modifier = Modifier.fillMaxWidth(0.9f).fillMaxHeight(0.9f).align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(textAlign = TextAlign.Center, color = Color.White,text = "Restoring will erase the current data. Do you still want to continue?", modifier = Modifier.align(
+                Alignment.CenterHorizontally).padding(vertical = 10.dp))
+            Spacer(modifier = Modifier.height(30.dp).width(20.dp))
+            Row (modifier = Modifier.fillMaxWidth().height(50.dp), horizontalArrangement = Arrangement.Center) {
+                Text("Yes", color = Color.Red, modifier = Modifier.clickable{
+                    onYes()
+                })
+                Spacer(modifier = Modifier.height(50.dp).width(50.dp))
+                Text("No", color = Color.Green,modifier = Modifier.clickable{
+                    onNo()
+                })
+            }
+        }
+    }
 }
