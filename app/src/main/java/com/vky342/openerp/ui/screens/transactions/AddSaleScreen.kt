@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.vky342.openerp.data.Entities.Account
+import com.vky342.openerp.data.Entities.Item
 import com.vky342.openerp.data.Entities.Purcahase
 import com.vky342.openerp.data.Entities.PurchaseEntry
 import com.vky342.openerp.data.Entities.Sale
@@ -66,8 +67,8 @@ import java.util.UUID
 fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val sidePadding = width.value * 0.08
-
     val context: Context = LocalContext.current
+
     var options = viewModel.old_Account_list.value
     var item_options = viewModel.all_items_in_inventory
 
@@ -84,6 +85,7 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
     var selectedAccountText by remember { mutableStateOf("") }
 
     // itemForm popUP
+    var currentItem = remember { mutableStateOf(Item("",0.0,0.0,0)) }
     var selectedItemName = remember { mutableStateOf("") }
     var selectedItemPrice = remember { mutableStateOf("") }
     var selectedItemDiscount = remember { mutableStateOf("") }
@@ -98,7 +100,6 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
     // purchase summary
     val totalItems by remember { derivedStateOf { itemsList.size } }
     var totalAmount = remember {derivedStateOf { itemsList.sumOf { it.totalAmount.value } } }
-
 
     // Items Summary
     val listState = rememberLazyListState()
@@ -221,14 +222,14 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
 
             }
 
-            // Purchase Summary
+            // Sale Summary
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .padding(top = 25.dp)) {
 
                 Text(
-                    "P u r c h a s e   S u m m a r y",
+                    "S u m m a r y",
                     fontSize = 20.sp, color = title_color,
                     modifier = Modifier
                         .padding(horizontal = sidePadding.dp)
@@ -323,6 +324,14 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                     .clickable { }) {
 
                 // touch barrier
+                BackHandler {
+                    item_fill_popUp_status.value = false
+                    selectedItemName.value = ""
+                    selectedItemPrice.value = ""
+                    selectedItemDiscount.value = ""
+                    selectedItemQuantity.value = ""
+                    currentItem.value = Item("",0.0,0.0,0)
+                }
 
             }
 
@@ -344,23 +353,26 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                     selectedItemPrice.value = ""
                     selectedItemDiscount.value = ""
                     selectedItemQuantity.value = ""
+                    currentItem.value = Item("",0.0,0.0,0)
                 },
                 onDone = {
 
                     if (item_options.value.any{ item -> item.itemName == selectedItemName.value}){
-                        item_fill_popUp_status.value = false
 
-                        itemsList.add(item_popup(
-                            name = selectedItemName.value,
-                            price = selectedItemPrice.value.toDouble(),
-                            disc = selectedItemDiscount.value.toDoubleOrNull() ?: 0.0,
-                            quantity = selectedItemQuantity.value.toInt())
-                        )
+                        if (selectedItemQuantity.value.toInt() <= currentItem.value.itemQuantity){
+                            itemsList.add(item_popup(
+                                name = selectedItemName.value,
+                                price = selectedItemPrice.value.toDouble(),
+                                disc = selectedItemDiscount.value.toDoubleOrNull() ?: 0.0,
+                                quantity = selectedItemQuantity.value.toInt())
+                            )
+                            item_fill_popUp_status.value = false
+                            currentItem.value = Item("",0.0,0.0,0)
+                        }else{
+                            Toast.makeText(context,"Inventory Shortage!", Toast.LENGTH_SHORT).show()
+                            selectedItemQuantity.value = ""
+                        }
 
-                        selectedItemName.value = ""
-                        selectedItemPrice.value = ""
-                        selectedItemDiscount.value = ""
-                        selectedItemQuantity.value = ""
                     }
                     else{
                         Toast.makeText(context, "No Item found named " + selectedItemName.value, Toast.LENGTH_SHORT).show()
@@ -442,9 +454,15 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                             .padding(vertical = 1.dp, horizontal = 4.dp)
                             .fillMaxWidth()
                             .clickable {
-                                selectedItemName.value = item.itemName
-                                selectedItemPrice.value = item.itemSellingPrice.toString()
-                                expanded_item_name_suggestion.value = false
+                                if (item.itemQuantity == 0) {
+                                    Toast.makeText(context,"Not available in inventory", Toast.LENGTH_SHORT).show()
+                                }
+                                else{
+                                    currentItem.value = item
+                                    selectedItemName.value = item.itemName
+                                    selectedItemPrice.value = item.itemSellingPrice.toString()
+                                    expanded_item_name_suggestion.value = false
+                                }
                             })
                 }
             }

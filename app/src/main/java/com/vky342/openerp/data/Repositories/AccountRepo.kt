@@ -36,4 +36,6 @@ class AccountRepo (private val openERPDataBase: OpenERPDataBase) {
         ledgerdao.delete(get_Ledger_by_accountName(account.name))
     }
 
+
+
 }

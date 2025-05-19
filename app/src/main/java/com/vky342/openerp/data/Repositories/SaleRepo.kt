@@ -1,9 +1,11 @@
 package com.vky342.openerp.data.Repositories
 
 import android.util.Log
+import com.vky342.openerp.data.Entities.Account
 import com.vky342.openerp.data.Entities.Sale
 import com.vky342.openerp.data.Entities.SaleEntry
 import com.vky342.openerp.data.Modules.OpenERPDataBase
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SaleRepo @Inject constructor(private val openERPDataBase: OpenERPDataBase) {
@@ -18,6 +20,12 @@ class SaleRepo @Inject constructor(private val openERPDataBase: OpenERPDataBase)
         add_sale_entry(list_of_saleEntry)
     }
 
+    suspend fun updateSale(oldName: String, newName: String, oldSale: Sale, newSale: Sale, old_list_of_saleEntry: List<SaleEntry>, new_list_of_saleEntry: List<SaleEntry>){
+        updateLedgerNetBalance(newName = newName, oldName = oldName, oldSale = oldSale,newSale = newSale)
+        privateUpdateSale(newName,newSale)
+        updateItemStock(newSale = newSale,old_list_of_saleEntry = old_list_of_saleEntry, new_list_of_saleEntry = new_list_of_saleEntry)
+    }
+
     suspend fun getLatestSaleID() : Int{
         try {
             val pid = saleDao.getLastSale().saleId
@@ -28,7 +36,15 @@ class SaleRepo @Inject constructor(private val openERPDataBase: OpenERPDataBase)
         }
     }
 
-    // function to be used within AddSale
+    suspend fun getListOfSaleEntriesByID(saleID : Int) : List<SaleEntry> {
+        return saleEntryDao.getAllSaleEntriesBySaleId(saleID)
+    }
+
+    fun get_every_Sale() : Flow<List<Sale>> {
+        return saleDao.getAllSales()
+    }
+
+    //Private functions
     private suspend fun add_sale_entry (list_of_saleEntry: List<SaleEntry>){
         val latestSale = saleDao.getLastSale()
         for (saleEntry in list_of_saleEntry) {
@@ -51,4 +67,47 @@ class SaleRepo @Inject constructor(private val openERPDataBase: OpenERPDataBase)
 
     }
 
+    // 1st process for updating
+    private suspend fun updateLedgerNetBalance(newName : String, oldName: String, oldSale : Sale,newSale: Sale){
+
+        //reversing old ledger
+        val oldLedger = ledgerDao.getLedgerByAccountName(oldName)
+        if (oldSale.saleType == "Credit"){
+            oldLedger.ledgerNetBalance = oldLedger.ledgerNetBalance + oldSale.saleAmount
+            ledgerDao.update(oldLedger)
+        }
+
+        // updating new ledger
+        val newLedger = ledgerDao.getLedgerByAccountName(newName)
+        if (newSale.saleType == "Credit"){
+            newLedger.ledgerNetBalance = newLedger.ledgerNetBalance - newSale.saleAmount
+            ledgerDao.update(newLedger)
+        }
+    }
+
+    //second process for updating
+    private suspend fun privateUpdateSale(newName : String,newSale: Sale){
+        val newLedger = ledgerDao.getLedgerByAccountName(newName)
+        saleDao.update(newSale.copy(ledgerId = newLedger.ledgerId))
+    }
+
+    // 3rd and final process for updating
+    private suspend fun updateItemStock(newSale: Sale,old_list_of_saleEntry: List<SaleEntry>, new_list_of_saleEntry: List<SaleEntry>){
+
+        //reversing the item stock for old_list_of_saleEntry
+        val latestSale = newSale
+        for (saleEntry in old_list_of_saleEntry) {
+            var item = itemInventoryDao.getItemByName(saleEntry.itemName)
+            itemInventoryDao.update(item.copy(itemQuantity = item.itemQuantity + saleEntry.entryQuantity))
+            saleEntryDao.delete(saleEntry.copy(saleId = latestSale.saleId))
+        }
+
+        // inserting new Entry and updating item stock for new_list_saleEntry
+        for (saleEntry in new_list_of_saleEntry) {
+            var item = itemInventoryDao.getItemByName(saleEntry.itemName)
+            itemInventoryDao.update(item.copy(itemQuantity = item.itemQuantity - saleEntry.entryQuantity))
+            saleEntryDao.insert(saleEntry.copy(saleId = latestSale.saleId))
+        }
+
+    }
 }

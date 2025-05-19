@@ -1,6 +1,7 @@
 package com.vky342.openerp.data.Repositories
 
 import com.vky342.openerp.data.Entities.Account
+import com.vky342.openerp.data.Entities.Ledger
 import com.vky342.openerp.data.Modules.OpenERPDataBase
 import com.vky342.openerp.ui.screens.Ledgers.AccountLedgerItem
 import java.time.LocalDate
@@ -47,6 +48,10 @@ class LedgerRepo (private val openERPDataBase: OpenERPDataBase) {
 
     suspend fun getBalanceOfSpecificAccount(name : String) : Double {
         return ledgerDao.getLedgerByAccountName(name).ledgerNetBalance
+    }
+
+    suspend fun getLedger(ID : Int) : Ledger{
+        return ledgerDao.getLedger(ID)
     }
 
 }

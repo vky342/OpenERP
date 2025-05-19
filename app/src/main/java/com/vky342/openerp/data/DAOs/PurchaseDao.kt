@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.vky342.openerp.data.Entities.Purcahase
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PurchaseDao {
@@ -19,7 +20,7 @@ interface PurchaseDao {
     suspend fun delete(purchase : Purcahase)
 
     @Query("SELECT * FROM Purchases")
-    fun getAllPurchase() : List<Purcahase>
+    fun getAllPurchase() : Flow<List<Purcahase>>
 
     @Query("SELECT * FROM Purchases WHERE ledgerId = :ledgerId")
     fun getPurchaseByLedgerId(ledgerId : Int) : List<Purcahase>

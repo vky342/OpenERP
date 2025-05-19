@@ -23,6 +23,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
@@ -49,6 +50,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -171,7 +173,13 @@ fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
                     .padding(vertical = 16.dp)
                     .height(70.dp)
             ) {
-                form_fields(enabled = old_item != Item("",0.0,0.0,0),onVc = {new_item = new_item.copy(itemSellingPrice = it.toDouble())},value = new_item.itemSellingPrice.toString(),icon = Icons.Outlined.Person,label = "selling price",modifier = Modifier.padding(horizontal = sidePadding.dp).align(
+                form_fields(keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),enabled = old_item != Item("",0.0,0.0,0),onVc = {
+                    try{
+                    new_item = new_item.copy(itemSellingPrice = it.toDouble())
+                    } catch (e : Exception){
+                        Toast.makeText(context, "Please enter numbers only", Toast.LENGTH_SHORT).show()
+                    }
+                                                                            },value = new_item.itemSellingPrice.toString(),icon = Icons.Outlined.Person,label = "selling price",modifier = Modifier.padding(horizontal = sidePadding.dp).align(
                     Alignment.CenterStart))
             }
 
@@ -182,7 +190,17 @@ fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
                     .padding(vertical = 16.dp)
                     .height(70.dp)
             ) {
-                form_fields(enabled = old_item != Item("",0.0,0.0,0),onVc = {new_item = new_item.copy(itemPurchasePrice = it.toDouble())},value = new_item.itemPurchasePrice.toString(),icon = Icons.Outlined.Person,label = "purchase price",modifier = Modifier.padding(horizontal = sidePadding.dp).align(
+                form_fields(keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),enabled = old_item != Item("",0.0,0.0,0),onVc = {
+                    try {
+                        if (it == ""){
+                            new_item = new_item.copy(itemPurchasePrice = 0.0)
+                        }
+                        new_item = new_item.copy(itemPurchasePrice = it.toDouble())
+                    }catch (e : Exception){
+                        Toast.makeText(context, "Please enter numbers only", Toast.LENGTH_SHORT).show()
+                    }
+
+                                                                            },value = new_item.itemPurchasePrice.toString(),icon = Icons.Outlined.Person,label = "purchase price",modifier = Modifier.padding(horizontal = sidePadding.dp).align(
                     Alignment.CenterStart))
             }
 
@@ -193,7 +211,17 @@ fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
                     .padding(vertical = 16.dp)
                     .height(70.dp)
             ) {
-                form_fields(enabled = old_item != Item("",0.0,0.0,0),onVc = {new_item = new_item.copy(itemQuantity = it.toInt())},value = new_item.itemQuantity.toString(),icon = Icons.Outlined.Person,label = "quantity",modifier = Modifier.padding(horizontal = sidePadding.dp).align(
+                form_fields(keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),enabled = old_item != Item("",0.0,0.0,0),onVc = {
+                    try{
+                        if (it == ""){
+                            new_item = new_item.copy(itemQuantity = 0)
+                        }
+                    new_item = new_item.copy(itemQuantity = it.toInt())
+
+                    } catch (e : Exception){
+                        Toast.makeText(context, "Please enter numbers only", Toast.LENGTH_SHORT).show()
+                    }
+                                                                            },value = new_item.itemQuantity.toString(),icon = Icons.Outlined.Person,label = "quantity",modifier = Modifier.padding(horizontal = sidePadding.dp).align(
                     Alignment.CenterStart))
             }
             Box(

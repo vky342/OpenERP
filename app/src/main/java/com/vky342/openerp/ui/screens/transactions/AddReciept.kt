@@ -94,7 +94,7 @@ fun AddReceipt(viewModel : Add_Receipt_Vm = hiltViewModel()){
                     .padding(vertical = 2.dp)
                     .height(50.dp)
             ) {
-                Text(text = "New payment", color = New_account_title_color,fontSize = 32.sp, modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = sidePadding.dp))
+                Text(text = "New receipt", color = New_account_title_color,fontSize = 32.sp, modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = sidePadding.dp))
             }
 
             // Account search bar
@@ -147,7 +147,7 @@ fun AddReceipt(viewModel : Add_Receipt_Vm = hiltViewModel()){
                     .padding(vertical = 2.dp)
                     .height(50.dp)
             ) {
-                Text(text = "balance : "+ kotlin.math.abs(viewModel.balance.value) + if (viewModel.balance.value < 0.0) " Dr" else " Cr", color = New_account_title_color,fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = sidePadding.dp))
+                Text(text = "Old balance : "+ kotlin.math.abs(viewModel.balance.value) + if (viewModel.balance.value < 0.0) " Dr" else " Cr", color = New_account_title_color,fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = sidePadding.dp))
             }
 
             // amount

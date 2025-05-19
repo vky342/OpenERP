@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.vky342.openerp.data.Entities.SaleEntry
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -20,7 +21,7 @@ interface SaleEntryDao{
     suspend fun delete(saleEntry: SaleEntry)
 
     @Query("SELECT * FROM SaleEntries WHERE saleId = :saleId")
-    fun getAllSaleEntriesBySaleId(saleId : Int) :  List<SaleEntry>
+    suspend fun getAllSaleEntriesBySaleId(saleId : Int) : List<SaleEntry>
 
     @Query("SELECT * FROM SaleEntries WHERE itemName = :itemName")
     fun getAllSaleEntriesByItemName(itemName : String) : List<SaleEntry>

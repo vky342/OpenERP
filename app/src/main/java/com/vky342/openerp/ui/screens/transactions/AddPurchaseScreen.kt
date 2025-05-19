@@ -458,7 +458,8 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                                 selectedItemName.value = item.itemName
                                 selectedItemPrice.value = item.itemSellingPrice.toString()
                                 expanded_item_name_suggestion.value = false
-                            })
+                            }
+                    )
                 }
             }
         }

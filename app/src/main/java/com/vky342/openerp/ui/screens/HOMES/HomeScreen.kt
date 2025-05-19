@@ -38,6 +38,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -529,7 +530,7 @@ fun Searchbar(modifier: Modifier,current_value : String,label : String,onVC : (S
             onVC(it)
 
         },
-        trailingIcon = { Icon(Icons.Default.Clear,modifier = Modifier.clickable{
+        trailingIcon = { Icon(Icons.Default.Search,modifier = Modifier.clickable{
             onClear()
         }, contentDescription = "", tint = search_item_content_color)},
         colors = TextFieldDefaults.colors().copy(focusedContainerColor = search_item_focused_container_colour, unfocusedContainerColor = search_item_container_colour))

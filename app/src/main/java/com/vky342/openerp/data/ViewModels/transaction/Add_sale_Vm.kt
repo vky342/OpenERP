@@ -58,16 +58,6 @@ class Add_sale_Vm @Inject constructor(
 
     private fun Save_Sale (account_name : String, sale: Sale, list_of_saleEntries : List<SaleEntry>) {
 
-        /*
-        *
-        * name should be passed with Pre-Checking
-        * sale should contain id = 0, and ledgerId = 0
-        * list_of_saleEntries should contain entryId = 0 and purchaseId = 0, it will be set automatically
-        * only name is to be passed and other data will be set automatically , as per the latest Purchase Id and account's Ledger Id.
-        *
-        */
-
-
         viewModelScope.launch (Dispatchers.IO){
             saleRepo.AddSale(
                 account_name = account_name,

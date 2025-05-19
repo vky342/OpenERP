@@ -30,4 +30,7 @@ interface ledgerDao{
     @Query("SELECT * FROM Ledgers WHERE accountName = :name")
     suspend fun getLedgerByAccountName(name : String) : Ledger
 
+    @Query("SELECT * FROM Ledgers WHERE ledgerId = :id")
+    suspend fun getLedger(id : Int) : Ledger
+
 }

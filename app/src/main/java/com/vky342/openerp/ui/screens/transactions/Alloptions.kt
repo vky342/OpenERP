@@ -16,25 +16,24 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.Build
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.vky342.openerp.ui.Graphs.AccountScreens
 import com.vky342.openerp.ui.Graphs.TransactionScreen
-import com.vky342.openerp.ui.screens.ACCOUNTS.new_card
 import com.vky342.openerp.ui.theme.account_add_border_color
 import com.vky342.openerp.ui.theme.account_add_content_color
 import com.vky342.openerp.ui.theme.account_add_options_container_color
@@ -71,7 +70,7 @@ fun AllTransactionOptionsScreen(
 
             add_purchase_button(onClick = {navController.navigate(TransactionScreen.AddPurchase)})
 
-            modify_bill_button(onClick = {navController.navigate(TransactionScreen.modifyBill)})
+            modify_sale_button(onClick = {navController.navigate(TransactionScreen.modifySale)})
 
             payment_bill_button(onClick = {navController.navigate(TransactionScreen.addPayment)})
 
@@ -85,7 +84,7 @@ fun AllTransactionOptionsScreen(
 
 @Preview
 @Composable
-fun modify_bill_button(modifier: Modifier = Modifier, onClick : () -> Unit = {}){
+fun modify_sale_button(modifier: Modifier = Modifier, onClick : () -> Unit = {}){
 
     Box(
         modifier = modifier
@@ -115,7 +114,7 @@ fun modify_bill_button(modifier: Modifier = Modifier, onClick : () -> Unit = {})
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
-                    Icons.Default.Create,
+                    Icons.Filled.Build,
                     contentDescription = "",
                     modifier = Modifier
                         .size(75.dp)
@@ -126,7 +125,7 @@ fun modify_bill_button(modifier: Modifier = Modifier, onClick : () -> Unit = {})
                     .height(40.dp)
                     .align(Alignment.CenterVertically)) {
                     Text(
-                        text = "Modify bills",
+                        text = "Modify sales",
                         fontSize = 20.sp,
                         color = account_add_title_color,
                         modifier = Modifier

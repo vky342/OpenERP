@@ -5,7 +5,9 @@ import com.vky342.openerp.data.Entities.Account
 import com.vky342.openerp.data.Entities.Item
 import com.vky342.openerp.data.Entities.Purcahase
 import com.vky342.openerp.data.Entities.PurchaseEntry
+import com.vky342.openerp.data.Entities.Sale
 import com.vky342.openerp.data.Modules.OpenERPDataBase
+import kotlinx.coroutines.flow.Flow
 
 class PurchaseRepo (private val openERPDataBase: OpenERPDataBase) {
 
@@ -55,5 +57,8 @@ class PurchaseRepo (private val openERPDataBase: OpenERPDataBase) {
         itemInventoryDao.update(item.copy(itemQuantity = item.itemQuantity + itemQuantity))
     }
 
+    fun get_every_Purchase() : Flow<List<Purcahase>> {
+        return purchaseDao.getAllPurchase()
+    }
 
 }
