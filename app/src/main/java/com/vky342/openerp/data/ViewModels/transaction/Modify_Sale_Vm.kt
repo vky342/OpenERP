@@ -95,5 +95,26 @@ class Modify_Sale_Vm @Inject constructor(
         return old_sale
     }
 
+    fun getRecentSale() : Sale {
+        var isSaleSet = false
+        var sale = Sale(0,"",0,0.0,"")
+        var id = 0
+        viewModelScope.launch{
+            id = saleRepo.getLatestSaleID()
+            if (id == 0){
+                isSaleSet = true
+            }else{
+                bill_id_to_modify.value = id
+                isSaleSet = true
+            }
+        }
+        while (!isSaleSet){
+        // Loading..
+        }
+        if(id == 0){
+            return sale
+        }
+        return getSaleByID(bill_id_to_modify.value)
+    }
 
 }

@@ -52,8 +52,17 @@ class Add_sale_Vm @Inject constructor(
     init {
         viewModelScope.launch {
             saleID.value = saleRepo.getLatestSaleID()
-            Log.d("STATUS", "fetched latest purchase ID")
+            Log.d("STATUS", "fetched latest sale ID")
         }
+    }
+
+    private fun reloadSale(){
+        viewModelScope.launch {
+            saleID.value = saleRepo.getLatestSaleID()
+            Log.d("DEBUG",saleID.value.toString())
+            Log.d("STATUS", "fetched latest sale ID")
+        }
+
     }
 
     private fun Save_Sale (account_name : String, sale: Sale, list_of_saleEntries : List<SaleEntry>) {
@@ -64,6 +73,7 @@ class Add_sale_Vm @Inject constructor(
                 sale = sale,
                 list_of_saleEntry = list_of_saleEntries
             )
+            reloadSale()
         }
 
     }
@@ -71,4 +81,5 @@ class Add_sale_Vm @Inject constructor(
     fun add_sale(name : String,sale: Sale, listOfEntry: List<SaleEntry>){
         Save_Sale(name,sale,listOfEntry)
     }
+
 }

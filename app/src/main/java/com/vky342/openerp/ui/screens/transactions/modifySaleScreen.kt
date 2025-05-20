@@ -285,7 +285,16 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                                 )
                                 .clickable {
                                     // load recent Bill
-                                    is_bill_selected.value = true
+                                    if(viewModel.getRecentSale() == Sale(0,"",0,0.0,"")){
+                                        Toast.makeText(context,"No previous sale found",Toast.LENGTH_SHORT).show()
+                                    }else{
+                                        old_sale.value = viewModel.getRecentSale()
+                                        is_bill_selected.value = true
+                                        payment_mode.value = old_sale.value.saleType
+                                        selectedDate.value = old_sale.value.saleDate
+                                        is_bill_selected.value = true
+                                    }
+
                                 }
                         )
                     }

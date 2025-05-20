@@ -61,6 +61,7 @@ import com.vky342.openerp.ui.theme.New_account_title_color
 import com.vky342.openerp.ui.theme.background_color
 import com.vky342.openerp.ui.theme.title_color
 import com.vky342.openerp.ui.theme.var_amount_row_colour
+import com.vky342.openerp.utility.getTodayDate
 import java.util.UUID
 
 @Composable
@@ -74,13 +75,13 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
 
     val item_fill_popUp_status = remember { mutableStateOf(false) }
 
-    var ID = remember { viewModel.saleID }
+    var ID by viewModel.saleID
 
     var selectedAccount = remember { mutableStateOf((Account(0, "", "", "", ""))) }
 
     var payment_mode = remember { mutableStateOf("") }
 
-    var selectedDate = remember { mutableStateOf("") }
+    var selectedDate = remember { mutableStateOf(getTodayDate()) }
 
     var selectedAccountText by remember { mutableStateOf("") }
 
@@ -105,6 +106,10 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
     val listState = rememberLazyListState()
     LaunchedEffect(itemsList.size) {
         listState.scrollToItem(0)
+    }
+
+    LaunchedEffect(viewModel.saleID.value) {
+        ID = viewModel.saleID.value
     }
 
     //Suggestions
@@ -149,7 +154,7 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                     .height(45.dp)
             ) {
                 Text(
-                    text = "New sale : " + ID.value,
+                    text = "New sale : " + if(ID == 0) 1 else ID+ 1,
                     color = New_account_title_color,
                     fontSize = 24.sp,
                     modifier = Modifier
@@ -259,9 +264,13 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                         itemsList.clear()
                         selectedAccountText = ""
                         selectedAccount.value = Account(0,"","","","")
-                        selectedDate.value = ""
                         payment_mode.value = ""
                         partyEnabled.value = true
+                        currentItem.value = Item("",0.0,0.0,0)
+                        selectedItemName.value = ""
+                        selectedItemPrice.value = ""
+                        selectedItemDiscount.value = ""
+                        selectedItemQuantity.value = ""
                     }
 
 
