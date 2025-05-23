@@ -285,14 +285,15 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                                 )
                                 .clickable {
                                     // load recent Bill
-                                    if(viewModel.getRecentSale() == Sale(0,"",0,0.0,"")){
-                                        Toast.makeText(context,"No previous sale found",Toast.LENGTH_SHORT).show()
-                                    }else{
-                                        old_sale.value = viewModel.getRecentSale()
+                                    if (viewModel.latestSaleId.value != 0){
+                                        viewModel.bill_id_to_modify.value = viewModel.latestSaleId.value
+                                        bill_id.value = viewModel.latestSaleId.value.toString()
                                         is_bill_selected.value = true
+                                        old_sale.value = viewModel.getSaleByID(viewModel.latestSaleId.value)
                                         payment_mode.value = old_sale.value.saleType
                                         selectedDate.value = old_sale.value.saleDate
-                                        is_bill_selected.value = true
+                                    }else {
+                                        Toast.makeText(context, "No bill found!", Toast.LENGTH_SHORT).show()
                                     }
 
                                 }
@@ -412,7 +413,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                     .padding(top = 25.dp)) {
 
                     Text(
-                        "P u r c h a s e   S u m m a r y",
+                        "S u m m a r y",
                         fontSize = 20.sp, color = title_color,
                         modifier = Modifier
                             .padding(horizontal = sidePadding.dp)
@@ -446,6 +447,11 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                             payment_mode.value = ""
                             partyEnabled.value = true
                             currentItem.value = Item("",0.0,0.0,0)
+                            old_sale.value = Sale(0, "", 0, 0.0, "")
+                            bill_id.value = ""
+
+                            is_bill_selected.value = false
+
                         }
 
 

@@ -24,6 +24,7 @@ class SaleRepo @Inject constructor(private val openERPDataBase: OpenERPDataBase)
         updateLedgerNetBalance(newName = newName, oldName = oldName, oldSale = oldSale,newSale = newSale)
         privateUpdateSale(newName,newSale)
         updateItemStock(newSale = newSale,old_list_of_saleEntry = old_list_of_saleEntry, new_list_of_saleEntry = new_list_of_saleEntry)
+        updateSaleEntry(saleID = oldSale.saleId, old_list_of_saleEntry,new_list_of_saleEntry)
     }
 
     suspend fun getLatestSaleID() : Int{
@@ -50,6 +51,15 @@ class SaleRepo @Inject constructor(private val openERPDataBase: OpenERPDataBase)
         for (saleEntry in list_of_saleEntry) {
             item_Stock_Update(saleEntry.itemName, saleEntry.entryQuantity)
             saleEntryDao.insert(saleEntry.copy(saleId = latestSale.saleId))
+        }
+    }
+
+    private suspend fun updateSaleEntry(saleID: Int, old_list_of_saleEntry: List<SaleEntry>, new_list_of_saleEntry: List<SaleEntry>){
+        for (entry in old_list_of_saleEntry){
+            saleEntryDao.delete(entry.copy(saleId = saleID))
+        }
+        for (entry in new_list_of_saleEntry){
+            saleEntryDao.insert(entry.copy(saleId = saleID))
         }
     }
 
@@ -99,14 +109,12 @@ class SaleRepo @Inject constructor(private val openERPDataBase: OpenERPDataBase)
         for (saleEntry in old_list_of_saleEntry) {
             var item = itemInventoryDao.getItemByName(saleEntry.itemName)
             itemInventoryDao.update(item.copy(itemQuantity = item.itemQuantity + saleEntry.entryQuantity))
-            saleEntryDao.delete(saleEntry.copy(saleId = latestSale.saleId))
         }
 
         // inserting new Entry and updating item stock for new_list_saleEntry
         for (saleEntry in new_list_of_saleEntry) {
             var item = itemInventoryDao.getItemByName(saleEntry.itemName)
             itemInventoryDao.update(item.copy(itemQuantity = item.itemQuantity - saleEntry.entryQuantity))
-            saleEntryDao.insert(saleEntry.copy(saleId = latestSale.saleId))
         }
 
     }

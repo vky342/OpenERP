@@ -376,7 +376,12 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                                 quantity = selectedItemQuantity.value.toInt())
                             )
                             item_fill_popUp_status.value = false
+                            selectedItemName.value = ""
+                            selectedItemPrice.value = ""
+                            selectedItemDiscount.value = ""
+                            selectedItemQuantity.value = ""
                             currentItem.value = Item("",0.0,0.0,0)
+
                         }else{
                             Toast.makeText(context,"Inventory Shortage!", Toast.LENGTH_SHORT).show()
                             selectedItemQuantity.value = ""

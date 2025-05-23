@@ -1,6 +1,7 @@
 package com.vky342.openerp.ui.screens.Ledgers
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -15,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,17 +43,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import com.vky342.openerp.data.Entities.Account
-import com.vky342.openerp.data.Entities.Item
-import com.vky342.openerp.data.Entities.Purcahase
-import com.vky342.openerp.data.ViewModels.Account.modify_Account_vm
 import com.vky342.openerp.data.ViewModels.Ledger.LedgerVm
 import com.vky342.openerp.ui.screens.ACCOUNTS.account_search_bar_for_edit_account
 import com.vky342.openerp.ui.screens.HOMES.Searchbar
-import com.vky342.openerp.ui.screens.Inventory.inventory_search_bar
 import com.vky342.openerp.ui.theme.New_account_title_color
 import com.vky342.openerp.ui.theme.background_color
+import com.vky342.openerp.ui.theme.title_color
 import com.vky342.openerp.ui.theme.var_amount_row_colour
 
 data class AccountLedgerItem(
@@ -87,16 +83,19 @@ fun AccountLedgerScreen( viewModel: LedgerVm = hiltViewModel() ){
 
     var expanded = remember { mutableStateOf(false) }
 
-    var select_account_selected_enalbled = remember { mutableStateOf(true) }
+    var updateLedgerListDisabled = remember { mutableStateOf(true) }
 
     // filter options based on text field value
     var filteringOptions = options.filter {
         it.name.contains(selectedOptionText, ignoreCase = true) || it.address.contains(selectedOptionText, ignoreCase = true) || it.contact.contains(selectedOptionText, ignoreCase = true)
     }
 
-    LaunchedEffect(!select_account_selected_enalbled.value) {
-        accountLedgerItemList.value = viewModel.getSpecificAccountLedger()
-        accountBalance.value = viewModel.getAccountBalance()
+    LaunchedEffect(updateLedgerListDisabled.value) {
+        if (updateLedgerListDisabled.value == false){
+            Log.d("DEBUG","line 100")
+            accountLedgerItemList.value = viewModel.getSpecificAccountLedger()
+            accountBalance.value = viewModel.getAccountBalance()
+        }
     }
 
     Box(
@@ -132,20 +131,31 @@ fun AccountLedgerScreen( viewModel: LedgerVm = hiltViewModel() ){
             ) {
 
                 account_search_bar_for_edit_account(onReset = {
-                    select_account_selected_enalbled.value = true
+                    updateLedgerListDisabled.value = true
                     old_Account = Account(0,"","","","")
                     selected_Account = Account(0,"","","","")
                     selectedOptionText = ""
                     viewModel.selectedAccount = old_Account
                     Toast.makeText(context,"Select an account please", Toast.LENGTH_SHORT).show()
                     accountLedgerItemList.value = viewModel.reset()
+                    accountBalance.value = 0.0
                 },
-                    enabled = select_account_selected_enalbled.value,modifier = Modifier
+                    enabled = updateLedgerListDisabled.value,modifier = Modifier
                     ,current_value = selectedOptionText
                     ,onVc = {
                         selectedOptionText = it
                         expanded.value = true
                     })
+            }
+
+            Box(modifier = Modifier.fillMaxWidth().height(40.dp)){
+                Text(
+                    "B a l a n c e",
+                    fontSize = 20.sp, color = title_color,
+                    modifier = Modifier
+                        .padding(horizontal = sidePadding.dp)
+                        .align(Alignment.Center)
+                )
             }
 
             Box(modifier = Modifier.fillMaxWidth().height(50.dp).background(color = var_amount_row_colour)) {
@@ -160,7 +170,7 @@ fun AccountLedgerScreen( viewModel: LedgerVm = hiltViewModel() ){
             }
 
             // List
-            Box(modifier = Modifier.fillMaxWidth().heightIn(max = 750.dp)) {
+            Box(modifier = Modifier.fillMaxWidth().heightIn(max = 750.dp).padding(vertical = 15.dp)) {
                 accountLedger_list_table(modifier = Modifier.padding(horizontal = (sidePadding/2).dp),LegderItemList = accountLedgerItemList.value)
             }
         }
@@ -192,7 +202,7 @@ fun AccountLedgerScreen( viewModel: LedgerVm = hiltViewModel() ){
                                 selected_Account = account
                                 viewModel.selectedAccount = account
                                 selectedOptionText = account.name + " " + "(" +account.type+ ")"
-                                select_account_selected_enalbled.value = false
+                                updateLedgerListDisabled.value = false
                                 expanded.value= false
                                 Toast.makeText(context,"Account selected", Toast.LENGTH_SHORT).show()
                             })

@@ -40,6 +40,8 @@ class Modify_Sale_Vm @Inject constructor(
     val old_Account_Name : MutableState<String> = mutableStateOf("")
     val old_list_of_saleEntries : MutableState<List<SaleEntry>> = mutableStateOf(listOf())
 
+    var latestSaleId : MutableState<Int> = mutableStateOf(0)
+
     init {
         viewModelScope.launch {
             saleRepo.get_every_Sale().collect(){
@@ -59,6 +61,9 @@ class Modify_Sale_Vm @Inject constructor(
                 Log.d("STATUS", "collected items line 40 -vm")
             }
         }
+        viewModelScope.launch {
+            latestSaleId.value = saleRepo.getLatestSaleID()
+        }
     }
 
     fun update_Sale(
@@ -75,7 +80,13 @@ class Modify_Sale_Vm @Inject constructor(
                 old_list_of_saleEntry = old_list_of_saleEntries.value,
                 new_list_of_saleEntry = new_list_of_saleEntries
             )
+            old_list_of_saleEntries.value = listOf()
+            bill_id_to_modify.value = 0
+            oldSale.value = Sale(0,"",0,0.0,"")
+            old_Account_Name.value = ""
         }
+        accountNameLoaded.value = false
+        saleEntriesLoaded.value = false
 
     }
 
@@ -93,28 +104,6 @@ class Modify_Sale_Vm @Inject constructor(
             Log.d("DEBUG"," collected account name : " + old_Account_Name.value)
         }
         return old_sale
-    }
-
-    fun getRecentSale() : Sale {
-        var isSaleSet = false
-        var sale = Sale(0,"",0,0.0,"")
-        var id = 0
-        viewModelScope.launch{
-            id = saleRepo.getLatestSaleID()
-            if (id == 0){
-                isSaleSet = true
-            }else{
-                bill_id_to_modify.value = id
-                isSaleSet = true
-            }
-        }
-        while (!isSaleSet){
-        // Loading..
-        }
-        if(id == 0){
-            return sale
-        }
-        return getSaleByID(bill_id_to_modify.value)
     }
 
 }
