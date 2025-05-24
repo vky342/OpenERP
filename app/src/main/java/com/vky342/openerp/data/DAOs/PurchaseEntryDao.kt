@@ -20,7 +20,7 @@ interface PurchaseEntryDao {
     suspend fun delete(purchaseEntry: PurchaseEntry)
 
     @Query("SELECT * FROM PurchaseEntries WHERE purchaseId = :purchaseId")
-    fun getAllPurchaseEntriesByPurchaseId(purchaseId : Int) :  List<PurchaseEntry>
+    suspend fun getAllPurchaseEntriesByPurchaseId(purchaseId : Int) :  List<PurchaseEntry>
 
     @Query("SELECT * FROM PurchaseEntries WHERE itemName = :itemName")
     fun getAllPurchaseEntriesByItemName(itemName : String) : List<PurchaseEntry>

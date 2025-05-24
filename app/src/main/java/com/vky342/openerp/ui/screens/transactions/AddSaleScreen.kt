@@ -278,7 +278,6 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
 
                 Add_button_Strip(addItemEnabled.value,onClick = { item_fill_popUp_status.value = true })
 
-
                 // Items List
                 Box(modifier = Modifier
                     .fillMaxWidth()
@@ -362,8 +361,7 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                     selectedItemPrice.value = ""
                     selectedItemDiscount.value = ""
                     selectedItemQuantity.value = ""
-                    currentItem.value = Item("",0.0,0.0,0)
-                },
+                    currentItem.value = Item("",0.0,0.0,0) },
                 onDone = {
 
                     if (item_options.value.any{ item -> item.itemName == selectedItemName.value}){

@@ -49,7 +49,7 @@ import com.vky342.openerp.ui.theme.background_color
 fun AllTransactionOptionsScreen(
     navController: NavHostController
 ){
-    val height = LocalConfiguration.current.run { screenHeightDp.dp }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -72,9 +72,12 @@ fun AllTransactionOptionsScreen(
 
             modify_sale_button(onClick = {navController.navigate(TransactionScreen.modifySale)})
 
+            modify_purhcase__button(onClick = {navController.navigate(TransactionScreen.modifyPurchase)})
+
             payment_bill_button(onClick = {navController.navigate(TransactionScreen.addPayment)})
 
             add_receipt_button(onClick = {navController.navigate(TransactionScreen.addReceipt)})
+
         }
 
     }
@@ -284,6 +287,74 @@ fun add_sale_button(modifier: Modifier = Modifier, onClick : () -> Unit = {}){
         }
     }
 }
+
+
+@Preview
+@Composable
+fun modify_purhcase__button(modifier: Modifier = Modifier, onClick : () -> Unit = {}){
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(80.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .height(65.dp)
+                .shadow(
+                    elevation = 4.dp,
+                    shape = RoundedCornerShape(20f),
+                    ambientColor = account_add_shadow_color,
+                    spotColor = account_add_shadow_color
+                )
+                .background(
+                    color = add_purchase_button_container_color,
+                    shape = RoundedCornerShape(20f)
+                )
+                .border(1.dp, account_add_border_color, RoundedCornerShape(20f))
+                .align(Alignment.Center)
+                .clickable { onClick() }
+        ) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start
+            ) {
+                Icon(
+                    Icons.Default.Create,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(75.dp)
+                        .padding(3.dp),
+                    tint = account_add_content_color
+                )
+                Box (modifier = Modifier
+                    .height(40.dp)
+                    .align(Alignment.CenterVertically)) {
+                    Text(
+                        text = "Modify Purchase",
+                        fontSize = 20.sp,
+                        color = account_add_title_color,
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                            .align(Alignment.TopStart)
+
+                    )
+                    Text(
+                        text = "modify precious purchase bills",
+                        fontSize = 12.sp,
+                        color = account_add_subtitle_color,
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                            .align(Alignment.BottomStart)
+                    )
+                }
+
+            }
+        }
+    }
+
+}
+
 
 
 

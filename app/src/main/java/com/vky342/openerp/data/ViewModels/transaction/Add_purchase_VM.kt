@@ -54,16 +54,16 @@ class Add_purchase_VM @Inject constructor(
         }
     }
 
-    private fun Save_Purchase(account_name : String,purchase : Purcahase, list_of_purEntries : List<PurchaseEntry>){
+    private fun reloadPurchase(){
+        viewModelScope.launch {
+            purchaseID.value = purchaseRepo.getLatestPurchaseID()
+            Log.d("DEBUG",purchaseID.value.toString())
+            Log.d("STATUS", "fetched latest sale ID")
+        }
 
-        /*
-        *
-        * name should be passed with Pre-Checking
-        * purchase should contain id = 0, and ledgerId = 0
-        * list_of_purEntries should contain entryId = 0 and purchaseId = 0, it will be set automatically
-        * only name is to be passed and other data will be set automatically , as per the latest Purchase Id and account's Ledger Id.
-        *
-        */
+    }
+
+    private fun Save_Purchase(account_name : String,purchase : Purcahase, list_of_purEntries : List<PurchaseEntry>){
 
         viewModelScope.launch (Dispatchers.IO){
 
@@ -72,14 +72,13 @@ class Add_purchase_VM @Inject constructor(
                 purchase = purchase,
                 list_of_purchaseEntry = list_of_purEntries
             )
+            reloadPurchase()
 
         }
     }
 
     fun add_purchase(name : String,purchase: Purcahase, listOfEntry: List<PurchaseEntry>){
-
         Save_Purchase(name,purchase,listOfEntry)
-
     }
 
 

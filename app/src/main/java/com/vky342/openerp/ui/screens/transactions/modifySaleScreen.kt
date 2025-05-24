@@ -80,7 +80,7 @@ import com.vky342.openerp.ui.theme.search_item_focused_container_colour
 import com.vky342.openerp.ui.theme.title_color
 import com.vky342.openerp.ui.theme.var_amount_row_colour
 
-@Preview
+
 @Composable
 fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
 
@@ -124,7 +124,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
     var partyEnabled = remember { mutableStateOf(false) }
     var addItemEnabled = remember { mutableStateOf(false)}
 
-    // purchase summary
+    // summary
     val totalItems by remember { derivedStateOf { itemsList.size } }
     var totalAmount = remember {derivedStateOf { itemsList.sumOf { it.totalAmount.value } } }
 

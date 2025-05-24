@@ -76,17 +76,16 @@ data class item_popup(
 
 @Composable
 fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
-
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val sidePadding = width.value * 0.08
-
     val context: Context = LocalContext.current
+
     var options = viewModel.old_Account_list.value
     var item_options = viewModel.all_items_in_inventory
 
     val item_fill_popUp_status = remember { mutableStateOf(false) }
 
-    var ID = remember { viewModel.purchaseID }
+    var ID by viewModel.purchaseID
 
     var selectedAccount = remember { mutableStateOf((Account(0, "", "", "", ""))) }
 
@@ -97,6 +96,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
     var selectedAccountText by remember { mutableStateOf("") }
 
     // itemForm popUP
+    var currentItem = remember { mutableStateOf(Item("",0.0,0.0,0)) }
     var selectedItemName = remember { mutableStateOf("") }
     var selectedItemPrice = remember { mutableStateOf("") }
     var selectedItemDiscount = remember { mutableStateOf("") }
@@ -112,11 +112,14 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
     val totalItems by remember { derivedStateOf { itemsList.size } }
     var totalAmount = remember {derivedStateOf { itemsList.sumOf { it.totalAmount.value } } }
 
-
     // Items Summary
     val listState = rememberLazyListState()
     LaunchedEffect(itemsList.size) {
         listState.scrollToItem(0)
+    }
+
+    LaunchedEffect(viewModel.purchaseID.value) {
+        ID = viewModel.purchaseID.value
     }
 
     //Suggestions
@@ -161,7 +164,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                     .height(45.dp)
             ) {
                 Text(
-                    text = "New purchase : " + ID.value,
+                    text = "New purchase : " + if(ID == 0) 1 else ID+ 1,
                     color = New_account_title_color,
                     fontSize = 24.sp,
                     modifier = Modifier
@@ -241,7 +244,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                 .padding(top = 25.dp)) {
 
                 Text(
-                    "P u r c h a s e   S u m m a r y",
+                    "S u m m a r y",
                     fontSize = 20.sp, color = title_color,
                     modifier = Modifier
                         .padding(horizontal = sidePadding.dp)
@@ -274,13 +277,17 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                         selectedDate.value = ""
                         payment_mode.value = ""
                         partyEnabled.value = true
+                        currentItem.value = Item("",0.0,0.0,0)
+                        selectedItemName.value = ""
+                        selectedItemPrice.value = ""
+                        selectedItemDiscount.value = ""
+                        selectedItemQuantity.value = ""
                     }
 
 
                 })
 
                 Add_button_Strip(addItemEnabled.value,onClick = { item_fill_popUp_status.value = true })
-
 
                 // Items List
                 Box(modifier = Modifier
@@ -336,6 +343,14 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                     .clickable { }) {
 
                 // touch barrier
+                BackHandler {
+                    item_fill_popUp_status.value = false
+                    selectedItemName.value = ""
+                    selectedItemPrice.value = ""
+                    selectedItemDiscount.value = ""
+                    selectedItemQuantity.value = ""
+                    currentItem.value = Item("",0.0,0.0,0)
+                }
 
             }
 
@@ -357,11 +372,10 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                     selectedItemPrice.value = ""
                     selectedItemDiscount.value = ""
                     selectedItemQuantity.value = ""
-                           },
+                    currentItem.value = Item("",0.0,0.0,0) },
                 onDone = {
 
                     if (item_options.value.any{ item -> item.itemName == selectedItemName.value}){
-                        item_fill_popUp_status.value = false
 
                         itemsList.add(item_popup(
                             name = selectedItemName.value,
@@ -369,11 +383,12 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                             disc = selectedItemDiscount.value.toDoubleOrNull() ?: 0.0,
                             quantity = selectedItemQuantity.value.toInt())
                         )
-
+                        item_fill_popUp_status.value = false
                         selectedItemName.value = ""
                         selectedItemPrice.value = ""
                         selectedItemDiscount.value = ""
                         selectedItemQuantity.value = ""
+                        currentItem.value = Item("",0.0,0.0,0)
                     }
                     else{
                         Toast.makeText(context, "No Item found named " + selectedItemName.value, Toast.LENGTH_SHORT).show()
@@ -455,6 +470,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                             .padding(vertical = 1.dp, horizontal = 4.dp)
                             .fillMaxWidth()
                             .clickable {
+                                currentItem.value = item
                                 selectedItemName.value = item.itemName
                                 selectedItemPrice.value = item.itemSellingPrice.toString()
                                 expanded_item_name_suggestion.value = false

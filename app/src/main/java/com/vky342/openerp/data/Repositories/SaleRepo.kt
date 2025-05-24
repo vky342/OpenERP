@@ -23,7 +23,7 @@ class SaleRepo @Inject constructor(private val openERPDataBase: OpenERPDataBase)
     suspend fun updateSale(oldName: String, newName: String, oldSale: Sale, newSale: Sale, old_list_of_saleEntry: List<SaleEntry>, new_list_of_saleEntry: List<SaleEntry>){
         updateLedgerNetBalance(newName = newName, oldName = oldName, oldSale = oldSale,newSale = newSale)
         privateUpdateSale(newName,newSale)
-        updateItemStock(newSale = newSale,old_list_of_saleEntry = old_list_of_saleEntry, new_list_of_saleEntry = new_list_of_saleEntry)
+        updateItemStock(old_list_of_saleEntry = old_list_of_saleEntry, new_list_of_saleEntry = new_list_of_saleEntry)
         updateSaleEntry(saleID = oldSale.saleId, old_list_of_saleEntry,new_list_of_saleEntry)
     }
 
@@ -102,10 +102,9 @@ class SaleRepo @Inject constructor(private val openERPDataBase: OpenERPDataBase)
     }
 
     // 3rd and final process for updating
-    private suspend fun updateItemStock(newSale: Sale,old_list_of_saleEntry: List<SaleEntry>, new_list_of_saleEntry: List<SaleEntry>){
+    private suspend fun updateItemStock(old_list_of_saleEntry: List<SaleEntry>, new_list_of_saleEntry: List<SaleEntry>){
 
         //reversing the item stock for old_list_of_saleEntry
-        val latestSale = newSale
         for (saleEntry in old_list_of_saleEntry) {
             var item = itemInventoryDao.getItemByName(saleEntry.itemName)
             itemInventoryDao.update(item.copy(itemQuantity = item.itemQuantity + saleEntry.entryQuantity))
