@@ -51,12 +51,14 @@ import com.vky342.openerp.ui.theme.New_account_title_color
 import com.vky342.openerp.ui.theme.background_color
 import com.vky342.openerp.ui.theme.title_color
 import com.vky342.openerp.ui.theme.var_amount_row_colour
+import com.vky342.openerp.utility.calculateEffectiveBalancesWithLogic
 
 data class AccountLedgerItem(
     val BillDate    : String,
     val BillType    : String,
     val BillAmount  : Double,
     val CashOrCredit : String = "",
+    val effectiveBalance : Double = 0.0,
 )
 
 
@@ -94,6 +96,7 @@ fun AccountLedgerScreen( viewModel: LedgerVm = hiltViewModel() ){
         if (updateLedgerListDisabled.value == false){
             Log.d("DEBUG","line 100")
             accountLedgerItemList.value = viewModel.getSpecificAccountLedger()
+            accountLedgerItemList.value = calculateEffectiveBalancesWithLogic(accountLedgerItemList.value)
             accountBalance.value = viewModel.getAccountBalance()
         }
     }
@@ -212,31 +215,6 @@ fun AccountLedgerScreen( viewModel: LedgerVm = hiltViewModel() ){
     }
 }
 
-
-
-@Composable
-fun Ledger_search_bar(modifier: Modifier = Modifier,onVC : (String) -> Unit = {},value : String = "", onClear : () -> Unit = {}){
-    // Search Bar (20% → Adjusted to fixed 100.dp)
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(100.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = modifier
-                .wrapContentHeight()
-                .wrapContentWidth()
-        ) {
-            Searchbar(onClear = onClear,modifier = Modifier, current_value = value, label = "Search Ledger...",onVC = {
-                onVC(it)
-            })
-        }
-    }
-}
-
-
-
 @Preview
 @Composable
 fun accountLedger_list_table(modifier: Modifier = Modifier, LegderItemList : List<AccountLedgerItem> = listOf()){
@@ -295,39 +273,16 @@ fun accountLedger_list_table(modifier: Modifier = Modifier, LegderItemList : Lis
                 ) {
                     Text(text = "Amount",fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.Center))
                 }
-
             }
         }
+        LazyColumn(reverseLayout = true,modifier = Modifier.fillMaxWidth()){
+            itemsIndexed(LegderItemList){ index, item ->
+                accountLedger_list_table_single_row(
+                    item = item,
+                    effectiveBalance = item.effectiveBalance
+                )
 
-        var localBalance = 0.0
-        LazyColumn(reverseLayout = true,modifier = Modifier.fillMaxWidth()){ itemsIndexed(LegderItemList){
-                index, item ->
-
-            if (item.BillType == "Receipt"){
-                accountLedger_list_table_single_row(item = item, effectiveBalance = localBalance + item.BillAmount)
-                localBalance += item.BillAmount
             }
-            else if (item.BillType == "Payment" ){
-                accountLedger_list_table_single_row(item = item, effectiveBalance = localBalance - item.BillAmount)
-                localBalance -= item.BillAmount
-            }
-            else if (item.BillType == "Purchase" && item.CashOrCredit == "Credit"){
-                accountLedger_list_table_single_row(item = item, effectiveBalance = localBalance + item.BillAmount)
-                localBalance += item.BillAmount
-            }
-            else if (item.BillType == "Sale" && item.CashOrCredit == "Credit"){
-                accountLedger_list_table_single_row(item = item, effectiveBalance = localBalance - item.BillAmount)
-                localBalance -= item.BillAmount
-            }
-            else if (item.BillType == "Purchase" && item.CashOrCredit == "Cash"){
-                accountLedger_list_table_single_row(item = item, effectiveBalance = localBalance)
-            }
-            else if (item.BillType == "Sale" && item.CashOrCredit == "Cash"){
-                accountLedger_list_table_single_row(item = item, effectiveBalance = localBalance)
-            }
-
-        }
-
         }
         Spacer(
             modifier = Modifier

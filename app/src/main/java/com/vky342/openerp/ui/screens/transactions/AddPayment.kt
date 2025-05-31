@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,13 +38,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vky342.openerp.data.Entities.Account
-import com.vky342.openerp.data.Entities.Ledger
 import com.vky342.openerp.data.ViewModels.transaction.Add_Payment_Vm
 import com.vky342.openerp.ui.screens.ACCOUNTS.Save_button
 import com.vky342.openerp.ui.screens.ACCOUNTS.account_search_bar_for_edit_account
@@ -61,6 +59,8 @@ fun addPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
 
     var old_Account by remember { mutableStateOf(Account(0,"","","","")) }
 
+    var ID by viewModel.paymentID
+
     var selectedOptionText by remember { mutableStateOf("") }
 
     var options = viewModel.old_Account_list.value
@@ -76,6 +76,11 @@ fun addPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
     var filteringOptions = options.filter {
         it.name.contains(selectedOptionText, ignoreCase = true) || it.address.contains(selectedOptionText, ignoreCase = true) || it.contact.contains(selectedOptionText, ignoreCase = true)
     }
+
+    LaunchedEffect(viewModel.paymentID.value) {
+        ID = viewModel.paymentID.value
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -97,7 +102,12 @@ fun addPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
                     .padding(vertical = 2.dp)
                     .height(50.dp)
             ) {
-                Text(text = "New payment", color = New_account_title_color,fontSize = 32.sp, modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = sidePadding.dp))
+                Text(text = "New payment : " + if(ID == 0) 1 else ID+ 1,
+                    color = New_account_title_color,
+                    fontSize = 29.sp,
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(horizontal = sidePadding.dp))
             }
 
             // Account search bar

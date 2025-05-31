@@ -99,7 +99,7 @@ class Modify_Sale_Vm @Inject constructor(
             Log.d("DEBUG"," collected sale entries : " + old_list_of_saleEntries.value)
         }
         viewModelScope.launch {
-            old_Account_Name.value =  ledgerRepo.getLedger(old_sale.ledgerId).accountName
+            old_Account_Name.value = ledgerRepo.getLedger(old_sale.ledgerId).accountName
             accountNameLoaded.value = true
             Log.d("DEBUG"," collected account name : " + old_Account_Name.value)
         }

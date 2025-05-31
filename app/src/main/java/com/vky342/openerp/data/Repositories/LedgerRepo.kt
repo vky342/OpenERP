@@ -51,7 +51,7 @@ class LedgerRepo (private val openERPDataBase: OpenERPDataBase) {
     }
 
     suspend fun getLedger(ID : Int) : Ledger{
-        return ledgerDao.getLedger(ID)
+        return ledgerDao.getLedger(ID) ?: Ledger(0,0.0,"")
     }
 
 }

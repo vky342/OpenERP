@@ -100,7 +100,7 @@ class modify_purchase_Vm @Inject constructor(
             Log.d("DEBUG"," collected purchase entries : " + old_list_of_purchaseEntries.value)
         }
         viewModelScope.launch {
-            old_Account_Name.value =  ledgerRepo.getLedger(old_purchase.ledgerId).accountName
+            old_Account_Name.value = ledgerRepo.getLedger(old_purchase.ledgerId).accountName
             accountNameLoaded.value = true
             Log.d("DEBUG"," collected account name : " + old_Account_Name.value)
         }

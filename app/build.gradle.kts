@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.vky342.openerp"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.vky342.openerp"
@@ -95,7 +95,7 @@ dependencies {
 
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
-
+    implementation("androidx.compose.runtime:runtime-livedata:1.8.2")
 }
 
 // Allow references to generated code

@@ -3,11 +3,9 @@ package com.vky342.openerp.data.DAOs
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.vky342.openerp.data.Entities.Ledger
-import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -31,6 +29,6 @@ interface ledgerDao{
     suspend fun getLedgerByAccountName(name : String) : Ledger
 
     @Query("SELECT * FROM Ledgers WHERE ledgerId = :id")
-    suspend fun getLedger(id : Int) : Ledger
+    suspend fun getLedger(id : Int) : Ledger?
 
 }
