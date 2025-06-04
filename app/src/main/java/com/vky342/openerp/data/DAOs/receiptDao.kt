@@ -3,12 +3,9 @@ package com.vky342.openerp.data.DAOs
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.vky342.openerp.data.Entities.Receipt
-import kotlinx.coroutines.flow.Flow
-import java.util.Date
 
 @Dao
 interface receiptDao {
@@ -32,4 +29,10 @@ interface receiptDao {
 
     @Query("SELECT * FROM Receipts WHERE ledgerId = :ledgerId")
     fun getAllReceiptsInLedger(ledgerId : Int) : List<Receipt>
+
+    @Query("SELECT * FROM Receipts WHERE receiptId = (SELECT max(receiptId) FROM Receipts)")
+    suspend fun getLastReceipt() : Receipt?
+
+    @Query("SELECT * FROM Receipts WHERE receiptId = :receiptId")
+    suspend fun getReceiptById(receiptId: Int): Receipt?
 }

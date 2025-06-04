@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,22 +42,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.vky342.openerp.data.Entities.Account
-import com.vky342.openerp.data.ViewModels.transaction.Add_Payment_Vm
 import com.vky342.openerp.data.ViewModels.transaction.Add_Receipt_Vm
 import com.vky342.openerp.ui.screens.ACCOUNTS.Save_button
 import com.vky342.openerp.ui.screens.ACCOUNTS.account_search_bar_for_edit_account
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.theme.New_account_title_color
 import com.vky342.openerp.ui.theme.background_color
+import com.vky342.openerp.utility.parseStrictDouble
 
 @Composable
-fun AddReceipt(viewModel : Add_Receipt_Vm = hiltViewModel()){
+fun AddReceiptScreen(viewModel : Add_Receipt_Vm = hiltViewModel()){
     val context : Context = LocalContext.current
 
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val sidePadding = width.value * 0.08
 
     var old_Account by remember { mutableStateOf(Account(0,"","","","")) }
+
+    var ID by viewModel.receiptID
 
     var selectedOptionText by remember { mutableStateOf("") }
 
@@ -73,6 +76,11 @@ fun AddReceipt(viewModel : Add_Receipt_Vm = hiltViewModel()){
     var filteringOptions = options.filter {
         it.name.contains(selectedOptionText, ignoreCase = true) || it.address.contains(selectedOptionText, ignoreCase = true) || it.contact.contains(selectedOptionText, ignoreCase = true)
     }
+
+    LaunchedEffect(viewModel.receiptID.value) {
+        ID = viewModel.receiptID.value
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -94,7 +102,7 @@ fun AddReceipt(viewModel : Add_Receipt_Vm = hiltViewModel()){
                     .padding(vertical = 2.dp)
                     .height(50.dp)
             ) {
-                Text(text = "New receipt", color = New_account_title_color,fontSize = 32.sp, modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = sidePadding.dp))
+                Text(text = "Receipt : " + if(ID == 0) 1 else ID+ 1, color = New_account_title_color,fontSize = 32.sp, modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = sidePadding.dp))
             }
 
             // Account search bar
@@ -169,17 +177,25 @@ fun AddReceipt(viewModel : Add_Receipt_Vm = hiltViewModel()){
                     .height(70.dp)
 
             ) {
-                Save_button(enabled = old_Account != Account(0,"","","",""),onClick = {
-
-                    if(viewModel.AddReceipt(old_Account.name, Date = selectedDate.value, amount = amount.toDouble())){
-                        Toast.makeText(context,"Payment saved", Toast.LENGTH_SHORT).show()
-                    }else{Toast.makeText(context,"Payment Invalid", Toast.LENGTH_SHORT).show()}
-                    old_Account = Account(0,"","","","")
-                    selectedOptionText = ""
-                    amount = ""
-                    selectedDate.value = ""
-                    viewModel.balance.value = 0.0
-                    select_account_selected_enalbled.value = true
+                Save_button(enabled = old_Account != Account(0,"","","","") && selectedDate.value != "" && amount != "",onClick = {
+                    val amountTobePassed = try {
+                        parseStrictDouble(amount)
+                    }catch (e : Exception){
+                        amount = ""
+                        Toast.makeText(context, "Invalid amount", Toast.LENGTH_SHORT).show()
+                        0.0
+                    }
+                    if (amountTobePassed != 0.0){
+                        if(viewModel.AddReceipt(old_Account.name, Date = selectedDate.value, amount = amount.toDouble())){
+                            Toast.makeText(context,"Payment saved", Toast.LENGTH_SHORT).show()
+                        }else{Toast.makeText(context,"Payment Invalid", Toast.LENGTH_SHORT).show()}
+                        old_Account = Account(0,"","","","")
+                        selectedOptionText = ""
+                        amount = ""
+                        selectedDate.value = ""
+                        viewModel.balance.value = 0.0
+                        select_account_selected_enalbled.value = true
+                    }
                 }
                     ,modifier = Modifier.align(Alignment.Center), label = "Save")
             }

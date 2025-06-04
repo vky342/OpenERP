@@ -31,7 +31,7 @@ interface paymentsDao {
     fun getAllPaymentsInLedger(ledgerId : Int) : List<Payment>
 
     @Query("SELECT * FROM Payments WHERE paymentId = (SELECT max(paymentId) FROM Payments)")
-    suspend fun getLastSale() : Payment
+    suspend fun getLastPayment() : Payment?
 
     @Query("SELECT * FROM Payments WHERE paymentId = :paymentId")
     suspend fun getPaymentById(paymentId: Int): Payment?

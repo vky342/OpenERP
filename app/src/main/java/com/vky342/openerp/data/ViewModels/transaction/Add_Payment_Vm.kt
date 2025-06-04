@@ -21,7 +21,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class Add_Payment_Vm @Inject constructor  (private val paymentRepo: PaymentRepo) : ViewModel() {
     val old_Account_list : MutableState<List<Account>> = mutableStateOf(listOf())
@@ -38,7 +37,6 @@ class Add_Payment_Vm @Inject constructor  (private val paymentRepo: PaymentRepo)
                 Log.d("STATUS", "collected accounts line 24 -vm")
             }
         }
-
         viewModelScope.launch {
             paymentID.value = paymentRepo.getLatestPaymentID()
             Log.d("STATUS", "fetched latest payment ID")
@@ -86,6 +84,24 @@ class Add_Payment_Vm @Inject constructor  (private val paymentRepo: PaymentRepo)
                 oldPayment.value = paymentRepo.getPaymentByID(ID = ID)
                 if (oldPayment.value != Payment(0,"",0.0,0)){
                     oldLedger.value = paymentRepo.getLedgerByID(oldPayment.value!!.ledgerId)
+                }
+            }
+        }catch (e : Exception) {
+            Log.e("ERROR"," unable to get payment by ID")
+        }
+    }
+
+    fun getRecentPayment() {
+        try {
+            viewModelScope.launch {
+                val pid = paymentRepo.getLatestPaymentID()
+                if (pid != 0){
+                    oldPayment.value = paymentRepo.getPaymentByID(ID = pid)
+                    if (oldPayment.value != Payment(0,"",0.0,0)){
+                        oldLedger.value = paymentRepo.getLedgerByID(oldPayment.value!!.ledgerId)
+                    }
+                }else{
+                    Log.d("DEBUG", "getRecentPayment: no recent payment found")
                 }
             }
         }catch (e : Exception) {

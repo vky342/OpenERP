@@ -1,7 +1,6 @@
 package com.vky342.openerp.data.Repositories
 
 import android.util.Log
-import com.vky342.openerp.data.DAOs.accountsDao
 import com.vky342.openerp.data.Entities.Account
 import com.vky342.openerp.data.Entities.Ledger
 import com.vky342.openerp.data.Entities.Payment
@@ -25,10 +24,15 @@ class PaymentRepo (private val openERPDataBase: OpenERPDataBase ){
 
     suspend fun getLatestPaymentID(): Int{
         try {
-            val pid = paymentsDao.getLastSale().paymentId
-            return pid
+            val pid = paymentsDao.getLastPayment()
+            if (pid != null){
+                return pid.paymentId
+            }else{
+                Log.d("STATUS","No previous payment found; returning id as 0")
+                return 0
+            }
         } catch (e: Exception){
-            Log.d("STATUS","No previous sale found; returning id as 0")
+            Log.d("STATUS","No previous payment found; returning id as 0")
             return 0
         }
     }

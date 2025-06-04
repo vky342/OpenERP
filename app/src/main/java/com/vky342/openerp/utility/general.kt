@@ -44,3 +44,31 @@ fun calculateEffectiveBalancesWithLogic(
         updatedItem
     }
 }
+
+fun parseStrictDouble(input: String): Double {
+    val trimmed = input.trim()
+
+    if (trimmed.isEmpty()) {
+        throw IllegalArgumentException("Input is empty or whitespace only.")
+    }
+
+    // Optional: Normalize input by replacing comma with dot if needed
+    // But this code assumes strict "." decimal format, not European style commas
+    if (trimmed.contains(',')) {
+        throw IllegalArgumentException("Commas are not allowed in numeric input.")
+    }
+
+    // Regular expression to match a strict decimal number (optional sign, integer or decimal)
+    val numberRegex = Regex("^[-+]?\\d+(\\.\\d+)?\$")
+
+    if (!numberRegex.matches(trimmed)) {
+        throw IllegalArgumentException("Invalid numeric format: '$input'")
+    }
+
+    return try {
+        trimmed.toDouble()
+    } catch (e: NumberFormatException) {
+        throw IllegalArgumentException("Failed to parse double from input: '$input'", e)
+    }
+}
+

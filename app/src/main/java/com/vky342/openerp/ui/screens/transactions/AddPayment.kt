@@ -48,6 +48,7 @@ import com.vky342.openerp.ui.screens.ACCOUNTS.account_search_bar_for_edit_accoun
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.theme.New_account_title_color
 import com.vky342.openerp.ui.theme.background_color
+import com.vky342.openerp.utility.parseStrictDouble
 
 
 @Composable
@@ -102,7 +103,7 @@ fun addPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
                     .padding(vertical = 2.dp)
                     .height(50.dp)
             ) {
-                Text(text = "New payment : " + if(ID == 0) 1 else ID+ 1,
+                Text(text = "Payment : " + if(ID == 0) 1 else ID+ 1,
                     color = New_account_title_color,
                     fontSize = 29.sp,
                     modifier = Modifier
@@ -160,7 +161,9 @@ fun addPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
                     .padding(vertical = 2.dp)
                     .height(50.dp)
             ) {
-                Text(text = "Old balance : "+ kotlin.math.abs(viewModel.balance.value) + if (viewModel.balance.value < 0.0) " Dr" else " Cr", color = New_account_title_color,fontSize = 24.sp, modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = sidePadding.dp))
+                Text(text = "Old balance : "+ kotlin.math.abs(viewModel.balance.value) + if (viewModel.balance.value < 0.0) " Dr" else " Cr", color = New_account_title_color,fontSize = 24.sp, modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(horizontal = sidePadding.dp))
             }
 
             // amount
@@ -171,8 +174,11 @@ fun addPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
                     .height(70.dp)
             ) {
                 form_fields(trailing_icon = Icons.Default.Clear,keyboardOptions = KeyboardOptions(autoCorrect = false, keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
-                    enabled = old_Account != Account(0,"","","",""),onVc = {amount = it},value = amount,icon = Icons.Default.Create,label = "Amount",modifier = Modifier.padding(horizontal = sidePadding.dp).align(
-                    Alignment.CenterStart))
+                    enabled = old_Account != Account(0,"","","",""),onVc = {amount = it},value = amount,icon = Icons.Default.Create,label = "Amount",modifier = Modifier
+                        .padding(horizontal = sidePadding.dp)
+                        .align(
+                            Alignment.CenterStart
+                        ))
             }
             // save button
             Box(
@@ -182,17 +188,26 @@ fun addPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
                     .height(70.dp)
 
             ) {
-                Save_button(enabled = old_Account != Account(0,"","","",""),onClick = {
-
-                    if(viewModel.AddPayment(old_Account.name, Date = selectedDate.value, amount = amount.toDouble())){
-                        Toast.makeText(context,"Payment saved", Toast.LENGTH_SHORT).show()
-                    }else{Toast.makeText(context,"Payment Invalid", Toast.LENGTH_SHORT).show()}
-                    old_Account = Account(0,"","","","")
-                    selectedOptionText = ""
-                    amount = ""
-                    selectedDate.value = ""
-                    viewModel.balance.value = 0.0
-                    select_account_selected_enalbled.value = true
+                Save_button(enabled = old_Account != Account(0,"","","","") && selectedDate.value != "" && amount != "",onClick = {
+                    val amountTobePassed = try {
+                        parseStrictDouble(amount)
+                    }catch (e : Exception){
+                        amount = ""
+                        Toast.makeText(context, "Invalid amount", Toast.LENGTH_SHORT).show()
+                        0.0
+                    }
+                    if (amountTobePassed != 0.0){
+                        if(viewModel.AddPayment(old_Account.name, Date = selectedDate.value, amount = amountTobePassed
+                            )){
+                            Toast.makeText(context,"Payment saved", Toast.LENGTH_SHORT).show()
+                        }else{Toast.makeText(context,"Payment Invalid", Toast.LENGTH_SHORT).show()}
+                        old_Account = Account(0,"","","","")
+                        selectedOptionText = ""
+                        amount = ""
+                        selectedDate.value = ""
+                        viewModel.balance.value = 0.0
+                        select_account_selected_enalbled.value = true
+                    }
                 }
                     ,modifier = Modifier.align(Alignment.Center), label = "Save")
             }
@@ -209,24 +224,27 @@ fun addPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
                     .fillMaxWidth()
                     .heightIn(max = 300.dp)
                     .padding(top = 150.dp)
-                    .padding(horizontal = (sidePadding/2).dp)
+                    .padding(horizontal = (sidePadding / 2).dp)
                     .align(Alignment.TopCenter)
-                    .shadow(elevation = 4.dp,shape = RoundedCornerShape(10f))
+                    .shadow(elevation = 4.dp, shape = RoundedCornerShape(10f))
                     .background(color = Color.White, shape = RoundedCornerShape(10f))
             ){
                 items (filteringOptions){ account ->
                     Text(text = account.name + " " + "(" +account.type+ ")",
                         fontSize = 18.sp,
                         fontWeight = FontWeight(350),
-                        modifier = Modifier.padding(vertical = 1.dp, horizontal = 2.dp).fillMaxWidth()
-                            .clickable{
+                        modifier = Modifier
+                            .padding(vertical = 1.dp, horizontal = 2.dp)
+                            .fillMaxWidth()
+                            .clickable {
                                 old_Account = account
-                                selectedOptionText = account.name + " " + "(" +account.type+ ")"
+                                selectedOptionText = account.name + " " + "(" + account.type + ")"
                                 select_account_selected_enalbled.value = false
-                                expanded.value= false
+                                expanded.value = false
                                 viewModel.load_balance(account.name)
-                                Toast.makeText(context,"Account selected", Toast.LENGTH_SHORT).show()
-                            })
+                                Toast.makeText(context, "Account selected", Toast.LENGTH_SHORT).show()
+                            }
+                    )
                 }
             }
         }

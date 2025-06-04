@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Payments")
 data class Payment(
     @PrimaryKey(autoGenerate = true)
-    val paymentId : Int,
-    val paymentDate : String,
-    val paymentAmount : Double,
-    val ledgerId : Int
+    var paymentId : Int,
+    var paymentDate : String,
+    var paymentAmount : Double,
+    var ledgerId : Int
 )

@@ -51,8 +51,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.vky342.openerp.data.Entities.Ledger
-import com.vky342.openerp.data.Entities.Payment
-import com.vky342.openerp.data.ViewModels.transaction.Add_Payment_Vm
+import com.vky342.openerp.data.Entities.Receipt
+import com.vky342.openerp.data.ViewModels.transaction.Add_Receipt_Vm
 import com.vky342.openerp.ui.screens.ACCOUNTS.Save_button
 import com.vky342.openerp.ui.screens.ACCOUNTS.account_search_bar_for_edit_account
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
@@ -61,15 +61,12 @@ import com.vky342.openerp.ui.theme.background_color
 import com.vky342.openerp.ui.theme.sale_button_box_color
 import com.vky342.openerp.utility.parseStrictDouble
 
-
-
 @Composable
-fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
-
-    val oldPayment = viewModel.oldPayment.observeAsState(Payment(0,"",0.0,0))
+fun ModifyReceiptScreen(viewModel : Add_Receipt_Vm = hiltViewModel()){
+    val oldReceipt = viewModel.oldReceipt.observeAsState(Receipt(0,"",0.0,0))
     val oldLedger = viewModel.oldLedger.observeAsState(Ledger(0,0.0,""))
 
-    val newPayment = remember { mutableStateOf(Payment(0,"",0.0,0)) }
+    val newReceipt = remember { mutableStateOf(Receipt(0,"",0.0,0)) }
     val newAccountName = remember { mutableStateOf("") }
 
     val context: Context = LocalContext.current
@@ -82,7 +79,7 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
 
     var selectedOptionText by remember { mutableStateOf("") }
 
-    var ID = remember { derivedStateOf{ newPayment.value.paymentId }  }
+    var ID = remember { derivedStateOf{ newReceipt.value.receiptId } }
 
     var options = viewModel.old_Account_list.value
 
@@ -98,11 +95,11 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
         it.name.contains(selectedOptionText, ignoreCase = true) || it.address.contains(selectedOptionText, ignoreCase = true) || it.contact.contains(selectedOptionText, ignoreCase = true)
     }
 
-    LaunchedEffect(oldPayment.value) {
-        if (oldPayment.value != Payment(0, "", 0.0, 0)) {
-            newPayment.value = oldPayment.value
-            amount = oldPayment.value.paymentAmount.toString()
-            selectedDate.value = oldPayment.value.paymentDate
+    LaunchedEffect(oldReceipt.value) {
+        if (oldReceipt.value != Receipt(0, "", 0.0, 0)) {
+            newReceipt.value = oldReceipt.value
+            amount = oldReceipt.value.receiptAmount.toString()
+            selectedDate.value = oldReceipt.value.receiptDate
             is_bill_selected.value = true
             select_account_selected_enalbled.value = false
         }
@@ -174,7 +171,7 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                                     }
                                 },
                             onTrailingIconClick = {
-                                viewModel.getPaymentByID(bill_id.value.toInt())
+                                viewModel.getReceiptByID(bill_id.value.toInt())
                             }
                         )
                     }
@@ -211,14 +208,14 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                                     Alignment.CenterVertically
                                 )
                                 .clickable {
-                                    viewModel.getRecentPayment()
+                                    viewModel.getRecentReceipt()
                                 }
                         )
                     }
                 }
             }
         }
-    }else{
+    } else {
 
         Box(
             modifier = Modifier
@@ -241,7 +238,7 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                         .padding(vertical = 2.dp)
                         .height(50.dp)
                 ) {
-                    Text(text = "Payment : " + ID.value,
+                    Text(text = "Receipt : " + ID.value,
                         color = New_account_title_color,
                         fontSize = 29.sp,
                         modifier = Modifier
@@ -327,8 +324,8 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                             Toast.makeText(context, "field empty!", Toast.LENGTH_SHORT).show()
                         }else{
                             if (amountTobePassed != 0.0){
-                                viewModel.updatePayment(name = newAccountName.value, Date = selectedDate.value, amount = amount.toDouble() )
-                                newPayment.value = Payment(0,"",0.0,0)
+                                viewModel.updateReceipt(name = newAccountName.value, Date = selectedDate.value, amount = amount.toDouble() )
+                                newReceipt.value = Receipt(0,"",0.0,0)
                                 amount = ""
                                 selectedDate.value = ""
                                 selectedOptionText = ""
