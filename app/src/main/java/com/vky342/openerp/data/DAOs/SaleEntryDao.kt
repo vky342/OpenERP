@@ -24,5 +24,6 @@ interface SaleEntryDao{
     suspend fun getAllSaleEntriesBySaleId(saleId : Int) : List<SaleEntry>
 
     @Query("SELECT * FROM SaleEntries WHERE itemName = :itemName")
-    fun getAllSaleEntriesByItemName(itemName : String) : List<SaleEntry>
+    suspend fun getAllSaleEntriesByItemName(itemName : String) : List<SaleEntry>
+
 }

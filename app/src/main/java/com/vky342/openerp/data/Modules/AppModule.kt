@@ -31,6 +31,7 @@ import com.vky342.openerp.data.Repositories.PaymentRepo
 import com.vky342.openerp.data.Repositories.PurchaseRepo
 import com.vky342.openerp.data.Repositories.ReceiptRepo
 import com.vky342.openerp.data.Repositories.SaleRepo
+import com.vky342.openerp.data.Repositories.SaleStatsRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,7 +43,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule{
-
 
     @Provides
     @Singleton
@@ -100,6 +100,11 @@ object AppModule{
         return ReceiptRepo(openDb)
     }
 
+    @Provides
+    @Singleton
+    fun provideSaleStatsRepo(openDb: OpenERPDataBase) : SaleStatsRepo{
+        return SaleStatsRepo(openDb)
+    }
 
 }
 

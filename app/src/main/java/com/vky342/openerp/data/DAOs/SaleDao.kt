@@ -29,4 +29,13 @@ interface SaleDao{
     @Query("SELECT * FROM Sales WHERE saleId = (SELECT max(saleId) FROM Sales)")
     suspend fun getLastSale() : Sale
 
+    @Query("""
+    SELECT SUM(saleAmount) FROM Sales 
+    WHERE saleDate LIKE :monthPattern
+""")
+    suspend fun getMonthlySalesTotal(monthPattern: String): Double?
+
+    @Query("SELECT SUM(saleAmount) FROM Sales WHERE saleDate = :date")
+    suspend fun getSalesTotalByDate(date: String): Double?
+
 }
