@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.vky342.openerp.data.Entities.Account
 import com.vky342.openerp.data.Entities.Sale
 import kotlinx.coroutines.flow.Flow
 

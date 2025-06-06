@@ -34,12 +34,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -53,7 +53,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -69,8 +68,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.vky342.openerp.ui.Graphs.InventoryScreens
 import com.vky342.openerp.ui.Graphs.LedgerScreens
-import com.vky342.openerp.ui.theme.GreyeHome
-import com.vky342.openerp.ui.theme.Purple80
 import com.vky342.openerp.ui.theme.amount_stat_border_color
 import com.vky342.openerp.ui.theme.amount_text_color
 import com.vky342.openerp.ui.theme.background_color
@@ -280,6 +277,52 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                         )
                         Text(
                             text = "Account Ledger",
+                            fontSize = 20.sp,
+                            color = edit_item_content_color,
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                    }
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(56.dp)
+                        .shadow(
+                            elevation = 4.dp,
+                            shape = RoundedCornerShape(20f),
+                            ambientColor = edit_item_card_shadow_color,
+                            spotColor = edit_item_card_shadow_color
+                        )
+                        .background(
+                            color = edit_item_container_colour,
+                            shape = RoundedCornerShape(20f)
+                        )
+                        .border(1.dp, edit_item_border_color, RoundedCornerShape(20f))
+                        .align(Alignment.Center)
+                        .clickable{
+                            navController.navigate("Statistics")
+                        }
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.Outlined.Info,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(30.dp)
+                                .padding(5.dp),
+                            tint = edit_item_content_color
+                        )
+                        Text(
+                            text = "Analytics",
                             fontSize = 20.sp,
                             color = edit_item_content_color,
                             modifier = Modifier.padding(start = 10.dp)
