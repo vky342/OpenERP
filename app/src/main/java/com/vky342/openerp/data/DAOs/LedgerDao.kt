@@ -9,7 +9,7 @@ import com.vky342.openerp.data.Entities.Ledger
 
 
 @Dao
-interface ledgerDao{
+interface LedgerDao{
 
     @Insert
     suspend fun insert(ledger: Ledger)
@@ -20,8 +20,6 @@ interface ledgerDao{
     @Delete
     suspend fun delete(ledger: Ledger)
 
-    // Function for Screening
-
     @Query("SELECT * FROM Ledgers")
     fun getAllLedger() : List<Ledger>
 
@@ -31,4 +29,15 @@ interface ledgerDao{
     @Query("SELECT * FROM Ledgers WHERE ledgerId = :id")
     suspend fun getLedger(id : Int) : Ledger?
 
+    @Query("SELECT SUM(ledgerNetBalance) FROM Ledgers WHERE ledgerNetBalance < 0")
+    suspend fun getTotalNegativeLedgerBalance(): Double?
+
+    @Query("SELECT * FROM Ledgers WHERE ledgerNetBalance < 0")
+    suspend fun getLedgersWithNegativeBalance(): List<Ledger>
+
+    @Query("SELECT SUM(ledgerNetBalance) FROM Ledgers WHERE ledgerNetBalance > 0")
+    suspend fun getTotalPositiveLedgerBalance(): Double?
+
+    @Query("SELECT * FROM Ledgers WHERE ledgerNetBalance > 0")
+    suspend fun getLedgersWithPositiveBalance(): List<Ledger>
 }

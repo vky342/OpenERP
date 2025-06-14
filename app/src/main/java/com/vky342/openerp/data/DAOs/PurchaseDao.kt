@@ -28,4 +28,13 @@ interface PurchaseDao {
     @Query("SELECT * FROM Purchases WHERE purchaseId = (SELECT max(purchaseId) FROM Purchases)")
     suspend fun getLastPurchase() : Purcahase
 
+    @Query("""
+    SELECT SUM(purchaseAmount) FROM Purchases 
+    WHERE purchaseType = 'Cash' AND purchaseDate LIKE :monthPattern
+""")
+    suspend fun getMonthlyPurchaseAmount(monthPattern: String): Double?
+
+    @Query("SELECT SUM(purchaseAmount) FROM Purchases WHERE purchaseType = 'Cash'")
+    suspend fun getTotalCashPurchases(): Double?
+
 }

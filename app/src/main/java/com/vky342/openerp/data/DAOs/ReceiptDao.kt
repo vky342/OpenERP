@@ -8,7 +8,7 @@ import androidx.room.Update
 import com.vky342.openerp.data.Entities.Receipt
 
 @Dao
-interface receiptDao {
+interface ReceiptDao {
 
     @Insert
     suspend fun insert(receipt: Receipt)
@@ -35,4 +35,13 @@ interface receiptDao {
 
     @Query("SELECT * FROM Receipts WHERE receiptId = :receiptId")
     suspend fun getReceiptById(receiptId: Int): Receipt?
+
+    @Query("SELECT SUM(receiptAmount) FROM Receipts")
+    suspend fun getTotalReceiptAmount(): Double?
+
+    @Query("""
+        SELECT SUM(receiptAmount) FROM Receipts
+        WHERE receiptDate LIKE :monthPattern
+    """)
+    suspend fun getMonthlyReceiptAmount(monthPattern: String): Double?
 }

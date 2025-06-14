@@ -6,10 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vky342.openerp.data.DAOs.ledgerDao
 import com.vky342.openerp.data.Entities.Account
 import com.vky342.openerp.data.Entities.Item
-import com.vky342.openerp.data.Entities.Ledger
 import com.vky342.openerp.data.Entities.Sale
 import com.vky342.openerp.data.Entities.SaleEntry
 import com.vky342.openerp.data.Repositories.AccountRepo

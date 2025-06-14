@@ -37,4 +37,12 @@ interface SaleDao{
     @Query("SELECT SUM(saleAmount) FROM Sales WHERE saleDate = :date")
     suspend fun getSalesTotalByDate(date: String): Double?
 
+    @Query("""
+    SELECT SUM(saleAmount) FROM Sales 
+    WHERE saleType = 'Cash' AND saleDate LIKE :monthPattern
+""")
+    suspend fun getMonthlyCashSales(monthPattern: String): Double?
+
+    @Query("SELECT SUM(saleAmount) FROM Sales WHERE saleType = 'Cash'")
+    suspend fun getTotalCashSales(): Double?
 }

@@ -8,7 +8,7 @@ import androidx.room.Update
 import com.vky342.openerp.data.Entities.Payment
 
 @Dao
-interface paymentsDao {
+interface PaymentsDao {
 
     @Insert
     suspend fun insert(payment: Payment)
@@ -35,4 +35,13 @@ interface paymentsDao {
 
     @Query("SELECT * FROM Payments WHERE paymentId = :paymentId")
     suspend fun getPaymentById(paymentId: Int): Payment?
+
+    @Query("SELECT SUM(paymentAmount) FROM Payments")
+    suspend fun getTotalPaymentAmount(): Double?
+
+    @Query("""
+        SELECT SUM(paymentAmount) FROM Payments
+        WHERE paymentDate LIKE :monthPattern
+    """)
+    suspend fun getMonthlyPaymentAmount(monthPattern: String): Double?
 }

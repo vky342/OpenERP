@@ -87,6 +87,7 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.room.ktx)
+    implementation("androidx.compose.material3:material3-adaptive:1.0.0-alpha05")
 
 
     implementation(libs.hilt.android)

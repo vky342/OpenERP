@@ -66,6 +66,8 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import com.vky342.openerp.ui.Graphs.AnalyticsScreens
+import com.vky342.openerp.ui.Graphs.Graph
 import com.vky342.openerp.ui.Graphs.InventoryScreens
 import com.vky342.openerp.ui.Graphs.LedgerScreens
 import com.vky342.openerp.ui.theme.amount_stat_border_color
@@ -306,7 +308,7 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                         .border(1.dp, edit_item_border_color, RoundedCornerShape(20f))
                         .align(Alignment.Center)
                         .clickable{
-                            navController.navigate("Statistics")
+                            navController.navigate(Graph.ANALYTICS)
                         }
                 ) {
                     Row(

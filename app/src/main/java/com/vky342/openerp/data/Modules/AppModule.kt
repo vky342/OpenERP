@@ -11,9 +11,9 @@ import com.vky342.openerp.data.DAOs.SaleDao
 import com.vky342.openerp.data.DAOs.SaleEntryDao
 import com.vky342.openerp.data.DAOs.accountsDao
 import com.vky342.openerp.data.DAOs.itemInventoryDao
-import com.vky342.openerp.data.DAOs.ledgerDao
-import com.vky342.openerp.data.DAOs.paymentsDao
-import com.vky342.openerp.data.DAOs.receiptDao
+import com.vky342.openerp.data.DAOs.LedgerDao
+import com.vky342.openerp.data.DAOs.PaymentsDao
+import com.vky342.openerp.data.DAOs.ReceiptDao
 import com.vky342.openerp.data.Entities.Account
 import com.vky342.openerp.data.Entities.Item
 import com.vky342.openerp.data.Entities.Ledger
@@ -24,6 +24,7 @@ import com.vky342.openerp.data.Entities.Receipt
 import com.vky342.openerp.data.Entities.Sale
 import com.vky342.openerp.data.Entities.SaleEntry
 import com.vky342.openerp.data.Repositories.AccountRepo
+import com.vky342.openerp.data.Repositories.CashStatsRepo
 import com.vky342.openerp.data.Repositories.HomeRepo
 import com.vky342.openerp.data.Repositories.InventoryRepo
 import com.vky342.openerp.data.Repositories.LedgerRepo
@@ -106,6 +107,12 @@ object AppModule{
         return SaleStatsRepo(openDb)
     }
 
+    @Provides
+    @Singleton
+    fun provideCashStatsRepo(openDb: OpenERPDataBase) : CashStatsRepo{
+        return CashStatsRepo(openDb)
+    }
+
 }
 
 
@@ -114,11 +121,11 @@ abstract class OpenERPDataBase : RoomDatabase(){
 
     abstract fun getAccountDao() : accountsDao
 
-    abstract fun getLedgerDao() : ledgerDao
+    abstract fun getLedgerDao() : LedgerDao
 
     abstract fun getItemInventoryDao() : itemInventoryDao
 
-    abstract fun getPaymentDao() : paymentsDao
+    abstract fun getPaymentDao() : PaymentsDao
 
     abstract fun getPurchaseDao() : PurchaseDao
 
@@ -128,6 +135,6 @@ abstract class OpenERPDataBase : RoomDatabase(){
 
     abstract fun getSaleEntryDao() : SaleEntryDao
 
-    abstract fun getReceiptDao() : receiptDao
+    abstract fun getReceiptDao() : ReceiptDao
 
 }

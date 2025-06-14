@@ -12,6 +12,7 @@ fun RootNavigationGraph(navController: NavHostController){
         TransactionNavGraph(navController = navController)
         LedgerNavigationGraph(navController = navController)
         InvontoryNavigationGraph(navController = navController)
+        AnalyticsNavigationGraph(navController = navController)
     }
 }
 
@@ -22,5 +23,6 @@ object Graph {
     const val TRANSACTION = "Transaction_graph"
     const val LEDGER = "Ledger_graph"
     const val INVENTORY = "Inventory_graph"
+    const val ANALYTICS = "analytics_graph"
 }
 
