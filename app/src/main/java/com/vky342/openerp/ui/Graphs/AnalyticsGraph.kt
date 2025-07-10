@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.vky342.openerp.ui.screens.Analytics.Analytics_home
 import com.vky342.openerp.ui.screens.Analytics.FinancialStats
+import com.vky342.openerp.ui.screens.Analytics.LedgerOverview
 import com.vky342.openerp.ui.screens.HOMES.HomeScreen
 
 fun NavGraphBuilder.AnalyticsNavigationGraph(navController: NavHostController){
@@ -19,6 +20,9 @@ fun NavGraphBuilder.AnalyticsNavigationGraph(navController: NavHostController){
         composable(route = AnalyticsScreens.salesOverview){
 
         }
+        composable(route = AnalyticsScreens.ledgersOverview){
+            LedgerOverview()
+        }
     }
 }
 
@@ -26,4 +30,5 @@ object AnalyticsScreens {
     val analyticsHome = "analyticsHome"
     val financialOverview = "financialOverview"
     val salesOverview = "saleOverview"
+    val ledgersOverview = "ledgersOverview"
 }

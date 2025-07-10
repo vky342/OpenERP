@@ -40,4 +40,5 @@ interface LedgerDao{
 
     @Query("SELECT * FROM Ledgers WHERE ledgerNetBalance > 0")
     suspend fun getLedgersWithPositiveBalance(): List<Ledger>
+
 }

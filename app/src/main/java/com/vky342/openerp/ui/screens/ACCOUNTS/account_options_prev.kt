@@ -362,7 +362,7 @@ fun account_list_table(modifier: Modifier = Modifier, accountList : List<Account
                     Text(text = "Name", modifier = Modifier.align(Alignment.CenterStart))
                 }
 
-                //contac
+                //contact
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()

@@ -17,6 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,6 +58,9 @@ fun Analytics_home(navController: NavHostController){
         ) {
             ButtonCard(mainText = "Financial Overview", subText = "Display of cash analytics",onClick = {
                 navController.navigate(AnalyticsScreens.financialOverview)
+            })
+            ButtonCard(icon = Icons.Default.DateRange,mainText = "Ledgers Overview", subText = "Pending Ledgers Display",onClick = {
+                navController.navigate(AnalyticsScreens.ledgersOverview)
             })
         }
     }

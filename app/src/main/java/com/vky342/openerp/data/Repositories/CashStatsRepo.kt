@@ -27,6 +27,8 @@ interface CashStatsRepository {
     suspend fun getMonthlyCashOutflow(month: String): Double
 
     suspend fun getPendingPayableLedgers(): List<Ledger>
+
+    suspend fun getPendingReceivableLedgers() : List<Ledger>
 }
 
 class CashStatsRepo @Inject constructor(openERPDataBase: OpenERPDataBase) : CashStatsRepository{
@@ -102,6 +104,10 @@ class CashStatsRepo @Inject constructor(openERPDataBase: OpenERPDataBase) : Cash
 
     override suspend fun getPendingPayableLedgers(): List<Ledger> {
         return ledgerDao.getLedgersWithPositiveBalance()
+    }
+
+    override suspend fun getPendingReceivableLedgers(): List<Ledger> {
+        return ledgerDao.getLedgersWithNegativeBalance()
     }
 
     override suspend fun getTotalPendingPayable(): Double {

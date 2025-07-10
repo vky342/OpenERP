@@ -10,6 +10,11 @@ fun getTodayDate(): String {
     return formatter.format(Date())
 }
 
+fun getCurrentMonthYear(): String {
+    val formatter = SimpleDateFormat("MM/yyyy", Locale.getDefault())
+    return formatter.format(Date())
+}
+
 fun calculateEffectiveBalancesWithLogic(
     ledgerList: List<AccountLedgerItem>
 ): List<AccountLedgerItem> {
