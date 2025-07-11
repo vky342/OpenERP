@@ -203,7 +203,7 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                             tint = Color.White
                         )
                         Text(
-                            "Load recent sale...",
+                            "Load recent payment...",
                             color = Color.White,
                             fontSize = 22.sp,
                             modifier = Modifier

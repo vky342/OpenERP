@@ -261,7 +261,7 @@ fun modifyPurchaseScreen(viewModel : modify_purchase_Vm = hiltViewModel()){
                             tint = Color.White
                         )
                         Text(
-                            "Load recent sale...",
+                            "Load recent purchase...",
                             color = Color.White,
                             fontSize = 22.sp,
                             modifier = Modifier

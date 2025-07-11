@@ -200,7 +200,7 @@ fun ModifyReceiptScreen(viewModel : Add_Receipt_Vm = hiltViewModel()){
                             tint = Color.White
                         )
                         Text(
-                            "Load recent sale...",
+                            "Load recent receipt...",
                             color = Color.White,
                             fontSize = 22.sp,
                             modifier = Modifier

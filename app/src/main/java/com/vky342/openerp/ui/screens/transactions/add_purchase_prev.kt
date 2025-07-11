@@ -410,23 +410,6 @@ fun item_Card(quantity : Int = 0,name : String = "", price : Double = 0.00, disc
                     .weight(1f)){
                     Row (modifier = Modifier.fillMaxSize()){
 
-                        // Image - Item
-                        Box(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .weight(0.75f)
-                                .padding(all = 12.dp)
-                                .shadow(elevation = 4.dp, shape = RoundedCornerShape(20f))
-                                .background(color = Color.White, shape = RoundedCornerShape(20f))
-                        ) {
-                            Image(
-                                Icons.Default.Refresh,
-                                contentDescription = "Item Pic",
-                                modifier = Modifier.align(Alignment.Center)
-                            )
-                        }
-
-
                         Box (modifier = Modifier
                             .fillMaxHeight()
                             .weight(1f)){
