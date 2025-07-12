@@ -66,7 +66,6 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
-import com.vky342.openerp.ui.Graphs.AnalyticsScreens
 import com.vky342.openerp.ui.Graphs.Graph
 import com.vky342.openerp.ui.Graphs.InventoryScreens
 import com.vky342.openerp.ui.Graphs.LedgerScreens
@@ -112,17 +111,17 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
 
     var initial_item_list = listOf(list_item("", 0, 0))
 
-    var Today_Sale = remember { mutableStateOf(1000000) }
-    var Today_Receipt = remember { mutableStateOf(1000000) }
+    val Today_Sale = remember { mutableStateOf(1000000) }
+    val Today_Receipt = remember { mutableStateOf(1000000) }
 
-    var Items_to_show = remember { mutableStateOf(initial_item_list) }
+    val Items_to_show = remember { mutableStateOf(initial_item_list) }
 
     val context = LocalContext.current
 
-    var restorePopUpEnabled = remember { mutableStateOf(false) }
+    val restorePopUpEnabled = remember { mutableStateOf(false) }
 
     // SAF Launchers inside composable!
-    val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument()) { uri: Uri? ->
+    val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/vnd.sqlite3")) { uri: Uri? ->
         uri?.let {
             val success = backupDatabaseToUri(context, it)
             Toast.makeText(context, if (success) "Backup done" else "Backup failed", Toast.LENGTH_SHORT).show()

@@ -78,8 +78,6 @@ dependencies {
     // To use Kotlin Symbol Processing (KSP)
     ksp(libs.androidx.room.compiler)
 
-    val nav_version = "2.7.7"
-
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.compose)

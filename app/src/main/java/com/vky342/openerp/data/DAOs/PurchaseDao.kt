@@ -37,4 +37,7 @@ interface PurchaseDao {
     @Query("SELECT SUM(purchaseAmount) FROM Purchases WHERE purchaseType = 'Cash'")
     suspend fun getTotalCashPurchases(): Double?
 
+    @Query("SELECT * FROM Purchases WHERE purchaseDate = :date")
+    suspend fun getPurchaseByDate(date: String): List<Purcahase>
+
 }

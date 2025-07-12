@@ -25,7 +25,7 @@ interface ReceiptDao {
     fun getAllReceipts() : List<Receipt>
 
     @Query("SELECT * FROM Receipts WHERE receiptDate = :date")
-    fun getAllReceiptsOnDate(date: String) : List<Receipt>
+    suspend fun getReceiptsOnDate(date: String) : List<Receipt>
 
     @Query("SELECT * FROM Receipts WHERE ledgerId = :ledgerId")
     fun getAllReceiptsInLedger(ledgerId : Int) : List<Receipt>

@@ -25,7 +25,7 @@ interface PaymentsDao {
     suspend fun getAllPayments() : List<Payment>
 
     @Query("SELECT * FROM Payments WHERE paymentDate = :date")
-    fun getAllPaymentOnDate(date: String) : List<Payment>
+    suspend fun getPaymentOnDate(date: String) : List<Payment>
 
     @Query("SELECT * FROM Payments WHERE ledgerId = :ledgerId")
     fun getAllPaymentsInLedger(ledgerId : Int) : List<Payment>

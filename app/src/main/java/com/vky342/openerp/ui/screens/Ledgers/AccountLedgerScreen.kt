@@ -71,8 +71,6 @@ fun AccountLedgerScreen( viewModel: LedgerVm = hiltViewModel() ){
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val sidePadding = width.value * 0.08
 
-    var selected_Account by remember { mutableStateOf(Account(0,"","","","")) }
-
     var accountLedgerItemList = remember { mutableStateOf(listOf<AccountLedgerItem>()) }
 
     var accountBalance = remember { mutableStateOf(0.0) }
@@ -136,7 +134,6 @@ fun AccountLedgerScreen( viewModel: LedgerVm = hiltViewModel() ){
                 account_search_bar_for_edit_account(onReset = {
                     updateLedgerListDisabled.value = true
                     old_Account = Account(0,"","","","")
-                    selected_Account = Account(0,"","","","")
                     selectedOptionText = ""
                     viewModel.selectedAccount = old_Account
                     Toast.makeText(context,"Select an account please", Toast.LENGTH_SHORT).show()
@@ -202,7 +199,6 @@ fun AccountLedgerScreen( viewModel: LedgerVm = hiltViewModel() ){
                         modifier = Modifier.padding(vertical = 1.dp, horizontal = 2.dp).fillMaxWidth()
                             .clickable{
                                 old_Account = account
-                                selected_Account = account
                                 viewModel.selectedAccount = account
                                 selectedOptionText = account.name + " " + "(" +account.type+ ")"
                                 updateLedgerListDisabled.value = false

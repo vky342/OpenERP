@@ -116,7 +116,7 @@ object AppModule{
 }
 
 
-@Database(entities = [Account::class, Item::class,Ledger::class,Payment::class,Purcahase::class,PurchaseEntry::class,Receipt::class,SaleEntry::class,Sale::class], version = 1)
+@Database(entities = [Account::class, Item::class,Ledger::class,Payment::class,Purcahase::class,PurchaseEntry::class,Receipt::class,SaleEntry::class,Sale::class], version = 1, exportSchema = false)
 abstract class OpenERPDataBase : RoomDatabase(){
 
     abstract fun getAccountDao() : accountsDao
