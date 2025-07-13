@@ -109,7 +109,7 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
 
     val sidePadding = width.value * 0.05
 
-    var initial_item_list = listOf(list_item("", 0, 0))
+    val initial_item_list = listOf(list_item("", 0, 0))
 
     val Today_Sale = remember { mutableStateOf(1000000) }
     val Today_Receipt = remember { mutableStateOf(1000000) }

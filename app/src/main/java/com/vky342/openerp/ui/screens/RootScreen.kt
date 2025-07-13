@@ -33,8 +33,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.vky342.openerp.ui.Graphs.Graph
 import com.vky342.openerp.ui.Graphs.RootNavigationGraph
@@ -62,6 +64,9 @@ data class BottomNavigationItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RootScreen(navController: NavHostController = rememberNavController()){
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
 
     val items = listOf(
         BottomNavigationItem(
@@ -112,12 +117,13 @@ fun RootScreen(navController: NavHostController = rememberNavController()){
             items.forEachIndexed(){index, item ->
                 NavigationBarItem(
                     colors = NavigationBarItemDefaults.colors().copy(selectedIconColor = bottom_bar_selected_icon_color, selectedTextColor = bottom_bar_selected_txt_color, selectedIndicatorColor = bottom_bar_selected_indicator_color, unselectedIconColor = bottom_bar_unselected_icon_color, unselectedTextColor = bottom_bar_unselected_txt_color),
-                    selected = selectedIcon == index,
+                    selected = currentDestination?.hierarchy?.any { it.route == item.Route } == true,
                     onClick = {
                         selectedIcon = index
                         navController.navigate(item.Route) {
                             popUpTo(navController.graph.findStartDestination().id)
                             launchSingleTop = true
+                            restoreState = true
                         }
                     },
                     label = {
