@@ -95,7 +95,7 @@ fun homePrev(){
                         border = BorderStroke(1.dp, amount_stat_border_color)
                     )
             ) {
-                VariableAmountRow(modifier = Modifier.align(Alignment.Center))
+                //VariableAmountRow(modifier = Modifier.align(Alignment.Center))
             }
         }
 
@@ -240,11 +240,7 @@ fun homePrev(){
                     .height(600.dp),
                 contentAlignment = Alignment.Center
             ) {
-                table_for_recent_items(
-                    modifier = Modifier
-                        .padding(horizontal = (sidePadding + 7).dp),
-                    items = recentItems
-                )
+
             }
         }
 

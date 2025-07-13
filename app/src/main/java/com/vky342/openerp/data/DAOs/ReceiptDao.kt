@@ -44,4 +44,7 @@ interface ReceiptDao {
         WHERE receiptDate LIKE :monthPattern
     """)
     suspend fun getMonthlyReceiptAmount(monthPattern: String): Double?
+
+    @Query("SELECT SUM(receiptAmount) FROM receipts WHERE receiptDate = :date")
+    suspend fun getReceiptTotalByDate(date: String): Double?
 }

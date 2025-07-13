@@ -24,9 +24,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
@@ -59,6 +56,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.vky342.openerp.data.ViewModels.HomeViewModel
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
@@ -69,6 +67,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.vky342.openerp.ui.Graphs.Graph
 import com.vky342.openerp.ui.Graphs.InventoryScreens
 import com.vky342.openerp.ui.Graphs.LedgerScreens
+import com.vky342.openerp.ui.Graphs.TransactionScreen
 import com.vky342.openerp.ui.theme.amount_stat_border_color
 import com.vky342.openerp.ui.theme.amount_text_color
 import com.vky342.openerp.ui.theme.background_color
@@ -78,8 +77,6 @@ import com.vky342.openerp.ui.theme.edit_item_border_color
 import com.vky342.openerp.ui.theme.edit_item_card_shadow_color
 import com.vky342.openerp.ui.theme.edit_item_container_colour
 import com.vky342.openerp.ui.theme.edit_item_content_color
-import com.vky342.openerp.ui.theme.item_table_container_colour
-import com.vky342.openerp.ui.theme.item_table_content_color
 import com.vky342.openerp.ui.theme.middle_spacer_color
 import com.vky342.openerp.ui.theme.sale_button_background_color
 import com.vky342.openerp.ui.theme.sale_button_box_color
@@ -96,27 +93,17 @@ import com.vky342.openerp.utility.backupDatabaseToUri
 import com.vky342.openerp.utility.restoreDatabaseFromUri
 
 
-data class list_item(
-    val name : String,
-    val Pcs : Int,
-    val Price : Int
-)
-
 @Composable
 fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hiltViewModel(navController.getBackStackEntry("HomeScreen"))) {
 
+    homeViewModel.setData()
+
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
-
     val sidePadding = width.value * 0.05
-
-    val initial_item_list = listOf(list_item("", 0, 0))
-
-    val Today_Sale = remember { mutableStateOf(1000000) }
-    val Today_Receipt = remember { mutableStateOf(1000000) }
-
-    val Items_to_show = remember { mutableStateOf(initial_item_list) }
-
     val context = LocalContext.current
+
+    val saleData = homeViewModel.todaySaleData.observeAsState(0.0)
+    val receiptData = homeViewModel.todayReceiptData.observeAsState(0.0)
 
     val restorePopUpEnabled = remember { mutableStateOf(false) }
 
@@ -186,7 +173,7 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                             border = BorderStroke(1.dp, amount_stat_border_color)
                         )
                 ) {
-                    VariableAmountRow(modifier = Modifier.align(Alignment.Center))
+                    VariableAmountRow(modifier = Modifier.align(Alignment.Center), sale = saleData.value,receiptData.value)
                 }
             }
 
@@ -433,66 +420,6 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
 
             }
 
-            // Search Bar (20% → Adjusted to fixed 100.dp)
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Box(
-                    modifier = Modifier
-                        .wrapContentHeight()
-                        .wrapContentWidth()
-                        .padding(horizontal = sidePadding.dp)
-                ) {
-                    Searchbar(modifier = Modifier,current_value = "", label = "Search items...",onVC = {
-
-                    })
-                }
-            }
-
-            // Search Bar and Recent Items Table (80% → Adjusted to 500.dp)
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(500.dp)
-            ) {
-
-                val recentItems = listOf(
-                    RecentItem("Laptop", 2, 50000),
-                    RecentItem("Smartphone", 5, 30000),
-                    RecentItem("Headphones", 10, 5000),
-                    RecentItem("Tablet", 3, 20000),
-                    RecentItem("Smartwatch", 4, 10000),
-                    RecentItem("Keyboard", 6, 4000),
-                    RecentItem("Mouse", 8, 2500),
-                    RecentItem("Monitor", 2, 15000),
-                    RecentItem("Speaker", 3, 7000),
-                    RecentItem("Charger", 12, 1200),
-                    RecentItem("USB Drive", 15, 800),
-                    RecentItem("Camera", 2, 45000),
-                    RecentItem("Printer", 1, 25000),
-                    RecentItem("External HDD", 4, 9000),
-                    RecentItem("Gaming Console", 3, 40000)
-                )
-
-
-                // Recent Items Table (75% → Adjusted to 380.dp)
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(500.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    table_for_recent_items(
-                        modifier = Modifier
-                            .padding(horizontal = (sidePadding + 7).dp),
-                        items = recentItems
-                    )
-                }
-            }
-
         }
         // Sale Button (Fixed Height: 60.dp)
         Box(
@@ -510,7 +437,10 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                 .fillMaxHeight(0.75f)
                 .shadow(elevation = 4.dp, shape = CircleShape.copy(CornerSize(20f)))
                 .background(color = sale_button_background_color, shape = RoundedCornerShape(
-                    CornerSize(20f)))){
+                    CornerSize(20f)))
+                .clickable{
+                    navController.navigate(TransactionScreen.AddSale)
+                }){
                 Icon(
                     imageVector = Icons.Default.ShoppingCart,
                     contentDescription = "",
@@ -531,7 +461,7 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                 // touch barrier
 
             }
-            restorePopUp(modifier = Modifier.align(Alignment.Center), onYes = {
+            RestorePopUp(modifier = Modifier.align(Alignment.Center), onYes = {
                 restorePopUpEnabled.value = false
                 restoreLauncher.launch(arrayOf("*/*"))
                 Toast.makeText(context, "Restore Successful", Toast.LENGTH_SHORT).show()
@@ -651,12 +581,9 @@ fun AutoResizeText(
     }
 }
 
-@Preview
 @Composable
-fun VariableAmountRow(modifier: Modifier = Modifier) {
+fun VariableAmountRow(modifier: Modifier = Modifier, sale : Double, receipt : Double) {
     // Mutable state for the amounts
-    val todaySales by remember { mutableStateOf("10,00,000") }
-    val todayReceipts by remember { mutableStateOf("40,00,000") }
 
     Row(
         modifier = modifier
@@ -667,7 +594,7 @@ fun VariableAmountRow(modifier: Modifier = Modifier) {
         // Left section: Today's Sale
         AmountSection(
             title = "Today's Sale",
-            amount = todaySales,
+            amount = sale.toString(),
             modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
         )
 
@@ -683,101 +610,36 @@ fun VariableAmountRow(modifier: Modifier = Modifier) {
         // Right section: Today's Receipts
         AmountSection(
             title = "Today's Receipts",
-            amount = todayReceipts,
+            amount = receipt.toString(),
             modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
         )
     }
 }
 
 
-@Composable
-fun table_for_recent_items(modifier: Modifier = Modifier, items : List<RecentItem>){
-
-    // overall body
-    Column(modifier = modifier.fillMaxHeight(0.95f).fillMaxWidth(1f)) {
-
-        // subtitle
-        Box (modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .weight(0.2f)
-            .shadow(elevation = 3.dp, shape = RoundedCornerShape(topEnd = 20f, topStart = 20f))
-            .background(color = item_table_container_colour, shape = RoundedCornerShape(topEnd = 20f, topStart = 20f))) {
-
-            Box (modifier = Modifier.wrapContentHeight().padding(4.dp).wrapContentWidth().align(Alignment.Center)) {
-                Text(text = "Inventory", fontSize = 18.sp, color = item_table_content_color)
-            }
-
-        }
-
-        // table
-
-        Box (modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .weight(0.98f)) {
-
-            Column (modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .border(BorderStroke(width = 1.dp, color = Color.White),shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f))
-                .shadow(elevation = 3.dp, shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f))
-                .background(color = Color.White, shape = RoundedCornerShape(bottomStart = 20f, bottomEnd = 20f))) {
-                Box (modifier = Modifier.fillMaxWidth().height(50.dp).background(color = Color.White)) {
-
-                    Row (modifier = Modifier.fillMaxHeight().fillMaxWidth()){
-                        //Srn
-                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.1f).background(color = Color.White)) {
-                            Text(text = "Sr.no", modifier = Modifier.align(Alignment.Center))
-                        }
-
-                        //Name
-                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.25f).background(color = Color.White)) {
-                            Text(text = "Name", modifier = Modifier.align(Alignment.Center))
-                        }
-
-                        //Pcs
-                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
-                            Text(text = "Pcs", modifier = Modifier.align(Alignment.Center))
-                        }
-
-                        //Price
-                        Box (modifier = Modifier.fillMaxHeight().fillMaxWidth().weight(0.15f).background(color = Color.White)) {
-                            Text(text = "Price", modifier = Modifier.align(Alignment.Center))
-                        }
-                    }
-                }
-
-                LazyColumn (modifier = Modifier.fillMaxWidth()){
-
-                    itemsIndexed(items){
-                        index, item ->  recent_item_table_row(item = item, sr = index)
-                    }
-                }
-
-                Spacer(modifier = Modifier.fillMaxWidth().height(1.dp).background(color = Color.LightGray))
-            }
-        }
-    }
-
-}
-
 @Preview
 @Composable
-fun restorePopUp(modifier: Modifier = Modifier, onYes : () -> Unit = {}, onNo : () -> Unit = {}){
+fun RestorePopUp(modifier: Modifier = Modifier, onYes : () -> Unit = {}, onNo : () -> Unit = {}){
     Box (modifier = modifier.fillMaxWidth(0.9f).height(150.dp).background(color = title_color, shape = RoundedCornerShape(20f))){
         Column(modifier = Modifier.fillMaxWidth(0.9f).fillMaxHeight(0.9f).align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(textAlign = TextAlign.Center, color = Color.White,text = "Restoring will erase the current data. Do you still want to continue?", modifier = Modifier.align(
                 Alignment.CenterHorizontally).padding(vertical = 10.dp))
             Spacer(modifier = Modifier.height(30.dp).width(20.dp))
             Row (modifier = Modifier.fillMaxWidth().height(50.dp), horizontalArrangement = Arrangement.Center) {
-                Text("Yes", color = Color.Red, modifier = Modifier.clickable{
-                    onYes()
-                })
+                Box(modifier = Modifier.width(50.dp).height(40.dp).background(color = Color.White, shape = RoundedCornerShape(20f))
+                    .clickable{
+                        onYes()
+                    }) {
+                    Text("Yes", modifier = Modifier.align(Alignment.Center))
+                }
+
                 Spacer(modifier = Modifier.height(50.dp).width(50.dp))
-                Text("No", color = Color.Green,modifier = Modifier.clickable{
-                    onNo()
-                })
+                Box(modifier = Modifier.width(50.dp).height(40.dp).background(color = Color.White, shape = RoundedCornerShape(20f))
+                    .clickable{
+                        onNo()
+                    }) {
+                    Text("No", modifier = Modifier.align(Alignment.Center))
+                }
             }
         }
     }
