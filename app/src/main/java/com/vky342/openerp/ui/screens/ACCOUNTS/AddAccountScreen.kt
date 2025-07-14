@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Call
@@ -26,6 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -117,7 +120,11 @@ fun Add_Account_Screen( viewModel: Add_Account_VM = hiltViewModel()){
                     .height(70.dp)
 
             ) {
-                form_fields(icon = Icons.Outlined.Call, value = contact, onVc = {contact = it},label = "Contact",modifier = Modifier.padding(horizontal = sidePadding.dp).align(Alignment.CenterStart))
+                form_fields(keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done),
+                    icon = Icons.Outlined.Call, value = contact,
+                    onVc = {
+                        contact = it },
+                    label = "Contact",modifier = Modifier.padding(horizontal = sidePadding.dp).align(Alignment.CenterStart))
             }
             Box(
                 modifier = Modifier
@@ -127,11 +134,15 @@ fun Add_Account_Screen( viewModel: Add_Account_VM = hiltViewModel()){
 
             ) {
                 Save_button(modifier = Modifier.align(Alignment.Center), onClick = {
-                    viewModel.save_account( name = name.value,address = address,contact=contact,type= type )
+                    val res = viewModel.save_account( name = name.value,address = address,contact=contact,type= type )
 
-                    if(name.value != "" && address != "" && contact != ""){
+                    if(!res){
+                        Toast.makeText(context,"Invalid Account", Toast.LENGTH_SHORT).show()
+                    }
+                    else if(name.value != "" && address != "" && contact != ""){
                         Toast.makeText(context,"Account saved", Toast.LENGTH_SHORT).show()
                     }
+
                     else{
                         Toast.makeText(context,"Please fill the form", Toast.LENGTH_SHORT).show()
                     }

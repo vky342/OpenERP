@@ -131,7 +131,7 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
     {
         Column(
             modifier = Modifier
-                .padding(bottom = 60.dp)
+                .padding(bottom = 70.dp)
                 .fillMaxSize()
                 .background(color = background_color)
                 .verticalScroll(rememberScrollState())

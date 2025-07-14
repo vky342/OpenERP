@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.systemGestureExclusion
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text2.input.TextFieldLineLimits
 import androidx.compose.foundation.text2.input.rememberTextFieldState
 import androidx.compose.foundation.text2.input.setTextAndPlaceCursorAtEnd
@@ -54,6 +55,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -79,14 +81,14 @@ fun ModifyAccountScreen( viewModel: modify_Account_vm = hiltViewModel() ){
 
     var selectedOptionText by remember { mutableStateOf("") }
 
-    var options = viewModel.old_Account_list.value
+    val options = viewModel.old_Account_list.value
 
-    var expanded = remember { mutableStateOf(false) }
+    val expanded = remember { mutableStateOf(false) }
 
-    var select_account_selected_enalbled = remember { mutableStateOf(true) }
+    val select_account_selected_enalbled = remember { mutableStateOf(true) }
 
     // filter options based on text field value
-    var filteringOptions = options.filter {
+    val filteringOptions = options.filter {
         it.name.contains(selectedOptionText, ignoreCase = true) || it.address.contains(selectedOptionText, ignoreCase = true) || it.contact.contains(selectedOptionText, ignoreCase = true)
     }
 
@@ -191,7 +193,8 @@ fun ModifyAccountScreen( viewModel: modify_Account_vm = hiltViewModel() ){
                     .height(70.dp)
 
             ) {
-                form_fields(enabled = old_Account != Account(0,"","","",""),value = new_Account.contact, onVc = {new_Account = new_Account.copy(contact = it)},icon = Icons.Outlined.Call,label = "Contact",modifier = Modifier.padding(horizontal = sidePadding.dp).align(
+                form_fields(keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done),
+                    enabled = old_Account != Account(0,"","","",""),value = new_Account.contact, onVc = {new_Account = new_Account.copy(contact = it)},icon = Icons.Outlined.Call,label = "Contact",modifier = Modifier.padding(horizontal = sidePadding.dp).align(
                     Alignment.CenterStart))
             }
             // save button
@@ -204,13 +207,16 @@ fun ModifyAccountScreen( viewModel: modify_Account_vm = hiltViewModel() ){
             ) {
                 Save_button(enabled = old_Account != Account(0,"","","",""),onClick = {
                     viewModel.account_to_modify = old_Account
+
                     if(viewModel.update_Account(new_Account)){
                         Toast.makeText(context,"Account saved", Toast.LENGTH_SHORT).show()
-                    }else{Toast.makeText(context,"Account Invalid", Toast.LENGTH_SHORT).show()}
-                    old_Account = Account(0,"","","","")
-                    new_Account = Account(0,"","","","")
-                    selectedOptionText = ""
-                                   }
+                        old_Account = Account(0,"","","","")
+                        new_Account = Account(0,"","","","")
+                        selectedOptionText = ""
+                        select_account_selected_enalbled.value = true
+                    }else{
+                        Toast.makeText(context,"Account Invalid", Toast.LENGTH_SHORT).show()}
+                }
                     ,modifier = Modifier.align(Alignment.Center), label = "Save")
             }
 

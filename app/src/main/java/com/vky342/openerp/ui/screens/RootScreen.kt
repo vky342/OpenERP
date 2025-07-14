@@ -2,7 +2,9 @@ package com.vky342.openerp.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
@@ -33,6 +35,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -40,6 +44,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.vky342.openerp.ui.Graphs.Graph
 import com.vky342.openerp.ui.Graphs.RootNavigationGraph
+import com.vky342.openerp.ui.screens.ACCOUNTS.ModifyAccountScreen
 import com.vky342.openerp.ui.theme.action_icon_color
 import com.vky342.openerp.ui.theme.bottom_app_bar
 import com.vky342.openerp.ui.theme.bottom_bar_content_color
@@ -127,10 +132,10 @@ fun RootScreen(navController: NavHostController = rememberNavController()){
                         }
                     },
                     label = {
-                        Text(text = item.title)
+                        Text(text = item.title, fontSize = 10.sp)
                     },
                     icon = {
-                        Icon(imageVector = if (index == selectedIcon){item.selectedIcon} else{item.unSelectedIcon}, contentDescription = "")
+                        Icon(imageVector = if (index == selectedIcon){item.selectedIcon} else{item.unSelectedIcon}, contentDescription = "", modifier = Modifier.size(25.dp))
                     }
                 )
             }

@@ -42,17 +42,13 @@ fun Alloptionsforledger(
                 .verticalScroll(rememberScrollState())
         ) {
 
-            ButtonCard(icon = Icons.Default.Person,mainText = "Account Ledger", subText = "ledgers of customer/seller/personal accounts",onClick = {
+            ButtonCard(icon = Icons.Default.Person,mainText = "Account Ledger", subText = "All ledgers",onClick = {
                 navController.navigate(LedgerScreens.AccountLedger)
             })
 
             ButtonCard(icon = Icons.Default.Menu,mainText = "Day book", subText = "Ledger of the day",onClick = {
                 navController.navigate(LedgerScreens.DayBook)
             })
-
-//            ButtonCard(icon = Icons.Default.Menu,mainText = "Year book", subText = "Ledger of the year",onClick = {
-//                navController.navigate(LedgerScreens.YearBook)
-//            })  TO BE implemented later.
 
         }
     }

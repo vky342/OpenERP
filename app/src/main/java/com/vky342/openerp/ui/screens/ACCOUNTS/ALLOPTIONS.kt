@@ -48,11 +48,11 @@ fun AllOptionsScreen(
 
     val sidePadding = width.value * 0.05
 
-    var selectedType = remember { mutableStateOf("customer") }
+    val selectedType = remember { mutableStateOf("customer") }
 
-    var searchText = remember { mutableStateOf("") }
+    val searchText = remember { mutableStateOf("") }
 
-    var accountList = remember { mutableStateOf(viewModel.old_Account_list.value) }
+    val accountList = remember { mutableStateOf(viewModel.old_Account_list.value) }
 
     if (searchText.value != "") {
        accountList.value =  accountList.value.filter { it.name.contains(searchText.value, ignoreCase = true) || it.address.contains(searchText.value, ignoreCase = true) || it.contact.contains(searchText.value, ignoreCase = true)}

@@ -44,6 +44,10 @@ class modify_Account_vm @Inject constructor(private val accountRepo: AccountRepo
             return false
         }
 
+        if (old_Account_list.value.filter { it.id != account_to_modify.id }.any{it.name == name}){
+            return false
+        }
+
         val contactRegex = "^[0-9]{10}$".toRegex()
         if (!contact.matches(contactRegex)) {
             Log.d("INVALID", "invalid input for contact")
