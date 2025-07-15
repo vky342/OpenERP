@@ -88,16 +88,19 @@ fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
 
     var old_item by remember { mutableStateOf(Item("",0.0,0.0,0)) }
 
-    var new_item by remember { mutableStateOf(Item("",0.0,0.0,0)) }
+    var newItemName by remember { mutableStateOf("") }
+    var newSP by remember { mutableStateOf("") }
+    var newPP by remember { mutableStateOf("") }
+    var newQuantity by remember { mutableStateOf("") }
 
-    var select_item_selected_enalbled = remember { mutableStateOf(true) }
+    val select_item_selected_enalbled = remember { mutableStateOf(true) }
 
-    var options = viewModel.item_list.value
+    val options = viewModel.item_list.value
 
-    var expanded = remember { mutableStateOf(false) }
+    val expanded = remember { mutableStateOf(false) }
 
     // filter options based on text field value
-    var filteringOptions = options.filter {
+    val filteringOptions = options.filter {
         it.itemName.contains(selectedOptionText, ignoreCase = true)
     }
 
@@ -142,7 +145,10 @@ fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
                 item_search_bar_for_edit_item(onReset = {
                     select_item_selected_enalbled.value = true
                     old_item = Item("",0.0,0.0,0)
-                    new_item = Item("",0.0,0.0,0)
+                    newItemName = ""
+                    newPP = ""
+                    newSP = ""
+                    newQuantity = ""
                     selectedOptionText = ""
                     viewModel.item_to_modify = old_item
                     Toast.makeText(context,"Select an account please", Toast.LENGTH_SHORT).show()
@@ -152,7 +158,8 @@ fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
                     ,onVc = {
                         selectedOptionText = it
                         expanded.value = true
-                    })
+                    }
+                )
             }
 
             // Name
@@ -162,8 +169,13 @@ fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
                     .padding(vertical = 16.dp)
                     .height(70.dp)
             ) {
-                form_fields(enabled = old_item != Item("",0.0,0.0,0),onVc = {new_item = new_item.copy(itemName = it)},value = new_item.itemName,icon = Icons.Outlined.Person,label = "Name",modifier = Modifier.padding(horizontal = sidePadding.dp).align(
-                    Alignment.CenterStart))
+                form_fields(enabled = old_item != Item("",0.0,0.0,0),
+                    onVc = {
+                        newItemName = it
+                           },
+                    value = newItemName,
+                    icon = Icons.Outlined.Person,label = "Name",
+                    modifier = Modifier.padding(horizontal = sidePadding.dp).align(Alignment.CenterStart))
             }
 
             // selling price
@@ -173,14 +185,15 @@ fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
                     .padding(vertical = 16.dp)
                     .height(70.dp)
             ) {
-                form_fields(keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),enabled = old_item != Item("",0.0,0.0,0),onVc = {
-                    try{
-                    new_item = new_item.copy(itemSellingPrice = it.toDouble())
-                    } catch (e : Exception){
-                        Toast.makeText(context, "Please enter numbers only", Toast.LENGTH_SHORT).show()
-                    }
-                                                                            },value = new_item.itemSellingPrice.toString(),icon = Icons.Outlined.Person,label = "selling price",modifier = Modifier.padding(horizontal = sidePadding.dp).align(
-                    Alignment.CenterStart))
+                form_fields(keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    enabled = old_item != Item("",0.0,0.0,0),
+                    onVc = {
+                        newSP = it
+                           },
+                    value = newSP,
+                    icon = Icons.Outlined.Person,
+                    label = "selling price",
+                    modifier = Modifier.padding(horizontal = sidePadding.dp).align(Alignment.CenterStart))
             }
 
             // cost price
@@ -190,18 +203,14 @@ fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
                     .padding(vertical = 16.dp)
                     .height(70.dp)
             ) {
-                form_fields(keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),enabled = old_item != Item("",0.0,0.0,0),onVc = {
-                    try {
-                        if (it == ""){
-                            new_item = new_item.copy(itemPurchasePrice = 0.0)
-                        }
-                        new_item = new_item.copy(itemPurchasePrice = it.toDouble())
-                    }catch (e : Exception){
-                        Toast.makeText(context, "Please enter numbers only", Toast.LENGTH_SHORT).show()
-                    }
-
-                                                                            },value = new_item.itemPurchasePrice.toString(),icon = Icons.Outlined.Person,label = "purchase price",modifier = Modifier.padding(horizontal = sidePadding.dp).align(
-                    Alignment.CenterStart))
+                form_fields(keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    enabled = old_item != Item("",0.0,0.0,0),
+                    onVc = {
+                        newPP = it
+                           },
+                    value = newPP,
+                    icon = Icons.Outlined.Person,label = "purchase price",
+                    modifier = Modifier.padding(horizontal = sidePadding.dp).align(Alignment.CenterStart))
             }
 
             // quantity
@@ -211,18 +220,13 @@ fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
                     .padding(vertical = 16.dp)
                     .height(70.dp)
             ) {
-                form_fields(keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),enabled = old_item != Item("",0.0,0.0,0),onVc = {
-                    try{
-                        if (it == ""){
-                            new_item = new_item.copy(itemQuantity = 0)
-                        }
-                    new_item = new_item.copy(itemQuantity = it.toInt())
-
-                    } catch (e : Exception){
-                        Toast.makeText(context, "Please enter numbers only", Toast.LENGTH_SHORT).show()
-                    }
-                                                                            },value = new_item.itemQuantity.toString(),icon = Icons.Outlined.Person,label = "quantity",modifier = Modifier.padding(horizontal = sidePadding.dp).align(
-                    Alignment.CenterStart))
+                form_fields(keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    enabled = old_item != Item("",0.0,0.0,0),
+                    onVc = { newQuantity = it },
+                    value = newQuantity,
+                    icon = Icons.Outlined.Person,
+                    label = "quantity",
+                    modifier = Modifier.padding(horizontal = sidePadding.dp).align(Alignment.CenterStart))
             }
             Box(
                 modifier = Modifier
@@ -231,15 +235,24 @@ fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
                     .height(70.dp)
 
             ) {
-                Save_button(enabled = old_item != Item("",0.0,0.0,0),onClick = {
+                Save_button(enabled = old_item != Item("",0.0,0.0,0),
+                    onClick = {
                     viewModel.item_to_modify = old_item
-                    viewModel.updateItem(new_item)
-                    Toast.makeText(context,"item saved", Toast.LENGTH_SHORT).show()
+                    val res = viewModel.updateItem(newItemName,newSP = newSP,newPP = newPP,newQuantity = newQuantity)
+                    if (res){
+                        Toast.makeText(context,"item saved", Toast.LENGTH_SHORT).show()
+                        old_item = Item("",0.0,0.0,0)
+                        newItemName = ""
+                        newPP = ""
+                        newSP = ""
+                        newQuantity = ""
+                        selectedOptionText = ""
+                        select_item_selected_enalbled.value = true
+                    }else{
+                        Toast.makeText(context,"Invalid item", Toast.LENGTH_SHORT).show()
+                        viewModel.item_to_modify = Item("",0.0,0.0,0)
+                    }
 
-                    old_item = Item("",0.0,0.0,0)
-                    new_item = Item("",0.0,0.0,0)
-                    selectedOptionText = ""
-                    select_item_selected_enalbled.value = true
                 }
                     ,modifier = Modifier.align(Alignment.Center), label = "Save")
             }
@@ -269,7 +282,10 @@ fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
                         modifier = Modifier.padding(vertical = 1.dp, horizontal = 2.dp).fillMaxWidth()
                             .clickable{
                                 old_item = item
-                                new_item = item
+                                newQuantity = item.itemQuantity.toString()
+                                newPP = item.itemPurchasePrice.toString()
+                                newSP = item.itemSellingPrice.toString()
+                                newItemName = item.itemName
                                 selectedOptionText = item.itemName + " " + "(" +item.itemQuantity+ ")"
                                 select_item_selected_enalbled.value = false
                                 expanded.value= false
@@ -283,8 +299,7 @@ fun ItemEdit(viewModel : InventoryList_VM = hiltViewModel()){
 
 
 @Composable
-fun item_search_bar_for_edit_item(onReset : () -> Unit,enabled : Boolean = true,modifier: Modifier = Modifier,onVc : (String) -> Unit,current_value: String){
-    // Search Bar (20% → Adjusted to fixed 100.dp)
+fun item_search_bar_for_edit_item(modifier: Modifier = Modifier,onReset : () -> Unit,enabled : Boolean = true,onVc : (String) -> Unit,current_value: String){
     Box(
         modifier = Modifier
             .fillMaxWidth()

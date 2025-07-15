@@ -37,7 +37,7 @@ import com.vky342.openerp.ui.theme.background_color
 
 
 @Composable
-fun newItem(viewModel : InventoryList_VM = hiltViewModel()) {
+fun NewItem(viewModel : InventoryList_VM = hiltViewModel()) {
 
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val sidePadding = width.value * 0.08
@@ -48,7 +48,7 @@ fun newItem(viewModel : InventoryList_VM = hiltViewModel()) {
 
     val sp = remember { mutableStateOf("") }
 
-    var pp = remember { mutableStateOf("") }
+    val pp = remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -72,7 +72,9 @@ fun newItem(viewModel : InventoryList_VM = hiltViewModel()) {
                     .padding(vertical = 2.dp)
                     .height(50.dp)
             ) {
-                Text(text = "New Item", color = New_account_title_color,fontSize = 32.sp, modifier = Modifier.align(Alignment.CenterStart).padding(horizontal = sidePadding.dp))
+                Text(text = "New Item", color = New_account_title_color,fontSize = 32.sp, modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(horizontal = sidePadding.dp))
             }
 
             // Name
@@ -82,7 +84,9 @@ fun newItem(viewModel : InventoryList_VM = hiltViewModel()) {
                     .padding(vertical = 16.dp)
                     .height(70.dp)
             ) {
-                form_fields(trailing_icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,icon = Icons.Outlined.Info, onVc = {name.value = it},value = name.value,label = "Name",modifier = Modifier.padding(horizontal = sidePadding.dp).align(Alignment.CenterStart))
+                form_fields(trailing_icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,icon = Icons.Outlined.Info, onVc = {name.value = it},value = name.value,label = "Name",modifier = Modifier
+                    .padding(horizontal = sidePadding.dp)
+                    .align(Alignment.CenterStart))
             }
 
             // set selling price
@@ -92,7 +96,14 @@ fun newItem(viewModel : InventoryList_VM = hiltViewModel()) {
                     .padding(vertical = 16.dp)
                     .height(70.dp)
             ) {
-                form_fields(trailing_icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,keyboardOptions = KeyboardOptions(autoCorrect = false, keyboardType = KeyboardType.Decimal),icon = Icons.Outlined.Info, onVc = {sp.value = it},value = sp.value,label = "default selling price",modifier = Modifier.padding(horizontal = sidePadding.dp).align(Alignment.CenterStart))
+                form_fields(trailing_icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,keyboardOptions = KeyboardOptions(autoCorrect = false, keyboardType = KeyboardType.Decimal),
+                    icon = Icons.Outlined.Info,
+                    onVc = {sp.value = it},
+                    value = sp.value,
+                    label = "default selling price",
+                    modifier = Modifier
+                        .padding(horizontal = sidePadding.dp)
+                        .align(Alignment.CenterStart))
             }
 
             // set cost price
@@ -102,7 +113,15 @@ fun newItem(viewModel : InventoryList_VM = hiltViewModel()) {
                     .padding(vertical = 16.dp)
                     .height(70.dp)
             ) {
-                form_fields(trailing_icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,keyboardOptions = KeyboardOptions(autoCorrect = false, keyboardType = KeyboardType.Decimal),icon = Icons.Outlined.Info, onVc = {pp.value = it},value = pp.value,label = "default cost price",modifier = Modifier.padding(horizontal = sidePadding.dp).align(Alignment.CenterStart))
+                form_fields(trailing_icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    keyboardOptions = KeyboardOptions(autoCorrect = false, keyboardType = KeyboardType.Decimal),
+                    icon = Icons.Outlined.Info,
+                    onVc = {pp.value = it},
+                    value = pp.value,
+                    label = "default cost price",
+                    modifier = Modifier
+                        .padding(horizontal = sidePadding.dp)
+                        .align(Alignment.CenterStart))
             }
 
             Box(
@@ -112,32 +131,24 @@ fun newItem(viewModel : InventoryList_VM = hiltViewModel()) {
                     .height(70.dp)
 
             ) {
-                Save_button(modifier = Modifier.align(Alignment.Center),
-
+                Save_button(
+                    enabled = (name.value != "" && sp.value != "" && pp.value != ""),
+                    modifier = Modifier.align(Alignment.Center),
+                    label = "Save",
                     onClick = {
 
-                    if(name.value != "" && sp.value != "" && pp.value != ""){
-
-                        var res = viewModel.NewItem(item = Item(name.value,sp.value.toDouble(),pp.value.toDouble(),0))
-                        if (res == ""){
-                            Toast.makeText(context,"New Item added", Toast.LENGTH_SHORT).show()
-                            name.value = ""
-                            sp.value = ""
-                            sp.value = ""
-                        }else{
-                            Toast.makeText(context,"Error Item name should be unique", Toast.LENGTH_SHORT).show()
+                        val res = viewModel.NewItem(newName = name.value, newPP = pp.value, newSP = sp.value, newQuantity = "0")
+                        if (res) {
+                            Toast.makeText(context, "New Item added", Toast.LENGTH_SHORT).show()
                             name.value = ""
                             sp.value = ""
                             pp.value = ""
+                        } else {
+                            Toast.makeText(context, "Invalid item", Toast.LENGTH_SHORT).show()
                         }
 
                     }
-                    else{
-                        Toast.makeText(context,"Please fill the form", Toast.LENGTH_SHORT).show()
-                    }
-                    },
-
-                    label = "Save")
+                )
             }
         }
     }

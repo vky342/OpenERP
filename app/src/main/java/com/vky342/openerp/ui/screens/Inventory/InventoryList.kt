@@ -48,9 +48,9 @@ fun InventoryList(viewModel : InventoryList_VM = hiltViewModel()){
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val sidePadding = width.value * 0.08
 
-    var searchText = remember { mutableStateOf("") }
+    val searchText = remember { mutableStateOf("") }
 
-    var itemList = remember { mutableStateOf(viewModel.item_list.value) }
+    val itemList = remember { mutableStateOf(viewModel.item_list.value) }
 
     if (searchText.value != "") {
        itemList.value =  itemList.value.filter { it.itemName.contains(searchText.value, ignoreCase = true) }

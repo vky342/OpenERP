@@ -19,6 +19,7 @@ class InventoryList_VM @Inject constructor( private val inventoryRepo: Inventory
 
     val item_list : MutableState<List<Item>> = mutableStateOf(listOf())
     var item_to_modify : Item = Item("",0.0,0.0,0)
+
     init {
         viewModelScope.launch {
             inventoryRepo.retrun_All_items_in_inventory().collect(){
@@ -28,94 +29,124 @@ class InventoryList_VM @Inject constructor( private val inventoryRepo: Inventory
         }
     }
 
-    val sampleItems = listOf(
-        Item(
-            itemName = "Laptop",
-            itemSellingPrice = 1200.0,
-            itemPurchasePrice = 1000.0,
-            itemQuantity = 10
-        ),
-        Item(
-            itemName = "Smartphone",
-            itemSellingPrice = 800.0,
-            itemPurchasePrice = 650.0,
-            itemQuantity = 25
-        ),
-        Item(
-            itemName = "Headphones",
-            itemSellingPrice = 150.0,
-            itemPurchasePrice = 100.0,
-            itemQuantity = 50
-        ),
-        Item(
-            itemName = "Keyboard",
-            itemSellingPrice = 75.0,
-            itemPurchasePrice = 50.0,
-            itemQuantity = 40
-        ),
-        Item(
-            itemName = "Monitor",
-            itemSellingPrice = 300.0,
-            itemPurchasePrice = 250.0,
-            itemQuantity = 20
-        ),
-        Item(
-            itemName = "Mouse",
-            itemSellingPrice = 30.0,
-            itemPurchasePrice = 20.0,
-            itemQuantity = 60
-        ),
-        Item(
-            itemName = "Printer",
-            itemSellingPrice = 200.0,
-            itemPurchasePrice = 150.0,
-            itemQuantity = 15
-        ),
-        Item(
-            itemName = "Router",
-            itemSellingPrice = 100.0,
-            itemPurchasePrice = 80.0,
-            itemQuantity = 30
-        ),
-        Item(
-            itemName = "External Hard Drive",
-            itemSellingPrice = 120.0,
-            itemPurchasePrice = 90.0,
-            itemQuantity = 35
-        ),
-        Item(
-            itemName = "Webcam",
-            itemSellingPrice = 80.0,
-            itemPurchasePrice = 60.0,
-            itemQuantity = 45
-        )
-    )
-
-    fun Add_Item_to_inventory (list_of_item : List<Item> = sampleItems) {
-        viewModelScope.launch (Dispatchers.IO) {
-            inventoryRepo.insert_item_into_inventory(list_of_item)
+    private fun validateNewItem(
+        newName: String,
+        newSP: String,
+        newPP: String,
+        newQuantity: String
+    ): Item? {
+        // Check if name is blank or too short
+        if (newName.isBlank() || newName.length < 2) {
+            Log.d("validateNewItem", "Invalid name")
+            return null
         }
-    }
 
-    fun updateItem(newItem : Item){
-        viewModelScope.launch {
-            inventoryRepo.updateItem(item_to_modify,newItem)
-        }
-    }
+        val sellingPrice: Double
+        val purchasePrice: Double
+        val quantity: Int
 
-    fun NewItem(item: Item) : String{
-
-        if (item in item_list.value ){
-            return "Error"
-        }
         try {
-            viewModelScope.launch {
-                inventoryRepo.addNewItem(item)
-            }
-        }catch (e : Exception){
-            return "Error"
+            sellingPrice = newSP.toDouble()
+            purchasePrice = newPP.toDouble()
+            quantity = newQuantity.toInt()
+        } catch (e: NumberFormatException) {
+            Log.d("validateNewItem", "Invalid number format in price or quantity")
+            return null
         }
-        return ""
 
+        // Check for non-negative values
+        if (sellingPrice < 0.0 || purchasePrice < 0.0 || quantity < 0) {
+            Log.d("validateNewItem", "Negative values found")
+            return null
+        }
+
+        // Check for duplicate item name
+        val isDuplicate = item_list.value.any { it.itemName == newName }
+        if (isDuplicate) {
+            Log.d("validateNewItem", "Duplicate item name")
+            return null
+        }
+
+        // All validations passed, return the new Item
+        return Item(
+            itemName = newName,
+            itemSellingPrice = sellingPrice,
+            itemPurchasePrice = purchasePrice,
+            itemQuantity = quantity
+        )
+    }
+
+
+    private fun validateEditItem(
+        newName: String,
+        newSP: String,
+        newPP: String,
+        newQuantity: String
+    ): Item? {
+        // Check if name is blank or too short
+        if (newName.isBlank() || newName.length < 2) {
+            Log.d("validateEditItem", "Invalid name")
+            return null
+        }
+
+        val sellingPrice: Double
+        val purchasePrice: Double
+        val quantity: Int
+
+        try {
+            sellingPrice = newSP.toDouble()
+            purchasePrice = newPP.toDouble()
+            quantity = newQuantity.toInt()
+        } catch (e: NumberFormatException) {
+            Log.d("validateEditItem", "Invalid number format")
+            return null
+        }
+
+        // Check for non-negative values
+        if (sellingPrice < 0.0 || purchasePrice < 0.0 || quantity < 0) {
+            Log.d("validateEditItem", "Negative values found")
+            return null
+        }
+
+        // Check for duplicate item name (excluding the item being modified)
+        val isDuplicateName = item_list.value
+            .filter { it.itemName != item_to_modify.itemName }
+            .any { it.itemName == newName }
+
+        if (isDuplicateName) {
+            Log.d("validateEditItem", "Duplicate item name")
+            return null
+        }
+
+        // All checks passed, return the new Item object
+        return Item(
+            itemName = newName,
+            itemSellingPrice = sellingPrice,
+            itemPurchasePrice = purchasePrice,
+            itemQuantity = quantity
+        )
+    }
+
+
+    fun updateItem(newName : String, newSP : String, newPP : String, newQuantity : String) : Boolean{
+        val validationResult = validateEditItem(newName,newSP,newPP,newQuantity)
+        if(validationResult == null){
+            return false
+        }
+        viewModelScope.launch {
+            inventoryRepo.updateItem(item_to_modify,validationResult)
+        }
+        return true
+    }
+
+    fun NewItem(newName : String, newSP : String, newPP : String, newQuantity : String) : Boolean{
+        val validationResult = validateNewItem(newName,newSP,newPP,newQuantity)
+        if (validationResult == null) {
+            return false
+        }
+        viewModelScope.launch {
+            inventoryRepo.addNewItem(validationResult)
+        }
+        return true
     }
 }
