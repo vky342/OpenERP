@@ -268,12 +268,12 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                         payment_mode.value = ""
                         partyEnabled.value = true
                         currentItem.value = Item("",0.0,0.0,0)
+                        fieldsEnabled.value = false
                         selectedItemName.value = ""
                         selectedItemPrice.value = ""
                         selectedItemDiscount.value = ""
                         selectedItemQuantity.value = ""
                     }
-
 
                 })
 
@@ -325,7 +325,6 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
         }
 
         if (item_fill_popUp_status.value) {
-
             Box(
                 modifier = Modifier
                     .fillMaxSize()

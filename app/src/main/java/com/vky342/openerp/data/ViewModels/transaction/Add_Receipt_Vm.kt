@@ -74,36 +74,52 @@ class Add_Receipt_Vm @Inject constructor  (private val receiptRepo: ReceiptRepo)
 
     }
 
-    fun getReceiptByID(ID : Int) {
-        try {
-            viewModelScope.launch {
-                oldReceipt.value = receiptRepo.getReceiptByID(ID = ID)
-                if (oldReceipt.value != Payment(0,"",0.0,0)){
-                    oldLedger.value = receiptRepo.getLedgerByID(oldReceipt.value!!.ledgerId)
+    fun getReceiptByID(ID: Int, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val receipt = receiptRepo.getReceiptByID(ID)
+                if (receipt != Payment(0, "", 0.0, 0)) {
+                    oldReceipt.value = receipt
+                    val ledger = receiptRepo.getLedgerByID(receipt.ledgerId)
+                    oldLedger.value = ledger
+                    onResult(true)
+                } else {
+                    onResult(false)
                 }
+            } catch (e: Exception) {
+                Log.e("ERROR", "Unable to get receipt by ID", e)
+                onResult(false)
             }
-        }catch (e : Exception) {
-            Log.e("ERROR"," unable to get receipt by ID")
         }
     }
 
-    fun getRecentReceipt() {
-        try {
-            viewModelScope.launch {
+
+    fun getRecentReceipt(onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
                 val pid = receiptRepo.getLatestReceiptID()
-                if (pid != 0){
-                    oldReceipt.value = receiptRepo.getReceiptByID(ID = pid)
-                    if (oldReceipt.value != Payment(0,"",0.0,0)){
-                        oldLedger.value = receiptRepo.getLedgerByID(oldReceipt.value!!.ledgerId)
+                if (pid != 0) {
+                    val receipt = receiptRepo.getReceiptByID(ID = pid)
+                    if (receipt != Payment(0, "", 0.0, 0)) {
+                        oldReceipt.value = receipt
+                        val ledger = receiptRepo.getLedgerByID(receipt.ledgerId)
+                        oldLedger.value = ledger
+                        onResult(true)
+                    } else {
+                        Log.d("DEBUG", "getRecentReceipt: empty receipt data")
+                        onResult(false)
                     }
-                }else{
+                } else {
                     Log.d("DEBUG", "getRecentReceipt: no recent receipt found")
+                    onResult(false)
                 }
+            } catch (e: Exception) {
+                Log.e("ERROR", "Unable to get recent receipt", e)
+                onResult(false)
             }
-        }catch (e : Exception) {
-            Log.e("ERROR"," unable to get receipt by ID")
         }
     }
+
 
     fun updateReceipt(name : String, Date: String, amount: Double){
         // deleting the old payment

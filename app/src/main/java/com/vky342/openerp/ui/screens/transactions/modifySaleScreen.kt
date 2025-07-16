@@ -98,35 +98,35 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
 
     val bill_id = remember { mutableStateOf("") }
 
-    var options = viewModel.old_Account_list.value
-    var item_options = viewModel.all_items_in_inventory
+    val options = viewModel.old_Account_list.value
+    val item_options = viewModel.all_items_in_inventory
 
     val item_fill_popUp_status = remember { mutableStateOf(false) }
 
-    var selectedAccount = remember { mutableStateOf("") }
+    val selectedAccount = remember { mutableStateOf("") }
 
-    var payment_mode = remember { mutableStateOf("") }
+    val payment_mode = remember { mutableStateOf("") }
 
-    var selectedDate = remember { mutableStateOf("") }
+    val selectedDate = remember { mutableStateOf("") }
 
     var selectedAccountText by remember { mutableStateOf("") }
 
     // itemForm popUP
-    var currentItem = remember { mutableStateOf(Item("",0.0,0.0,0)) }
-    var selectedItemName = remember { mutableStateOf("") }
-    var selectedItemPrice = remember { mutableStateOf("") }
-    var selectedItemDiscount = remember { mutableStateOf("") }
-    var selectedItemQuantity = remember { mutableStateOf("") }
+    val currentItem = remember { mutableStateOf(Item("",0.0,0.0,0)) }
+    val fieldsEnabled = remember { mutableStateOf(false) }
+    val selectedItemName = remember { mutableStateOf("") }
+    val selectedItemPrice = remember { mutableStateOf("") }
+    val selectedItemDiscount = remember { mutableStateOf("") }
+    val selectedItemQuantity = remember { mutableStateOf("") }
 
-    var itemsList = remember { mutableStateListOf<item_popup>() }
-
+    val itemsList = remember { mutableStateListOf<item_popup>() }
     val checkOutEnabled by remember { derivedStateOf { itemsList.isNotEmpty() && selectedAccount.value != "" && payment_mode.value != "" } }
-    var partyEnabled = remember { mutableStateOf(false) }
-    var addItemEnabled = remember { mutableStateOf(false)}
+    val partyEnabled = remember { mutableStateOf(false) }
+    val addItemEnabled = remember { mutableStateOf(false)}
 
     // summary
     val totalItems by remember { derivedStateOf { itemsList.size } }
-    var totalAmount = remember {derivedStateOf { itemsList.sumOf { it.totalAmount.value } } }
+    val totalAmount = remember {derivedStateOf { itemsList.sumOf { it.totalAmount.value } } }
 
     // Items Summary
     val listState = rememberLazyListState()
@@ -136,7 +136,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
 
     LaunchedEffect(viewModel.old_Account_Name.value) {
         if (viewModel.accountNameLoaded.value == true && is_accountName_loaded.value == false){
-
+            partyEnabled.value = false
             selectedAccount.value = viewModel.old_Account_Name.value
             selectedAccountText = viewModel.old_Account_Name.value
             Log.d("DEBUG","line 136 : " + selectedAccount.value + "  " + selectedAccountText)
@@ -166,17 +166,17 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
     }
 
     //Suggestions
-    var filteringOptions = options.filter {
+    val filteringOptions = options.filter {
         it.name.contains(selectedAccountText, ignoreCase = true) || it.address.contains(
             selectedAccountText,
             ignoreCase = true
         ) || it.contact.contains(selectedAccountText, ignoreCase = true)
     }
-    var filtering_items_Options = item_options.value.filter {
+    val filtering_items_Options = item_options.value.filter {
         it.itemName.contains(selectedItemName.value, ignoreCase = true)
     }
-    var expanded_item_name_suggestion = remember { mutableStateOf(false) }
-    var expanded_account_suggestion = remember { mutableStateOf(false) }
+    val expanded_item_name_suggestion = remember { mutableStateOf(false) }
+    val expanded_account_suggestion = remember { mutableStateOf(false) }
 
     if (!is_bill_selected.value) {
 
@@ -237,15 +237,25 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                                     }
                                 },
                             onTrailingIconClick = {
-                                if (viewModel.sale_list.value.any { it.saleId == bill_id.value.toInt() }) {
-                                    viewModel.bill_id_to_modify.value = bill_id.value.toInt()
-                                    is_bill_selected.value = true
-                                    old_sale.value = viewModel.getSaleByID(bill_id.value.toInt())
-                                    payment_mode.value = old_sale.value.saleType
-                                    selectedDate.value = old_sale.value.saleDate
+                                try {
+                                    if (viewModel.sale_list.value.any { it.saleId == bill_id.value.toInt() }) {
+                                        viewModel.bill_id_to_modify.value = bill_id.value.toInt()
+                                        is_bill_selected.value = true
+                                        old_sale.value =
+                                            viewModel.getSaleByID(bill_id.value.toInt())
+                                        payment_mode.value = old_sale.value.saleType
+                                        selectedDate.value = old_sale.value.saleDate
 
-                                } else {
-                                    Toast.makeText(context, "No bill found!", Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "No bill found!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                } catch (e: Exception) {
+                                    Toast.makeText(context, "Invalid Search", Toast.LENGTH_SHORT)
+                                        .show()
                                 }
 
                             }
@@ -285,15 +295,21 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                                 )
                                 .clickable {
                                     // load recent Bill
-                                    if (viewModel.latestSaleId.value != 0){
-                                        viewModel.bill_id_to_modify.value = viewModel.latestSaleId.value
+                                    if (viewModel.latestSaleId.value != 0) {
+                                        viewModel.bill_id_to_modify.value =
+                                            viewModel.latestSaleId.value
                                         bill_id.value = viewModel.latestSaleId.value.toString()
                                         is_bill_selected.value = true
-                                        old_sale.value = viewModel.getSaleByID(viewModel.latestSaleId.value)
+                                        old_sale.value =
+                                            viewModel.getSaleByID(viewModel.latestSaleId.value)
                                         payment_mode.value = old_sale.value.saleType
                                         selectedDate.value = old_sale.value.saleDate
-                                    }else {
-                                        Toast.makeText(context, "No bill found!", Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "No bill found!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
 
                                 }
@@ -333,7 +349,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                         .height(45.dp)
                 ) {
                     Text(
-                        text = " sale : " + bill_id.value.toString(),
+                        text = "sale : " + bill_id.value.toString(),
                         color = New_account_title_color,
                         fontSize = 24.sp,
                         modifier = Modifier
@@ -351,7 +367,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                         .height(70.dp)
                 ) {
                     form_fields(
-                        trailing_icon_enabled = if(selectedAccount.value == "") false else{true},
+                        trailing_icon_enabled = selectedAccount.value != "",
                         onTrailingIconClick = {
                             Log.d("Status", "on Trailing Icon Clicked")
                             addItemEnabled.value = false
@@ -447,18 +463,19 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                             payment_mode.value = ""
                             partyEnabled.value = true
                             currentItem.value = Item("",0.0,0.0,0)
+                            fieldsEnabled.value = false
                             old_sale.value = Sale(0, "", 0, 0.0, "")
                             bill_id.value = ""
-
                             is_bill_selected.value = false
-
+                            selectedItemName.value = ""
+                            selectedItemPrice.value = ""
+                            selectedItemDiscount.value = ""
+                            selectedItemQuantity.value = ""
                         }
-
 
                     })
 
                     Add_button_Strip(addItemEnabled.value,onClick = { item_fill_popUp_status.value = true })
-
 
                     // Items List
                     Box(modifier = Modifier
@@ -499,14 +516,10 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                             }
                         }
                     }
-
-
-
                 }
             }
 
             if (item_fill_popUp_status.value) {
-                Log.d("DEBUG","itempopup")
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -521,12 +534,13 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                         selectedItemDiscount.value = ""
                         selectedItemQuantity.value = ""
                         currentItem.value = Item("",0.0,0.0,0)
+                        fieldsEnabled.value = false
                     }
 
 
                 }
 
-                item_fill_popUp(
+                item_fill_popUp(fieldsEnabled = fieldsEnabled.value,
                     name = selectedItemName.value,
                     price = selectedItemPrice.value,
                     discount = selectedItemDiscount.value,
@@ -545,11 +559,10 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                         selectedItemDiscount.value = ""
                         selectedItemQuantity.value = ""
                         currentItem.value = Item("",0.0,0.0,0)
-                    },
+                        fieldsEnabled.value =false},
                     onDone = {
-
-                        if (item_options.value.any{ item -> item.itemName == selectedItemName.value}){
-
+                        val res = viewModel.validateItemPopUPInput(selectedItemName.value,selectedItemPrice.value,selectedItemDiscount.value,selectedItemQuantity.value)
+                        if (res && currentItem.value != Item("",0.0,0.0,0)){
                             if (selectedItemQuantity.value.toInt() <= currentItem.value.itemQuantity){
                                 itemsList.add(item_popup(
                                     name = selectedItemName.value,
@@ -558,36 +571,28 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                                     quantity = selectedItemQuantity.value.toInt())
                                 )
                                 item_fill_popUp_status.value = false
+                                selectedItemName.value = ""
+                                selectedItemPrice.value = ""
+                                selectedItemDiscount.value = ""
+                                selectedItemQuantity.value = ""
+                                fieldsEnabled.value = false
                                 currentItem.value = Item("",0.0,0.0,0)
                             }else{
                                 Toast.makeText(context,"Inventory Shortage!", Toast.LENGTH_SHORT).show()
                                 selectedItemQuantity.value = ""
                             }
-
                         }
                         else{
-                            Toast.makeText(context, "No Item found named " + selectedItemName.value, Toast.LENGTH_SHORT).show()
-                            selectedItemName.value = ""
-                            selectedItemPrice.value = ""
-                            selectedItemDiscount.value = ""
-                            selectedItemQuantity.value = ""
+                            Toast.makeText(context, "Invalid Input", Toast.LENGTH_SHORT).show()
                         }
-
                     }
                 )
-
-
-
             }
-
-
             // account suggestion
             if (expanded_account_suggestion.value) {
-
                 BackHandler(enabled = expanded_account_suggestion.value) {
                     expanded_account_suggestion.value = false
                 }
-
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -612,19 +617,16 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                                     partyEnabled.value = false
                                     addItemEnabled.value = true
                                     selectedAccount.value = account.name
-                                    Toast.makeText(context, "Account selected", Toast.LENGTH_SHORT)
-                                        .show()
-                                })
+                                    Toast.makeText(context, "Account selected", Toast.LENGTH_SHORT).show()
+                                }
+                        )
                     }
                 }
             }
-
             if (expanded_item_name_suggestion.value){
-
                 BackHandler(enabled = expanded_account_suggestion.value) {
                     expanded_item_name_suggestion.value = false
                 }
-
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -646,15 +648,20 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                                 .fillMaxWidth()
                                 .clickable {
                                     if (item.itemQuantity == 0) {
-                                        Toast.makeText(context,"Not available in inventory", Toast.LENGTH_SHORT).show()
-                                    }
-                                    else{
+                                        Toast.makeText(
+                                            context,
+                                            "Not available in inventory",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    } else {
                                         currentItem.value = item
+                                        fieldsEnabled.value = true
                                         selectedItemName.value = item.itemName
                                         selectedItemPrice.value = item.itemSellingPrice.toString()
                                         expanded_item_name_suggestion.value = false
                                     }
-                                })
+                                }
+                        )
                     }
                 }
             }

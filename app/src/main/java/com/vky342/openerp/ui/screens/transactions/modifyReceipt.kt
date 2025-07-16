@@ -68,7 +68,6 @@ fun ModifyReceiptScreen(viewModel : Add_Receipt_Vm = hiltViewModel()){
 
     val newReceipt = remember { mutableStateOf(Receipt(0,"",0.0,0)) }
     val newAccountName = remember { mutableStateOf("") }
-
     val context: Context = LocalContext.current
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val sidePadding = width.value * 0.08
@@ -79,19 +78,19 @@ fun ModifyReceiptScreen(viewModel : Add_Receipt_Vm = hiltViewModel()){
 
     var selectedOptionText by remember { mutableStateOf("") }
 
-    var ID = remember { derivedStateOf{ newReceipt.value.receiptId } }
+    val ID = remember { derivedStateOf{ newReceipt.value.receiptId } }
 
-    var options = viewModel.old_Account_list.value
+    val options = viewModel.old_Account_list.value
 
-    var expanded = remember { mutableStateOf(false) }
+    val expanded = remember { mutableStateOf(false) }
 
-    var select_account_selected_enalbled = remember { mutableStateOf(false) }
+    val select_account_selected_enalbled = remember { mutableStateOf(false) }
 
     var amount by remember { mutableStateOf("") }
 
-    var selectedDate = remember { mutableStateOf("") }
+    val selectedDate = remember { mutableStateOf("") }
 
-    var filteringOptions = options.filter {
+    val filteringOptions = options.filter {
         it.name.contains(selectedOptionText, ignoreCase = true) || it.address.contains(selectedOptionText, ignoreCase = true) || it.contact.contains(selectedOptionText, ignoreCase = true)
     }
 
@@ -171,7 +170,17 @@ fun ModifyReceiptScreen(viewModel : Add_Receipt_Vm = hiltViewModel()){
                                     }
                                 },
                             onTrailingIconClick = {
-                                viewModel.getReceiptByID(bill_id.value.toInt())
+                                try{
+                                    viewModel.getReceiptByID(bill_id.value.toInt()) { success ->
+                                        if (success) {
+                                            Toast.makeText(context, "bill found", Toast.LENGTH_SHORT).show()
+                                        } else {
+                                            Toast.makeText(context, "No bill found", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                }catch (e : Exception){
+                                    Toast.makeText(context, "Invalid search", Toast.LENGTH_SHORT).show()
+                                }
                             }
                         )
                     }
@@ -208,7 +217,21 @@ fun ModifyReceiptScreen(viewModel : Add_Receipt_Vm = hiltViewModel()){
                                     Alignment.CenterVertically
                                 )
                                 .clickable {
-                                    viewModel.getRecentReceipt()
+                                    viewModel.getRecentReceipt { success ->
+                                        if (success) {
+                                            Toast.makeText(
+                                                context,
+                                                "bill found",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                "No recent bill found",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
                                 }
                         )
                     }
@@ -320,7 +343,7 @@ fun ModifyReceiptScreen(viewModel : Add_Receipt_Vm = hiltViewModel()){
                             Toast.makeText(context, "Invalid amount", Toast.LENGTH_SHORT).show()
                             0.0
                         }
-                        if(newAccountName.value == "" || selectedDate.value == "" || amount == ""){
+                        if(newAccountName.value == "" || selectedDate.value == ""){
                             Toast.makeText(context, "field empty!", Toast.LENGTH_SHORT).show()
                         }else{
                             if (amountTobePassed != 0.0){

@@ -280,6 +280,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                         payment_mode.value = ""
                         partyEnabled.value = true
                         currentItem.value = Item("",0.0,0.0,0)
+                        fieldsEnabled.value = false
                         selectedItemName.value = ""
                         selectedItemPrice.value = ""
                         selectedItemDiscount.value = ""

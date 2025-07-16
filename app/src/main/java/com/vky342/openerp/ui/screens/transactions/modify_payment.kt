@@ -174,12 +174,16 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                                     }
                                 },
                             onTrailingIconClick = {
-                                viewModel.validatePaymentAsync(bill_id.value.toInt()) { result ->
-                                    if (result) {
-                                        Toast.makeText(context, "bill found", Toast.LENGTH_SHORT).show()
-                                    } else {
-                                        Toast.makeText(context, "No bill found", Toast.LENGTH_SHORT).show()
+                                try {
+                                    viewModel.validatePaymentAsync(bill_id.value.toInt()) { result ->
+                                        if (result) {
+                                            Toast.makeText(context, "bill found", Toast.LENGTH_SHORT).show()
+                                        } else {
+                                            Toast.makeText(context, "No bill found", Toast.LENGTH_SHORT).show()
+                                        }
                                     }
+                                }catch (e : Exception){
+                                    Toast.makeText(context, "Invalid search", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         )
@@ -219,9 +223,17 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                                 .clickable {
                                     viewModel.getRecentPayment { success ->
                                         if (success) {
-                                            Toast.makeText(context, "bill found", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(
+                                                context,
+                                                "bill found",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
                                         } else {
-                                            Toast.makeText(context, "No recent bill found", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(
+                                                context,
+                                                "No recent bill found",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
                                         }
                                     }
                                 }
