@@ -48,6 +48,7 @@ import com.vky342.openerp.ui.screens.ACCOUNTS.account_search_bar_for_edit_accoun
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.theme.New_account_title_color
 import com.vky342.openerp.ui.theme.background_color
+import com.vky342.openerp.utility.getTodayDate
 import com.vky342.openerp.utility.parseStrictDouble
 
 @Composable
@@ -63,17 +64,17 @@ fun AddReceiptScreen(viewModel : Add_Receipt_Vm = hiltViewModel()){
 
     var selectedOptionText by remember { mutableStateOf("") }
 
-    var options = viewModel.old_Account_list.value
+    val options = viewModel.old_Account_list.value
 
-    var expanded = remember { mutableStateOf(false) }
+    val expanded = remember { mutableStateOf(false) }
 
-    var select_account_selected_enalbled = remember { mutableStateOf(true) }
+    val select_account_selected_enalbled = remember { mutableStateOf(true) }
 
     var amount by remember { mutableStateOf("") }
 
-    var selectedDate = remember { mutableStateOf("") }
+    val selectedDate = remember { mutableStateOf(getTodayDate()) }
 
-    var filteringOptions = options.filter {
+    val filteringOptions = options.filter {
         it.name.contains(selectedOptionText, ignoreCase = true) || it.address.contains(selectedOptionText, ignoreCase = true) || it.contact.contains(selectedOptionText, ignoreCase = true)
     }
 

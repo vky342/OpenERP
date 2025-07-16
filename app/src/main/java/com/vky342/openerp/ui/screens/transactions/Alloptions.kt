@@ -64,7 +64,6 @@ fun AllTransactionOptionsScreen(
                 .verticalScroll(rememberScrollState())
         ) {
 
-
             add_sale_button(onClick = {navController.navigate(TransactionScreen.AddSale)})
 
             add_purchase_button(onClick = {navController.navigate(TransactionScreen.AddPurchase)})

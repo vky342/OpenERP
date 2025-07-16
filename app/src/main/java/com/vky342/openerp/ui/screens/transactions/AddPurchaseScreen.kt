@@ -63,6 +63,7 @@ import com.vky342.openerp.ui.theme.New_account_title_color
 import com.vky342.openerp.ui.theme.background_color
 import com.vky342.openerp.ui.theme.title_color
 import com.vky342.openerp.ui.theme.var_amount_row_colour
+import com.vky342.openerp.utility.getTodayDate
 import java.util.UUID
 
 data class item_popup(
@@ -80,37 +81,38 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
     val sidePadding = width.value * 0.08
     val context: Context = LocalContext.current
 
-    var options = viewModel.old_Account_list.value
-    var item_options = viewModel.all_items_in_inventory
+    val options = viewModel.old_Account_list.value
+    val item_options = viewModel.all_items_in_inventory
 
     val item_fill_popUp_status = remember { mutableStateOf(false) }
 
     var ID by viewModel.purchaseID
 
-    var selectedAccount = remember { mutableStateOf((Account(0, "", "", "", ""))) }
+    val selectedAccount = remember { mutableStateOf((Account(0, "", "", "", ""))) }
 
-    var payment_mode = remember { mutableStateOf("") }
+    val payment_mode = remember { mutableStateOf("") }
 
-    var selectedDate = remember { mutableStateOf("") }
+    val selectedDate = remember { mutableStateOf(getTodayDate()) }
 
     var selectedAccountText by remember { mutableStateOf("") }
 
     // itemForm popUP
-    var currentItem = remember { mutableStateOf(Item("",0.0,0.0,0)) }
-    var selectedItemName = remember { mutableStateOf("") }
-    var selectedItemPrice = remember { mutableStateOf("") }
-    var selectedItemDiscount = remember { mutableStateOf("") }
-    var selectedItemQuantity = remember { mutableStateOf("") }
+    val currentItem = remember { mutableStateOf(Item("",0.0,0.0,0)) }
+    val fieldsEnabled = remember { mutableStateOf(false) }
+    val selectedItemName = remember { mutableStateOf("") }
+    val selectedItemPrice = remember { mutableStateOf("") }
+    val selectedItemDiscount = remember { mutableStateOf("") }
+    val selectedItemQuantity = remember { mutableStateOf("") }
 
-    var itemsList = remember { mutableStateListOf<item_popup>() }
+    val itemsList = remember { mutableStateListOf<item_popup>() }
 
     val checkOutEnabled by remember { derivedStateOf { itemsList.isNotEmpty() } }
-    var partyEnabled = remember { mutableStateOf(true) }
-    var addItemEnabled = remember { mutableStateOf(false)}
+    val partyEnabled = remember { mutableStateOf(true) }
+    val addItemEnabled = remember { mutableStateOf(false)}
 
     // purchase summary
     val totalItems by remember { derivedStateOf { itemsList.size } }
-    var totalAmount = remember {derivedStateOf { itemsList.sumOf { it.totalAmount.value } } }
+    val totalAmount = remember {derivedStateOf { itemsList.sumOf { it.totalAmount.value } } }
 
     // Items Summary
     val listState = rememberLazyListState()
@@ -123,17 +125,17 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
     }
 
     //Suggestions
-    var filteringOptions = options.filter {
+    val filteringOptions = options.filter {
         it.name.contains(selectedAccountText, ignoreCase = true) || it.address.contains(
             selectedAccountText,
             ignoreCase = true
         ) || it.contact.contains(selectedAccountText, ignoreCase = true)
     }
-    var filtering_items_Options = item_options.value.filter {
+    val filtering_items_Options = item_options.value.filter {
         it.itemName.contains(selectedItemName.value, ignoreCase = true)
     }
-    var expanded_item_name_suggestion = remember { mutableStateOf(false) }
-    var expanded_account_suggestion = remember { mutableStateOf(false) }
+    val expanded_item_name_suggestion = remember { mutableStateOf(false) }
+    val expanded_account_suggestion = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -328,14 +330,10 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                         }
                     }
                 }
-
-
-
             }
         }
 
         if (item_fill_popUp_status.value) {
-
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -350,11 +348,12 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                     selectedItemDiscount.value = ""
                     selectedItemQuantity.value = ""
                     currentItem.value = Item("",0.0,0.0,0)
+                    fieldsEnabled.value = false
                 }
 
             }
 
-            item_fill_popUp(
+            item_fill_popUp(fieldsEnabled = fieldsEnabled.value,
                 name = selectedItemName.value,
                 price = selectedItemPrice.value,
                 discount = selectedItemDiscount.value,
@@ -372,11 +371,11 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                     selectedItemPrice.value = ""
                     selectedItemDiscount.value = ""
                     selectedItemQuantity.value = ""
-                    currentItem.value = Item("",0.0,0.0,0) },
+                    currentItem.value = Item("",0.0,0.0,0)
+                    fieldsEnabled.value = false},
                 onDone = {
-
-                    if (item_options.value.any{ item -> item.itemName == selectedItemName.value}){
-
+                    val res = viewModel.validateItemPopUPInput(selectedItemName.value,selectedItemPrice.value,selectedItemDiscount.value,selectedItemQuantity.value)
+                    if (res && currentItem.value != Item("",0.0,0.0,0)){
                         itemsList.add(item_popup(
                             name = selectedItemName.value,
                             price = selectedItemPrice.value.toDouble(),
@@ -389,20 +388,12 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                         selectedItemDiscount.value = ""
                         selectedItemQuantity.value = ""
                         currentItem.value = Item("",0.0,0.0,0)
+                        fieldsEnabled.value = false
+                    } else{
+                        Toast.makeText(context, "Invalid Input", Toast.LENGTH_SHORT).show()
                     }
-                    else{
-                        Toast.makeText(context, "No Item found named " + selectedItemName.value, Toast.LENGTH_SHORT).show()
-                        selectedItemName.value = ""
-                        selectedItemPrice.value = ""
-                        selectedItemDiscount.value = ""
-                        selectedItemQuantity.value = ""
-                    }
-
                 }
             )
-
-
-
         }
 
 
@@ -471,14 +462,13 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                             .fillMaxWidth()
                             .clickable {
                                 currentItem.value = item
+                                fieldsEnabled.value = true
                                 selectedItemName.value = item.itemName
                                 selectedItemPrice.value = item.itemSellingPrice.toString()
-                                expanded_item_name_suggestion.value = false
-                            }
+                                expanded_item_name_suggestion.value = false }
                     )
                 }
             }
         }
-
     }
 }

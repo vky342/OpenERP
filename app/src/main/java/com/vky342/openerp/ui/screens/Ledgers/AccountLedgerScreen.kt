@@ -71,22 +71,22 @@ fun AccountLedgerScreen( viewModel: LedgerVm = hiltViewModel() ){
     val (height, width) = LocalConfiguration.current.run { screenHeightDp.dp to screenWidthDp.dp }
     val sidePadding = width.value * 0.08
 
-    var accountLedgerItemList = remember { mutableStateOf(listOf<AccountLedgerItem>()) }
+    val accountLedgerItemList = remember { mutableStateOf(listOf<AccountLedgerItem>()) }
 
-    var accountBalance = remember { mutableStateOf(0.0) }
+    val accountBalance = remember { mutableStateOf(0.0) }
 
     var old_Account by remember { mutableStateOf(Account(0,"","","","")) }
 
     var selectedOptionText by remember { mutableStateOf("") }
 
-    var options = viewModel.old_Account_list.value
+    val options = viewModel.old_Account_list.value
 
-    var expanded = remember { mutableStateOf(false) }
+    val expanded = remember { mutableStateOf(false) }
 
-    var updateLedgerListDisabled = remember { mutableStateOf(true) }
+    val updateLedgerListDisabled = remember { mutableStateOf(true) }
 
     // filter options based on text field value
-    var filteringOptions = options.filter {
+    val filteringOptions = options.filter {
         it.name.contains(selectedOptionText, ignoreCase = true) || it.address.contains(selectedOptionText, ignoreCase = true) || it.contact.contains(selectedOptionText, ignoreCase = true)
     }
 
@@ -160,11 +160,11 @@ fun AccountLedgerScreen( viewModel: LedgerVm = hiltViewModel() ){
 
             Box(modifier = Modifier.fillMaxWidth().height(50.dp).background(color = var_amount_row_colour)) {
                 if (accountBalance.value < 0){
-                    var balance = accountBalance.value * -1
-                    Text(balance.toString() + " Dr", fontSize = 20.sp,modifier = Modifier.align(Alignment.Center))
+                    val balance = accountBalance.value * -1
+                    Text("$balance Dr", fontSize = 20.sp,modifier = Modifier.align(Alignment.Center))
                 }
                 else{
-                    Text( accountBalance.value.toString() + " Cr", fontSize = 20.sp,modifier = Modifier.align(Alignment.Center))
+                    Text("${accountBalance.value} Cr", fontSize = 20.sp,modifier = Modifier.align(Alignment.Center))
                 }
 
             }
@@ -393,13 +393,15 @@ fun accountLedger_list_table_single_row(modifier: Modifier = Modifier, item : Ac
                             .background(color = Color.White)
                     ) {
                         if (effectiveBalance < 0){
-                            var localBalance = effectiveBalance * -1
-                            Text("~ Balance : ₹" + localBalance.toString() + " Dr",
+                            val localBalance = effectiveBalance * -1
+                            Text(
+                                "~ Balance : ₹$localBalance Dr",
                                 modifier = Modifier.align(Alignment.CenterStart)
                             )
                         }
                         else{
-                            Text("~ Balance : ₹" + effectiveBalance.toString() + " Cr",
+                            Text(
+                                "~ Balance : ₹$effectiveBalance Cr",
                                 modifier = Modifier.align(Alignment.CenterStart)
                             )
                         }

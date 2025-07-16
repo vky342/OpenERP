@@ -624,7 +624,7 @@ fun floating_add_button(modifier: Modifier = Modifier,onClick : () -> Unit = {})
 
 @Preview
 @Composable
-fun item_fill_popUp(name: String = "", price: String = "", discount: String = "", quantity: String = "",
+fun item_fill_popUp(fieldsEnabled : Boolean = true,name: String = "", price: String = "", discount: String = "", quantity: String = "",
                     onNameChange : (String) -> Unit = {}, onPriceChange : (String) -> Unit = {}, onDiscountChange : (String) -> Unit = {}, onQuantityChange : (String) -> Unit = {},
                     onVC : (String) -> Unit = {}, modifier: Modifier = Modifier, onCancel : () -> Unit = {}, onDone : () -> Unit = {}){
 
@@ -632,13 +632,11 @@ fun item_fill_popUp(name: String = "", price: String = "", discount: String = ""
 
     val context : Context = LocalContext.current
 
-
     Box(
         modifier = modifier
             .height(300.dp)
             .fillMaxWidth()
             .background(color = background_color, shape = RoundedCornerShape(20f))
-            //.border(width = 1.dp, color = title_color, shape = RoundedCornerShape(20f))
             .shadow(elevation = 4.dp, ambientColor = Color.White, spotColor = Color.White)
     ) {
 
@@ -674,7 +672,7 @@ fun item_fill_popUp(name: String = "", price: String = "", discount: String = ""
                                 .fillMaxWidth(0.8f)
                                 .fillMaxHeight()
                                 .align(Alignment.CenterStart)){
-                                form_fields(
+                                form_fields(enabled = fieldsEnabled,
                                     suffix = "₹",
                                     keyboardOptions = KeyboardOptions(
                                         autoCorrect = false,
@@ -701,7 +699,7 @@ fun item_fill_popUp(name: String = "", price: String = "", discount: String = ""
                                 .fillMaxWidth(0.8f)
                                 .fillMaxHeight()
                                 .align(Alignment.CenterStart)){
-                                form_fields(
+                                form_fields(enabled = fieldsEnabled,
                                     suffix = "%",
                                     keyboardOptions = KeyboardOptions(
                                     autoCorrect = false,
@@ -726,7 +724,7 @@ fun item_fill_popUp(name: String = "", price: String = "", discount: String = ""
                             .fillMaxWidth(0.8f)
                             .fillMaxHeight()
                             .align(Alignment.CenterStart)){
-                            form_fields(
+                            form_fields(enabled = fieldsEnabled,
                                 keyboardOptions = KeyboardOptions(
                                     autoCorrect = false,
                                     keyboardType = KeyboardType.Decimal),

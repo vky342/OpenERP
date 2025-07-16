@@ -12,6 +12,7 @@ import com.vky342.openerp.data.Entities.PurchaseEntry
 import com.vky342.openerp.data.Repositories.AccountRepo
 import com.vky342.openerp.data.Repositories.InventoryRepo
 import com.vky342.openerp.data.Repositories.PurchaseRepo
+import com.vky342.openerp.ui.screens.transactions.item_popup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -81,5 +82,47 @@ class Add_purchase_VM @Inject constructor(
         Save_Purchase(name,purchase,listOfEntry)
     }
 
+    fun validateItemPopUPInput(
+        selectedItemName: String,
+        selectedItemPrice: String,
+        selectedItemDiscount: String,
+        selectedItemQuantity: String
+    ): Boolean {
+        // 1. Validate item name
+        if (selectedItemName.isBlank() || selectedItemName.length < 2) {
+            return false
+        }
 
+        // 2. Try parsing and validating price
+        val price = selectedItemPrice.toDoubleOrNull()
+        if (price == null || price < 0.0 || price > 1_000_000) {
+            return false
+        }
+
+        // 3. Handle empty discount as 0.0
+        val discount = if (selectedItemDiscount.isBlank()) {
+            0.0
+        } else {
+            selectedItemDiscount.toDoubleOrNull()
+        }
+
+        if (discount == null || discount < 0.0 || discount > 100.0) {
+            return false
+        }
+
+        // 4. Try parsing and validating quantity
+        val quantity = selectedItemQuantity.toIntOrNull()
+        if (quantity == null || quantity < 0 || quantity > 10_000) {
+            return false
+        }
+
+        // 5. Check that effective price after discount is not negative
+        val effectivePrice = price - (price * discount / 100)
+        if (effectivePrice < 0.0) {
+            return false
+        }
+
+        // All validations passed
+        return true
+    }
 }

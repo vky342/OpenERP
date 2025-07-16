@@ -11,7 +11,7 @@ import com.vky342.openerp.ui.screens.transactions.AddSaleScreen
 import com.vky342.openerp.ui.screens.transactions.AllTransactionOptionsScreen
 import com.vky342.openerp.ui.screens.transactions.ModifyReceiptScreen
 import com.vky342.openerp.ui.screens.transactions.Modify_Payment_Screen
-import com.vky342.openerp.ui.screens.transactions.addPayment
+import com.vky342.openerp.ui.screens.transactions.AddPayment
 import com.vky342.openerp.ui.screens.transactions.modifyPurchaseScreen
 import com.vky342.openerp.ui.screens.transactions.modifySaleScreen
 
@@ -32,7 +32,7 @@ fun NavGraphBuilder.TransactionNavGraph(navController: NavHostController){
             AddPurchaseScreen()
         }
         composable ( route = TransactionScreen.addPayment){
-            addPayment()
+            AddPayment()
         }
         composable ( route = TransactionScreen.addReceipt){
             AddReceiptScreen()

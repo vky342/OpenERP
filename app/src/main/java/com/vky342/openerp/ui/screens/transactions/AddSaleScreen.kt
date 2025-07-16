@@ -70,37 +70,38 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
     val sidePadding = width.value * 0.08
     val context: Context = LocalContext.current
 
-    var options = viewModel.old_Account_list.value
-    var item_options = viewModel.all_items_in_inventory
+    val options = viewModel.old_Account_list.value
+    val item_options = viewModel.all_items_in_inventory
 
     val item_fill_popUp_status = remember { mutableStateOf(false) }
 
     var ID by viewModel.saleID
 
-    var selectedAccount = remember { mutableStateOf((Account(0, "", "", "", ""))) }
+    val selectedAccount = remember { mutableStateOf((Account(0, "", "", "", ""))) }
 
-    var payment_mode = remember { mutableStateOf("") }
+    val payment_mode = remember { mutableStateOf("") }
 
-    var selectedDate = remember { mutableStateOf(getTodayDate()) }
+    val selectedDate = remember { mutableStateOf(getTodayDate()) }
 
     var selectedAccountText by remember { mutableStateOf("") }
 
     // itemForm popUP
-    var currentItem = remember { mutableStateOf(Item("",0.0,0.0,0)) }
-    var selectedItemName = remember { mutableStateOf("") }
-    var selectedItemPrice = remember { mutableStateOf("") }
-    var selectedItemDiscount = remember { mutableStateOf("") }
-    var selectedItemQuantity = remember { mutableStateOf("") }
+    val currentItem = remember { mutableStateOf(Item("",0.0,0.0,0)) }
+    val fieldsEnabled = remember { mutableStateOf(false) }
+    val selectedItemName = remember { mutableStateOf("") }
+    val selectedItemPrice = remember { mutableStateOf("") }
+    val selectedItemDiscount = remember { mutableStateOf("") }
+    val selectedItemQuantity = remember { mutableStateOf("") }
 
-    var itemsList = remember { mutableStateListOf<item_popup>() }
+    val itemsList = remember { mutableStateListOf<item_popup>() }
 
     val checkOutEnabled by remember { derivedStateOf { itemsList.isNotEmpty() } }
-    var partyEnabled = remember { mutableStateOf(true) }
-    var addItemEnabled = remember { mutableStateOf(false)}
+    val partyEnabled = remember { mutableStateOf(true) }
+    val addItemEnabled = remember { mutableStateOf(false)}
 
     // purchase summary
     val totalItems by remember { derivedStateOf { itemsList.size } }
-    var totalAmount = remember {derivedStateOf { itemsList.sumOf { it.totalAmount.value } } }
+    val totalAmount = remember {derivedStateOf { itemsList.sumOf { it.totalAmount.value } } }
 
     // Items Summary
     val listState = rememberLazyListState()
@@ -113,17 +114,17 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
     }
 
     //Suggestions
-    var filteringOptions = options.filter {
+    val filteringOptions = options.filter {
         it.name.contains(selectedAccountText, ignoreCase = true) || it.address.contains(
             selectedAccountText,
             ignoreCase = true
         ) || it.contact.contains(selectedAccountText, ignoreCase = true)
     }
-    var filtering_items_Options = item_options.value.filter {
+    val filtering_items_Options = item_options.value.filter {
         it.itemName.contains(selectedItemName.value, ignoreCase = true)
     }
-    var expanded_item_name_suggestion = remember { mutableStateOf(false) }
-    var expanded_account_suggestion = remember { mutableStateOf(false) }
+    val expanded_item_name_suggestion = remember { mutableStateOf(false) }
+    val expanded_account_suggestion = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -343,7 +344,7 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
 
             }
 
-            item_fill_popUp(
+            item_fill_popUp(fieldsEnabled = fieldsEnabled.value,
                 name = selectedItemName.value,
                 price = selectedItemPrice.value,
                 discount = selectedItemDiscount.value,
@@ -361,11 +362,11 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                     selectedItemPrice.value = ""
                     selectedItemDiscount.value = ""
                     selectedItemQuantity.value = ""
-                    currentItem.value = Item("",0.0,0.0,0) },
+                    currentItem.value = Item("",0.0,0.0,0)
+                    fieldsEnabled.value =false},
                 onDone = {
-
-                    if (item_options.value.any{ item -> item.itemName == selectedItemName.value}){
-
+                    val res = viewModel.validateItemPopUPInput(selectedItemName.value,selectedItemPrice.value,selectedItemDiscount.value,selectedItemQuantity.value)
+                    if (res && currentItem.value != Item("",0.0,0.0,0)){
                         if (selectedItemQuantity.value.toInt() <= currentItem.value.itemQuantity){
                             itemsList.add(item_popup(
                                 name = selectedItemName.value,
@@ -379,26 +380,17 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                             selectedItemDiscount.value = ""
                             selectedItemQuantity.value = ""
                             currentItem.value = Item("",0.0,0.0,0)
-
-                        }else{
+                            fieldsEnabled.value = false
+                        } else{
                             Toast.makeText(context,"Inventory Shortage!", Toast.LENGTH_SHORT).show()
                             selectedItemQuantity.value = ""
                         }
-
                     }
                     else{
-                        Toast.makeText(context, "No Item found named " + selectedItemName.value, Toast.LENGTH_SHORT).show()
-                        selectedItemName.value = ""
-                        selectedItemPrice.value = ""
-                        selectedItemDiscount.value = ""
-                        selectedItemQuantity.value = ""
+                        Toast.makeText(context, "Invalid Input", Toast.LENGTH_SHORT).show()
                     }
-
                 }
             )
-
-
-
         }
 
 
@@ -433,9 +425,9 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                                 partyEnabled.value = false
                                 addItemEnabled.value = true
                                 selectedAccount.value = account
-                                Toast.makeText(context, "Account selected", Toast.LENGTH_SHORT)
-                                    .show()
-                            })
+                                Toast.makeText(context, "Account selected", Toast.LENGTH_SHORT).show()
+                            }
+                    )
                 }
             }
         }
@@ -468,18 +460,18 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                             .clickable {
                                 if (item.itemQuantity == 0) {
                                     Toast.makeText(context,"Not available in inventory", Toast.LENGTH_SHORT).show()
-                                }
-                                else{
+                                } else{
                                     currentItem.value = item
+                                    fieldsEnabled.value = true
                                     selectedItemName.value = item.itemName
                                     selectedItemPrice.value = item.itemSellingPrice.toString()
                                     expanded_item_name_suggestion.value = false
                                 }
-                            })
+                            }
+                    )
                 }
             }
         }
-
     }
 }
 

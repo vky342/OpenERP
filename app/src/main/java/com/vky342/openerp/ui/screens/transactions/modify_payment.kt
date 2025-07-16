@@ -82,19 +82,19 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
 
     var selectedOptionText by remember { mutableStateOf("") }
 
-    var ID = remember { derivedStateOf{ newPayment.value.paymentId }  }
+    val ID = remember { derivedStateOf{ newPayment.value.paymentId }  }
 
-    var options = viewModel.old_Account_list.value
+    val options = viewModel.old_Account_list.value
 
-    var expanded = remember { mutableStateOf(false) }
+    val expanded = remember { mutableStateOf(false) }
 
-    var select_account_selected_enalbled = remember { mutableStateOf(false) }
+    val select_account_selected_enalbled = remember { mutableStateOf(false) }
 
     var amount by remember { mutableStateOf("") }
 
-    var selectedDate = remember { mutableStateOf("") }
+    val selectedDate = remember { mutableStateOf("") }
 
-    var filteringOptions = options.filter {
+    val filteringOptions = options.filter {
         it.name.contains(selectedOptionText, ignoreCase = true) || it.address.contains(selectedOptionText, ignoreCase = true) || it.contact.contains(selectedOptionText, ignoreCase = true)
     }
 
@@ -174,7 +174,13 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                                     }
                                 },
                             onTrailingIconClick = {
-                                viewModel.getPaymentByID(bill_id.value.toInt())
+                                viewModel.validatePaymentAsync(bill_id.value.toInt()) { result ->
+                                    if (result) {
+                                        Toast.makeText(context, "bill found", Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        Toast.makeText(context, "No bill found", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
                             }
                         )
                     }
@@ -211,7 +217,13 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                                     Alignment.CenterVertically
                                 )
                                 .clickable {
-                                    viewModel.getRecentPayment()
+                                    viewModel.getRecentPayment { success ->
+                                        if (success) {
+                                            Toast.makeText(context, "bill found", Toast.LENGTH_SHORT).show()
+                                        } else {
+                                            Toast.makeText(context, "No recent bill found", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
                                 }
                         )
                     }
@@ -246,7 +258,8 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                         fontSize = 29.sp,
                         modifier = Modifier
                             .align(Alignment.CenterStart)
-                            .padding(horizontal = sidePadding.dp))
+                            .padding(horizontal = sidePadding.dp)
+                    )
                 }
 
                 // Account search bar
@@ -269,7 +282,8 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                         ,onVc = {
                             selectedOptionText = it
                             expanded.value = true
-                        })
+                        }
+                    )
                 }
 
                 // Date
@@ -287,7 +301,8 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                             .fillMaxHeight(),
                         label = "Date",
                         value = selectedDate.value,
-                        onDateSelected = { selectedDate.value = it })
+                        onDateSelected = { selectedDate.value = it }
+                    )
 
 
                 }
@@ -302,9 +317,8 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                     form_fields(trailing_icon = Icons.Default.Clear,keyboardOptions = KeyboardOptions(autoCorrect = false, keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
                         enabled = !select_account_selected_enalbled.value,onVc = {amount = it},value = amount,icon = Icons.Default.Create,label = "Amount",modifier = Modifier
                             .padding(horizontal = sidePadding.dp)
-                            .align(
-                                Alignment.CenterStart
-                            ))
+                            .align(Alignment.CenterStart)
+                    )
                 }
                 // save button
                 Box(
@@ -323,7 +337,7 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                             Toast.makeText(context, "Invalid amount", Toast.LENGTH_SHORT).show()
                             0.0
                         }
-                        if(newAccountName.value == "" || selectedDate.value == "" || amount == ""){
+                        if(newAccountName.value == "" || selectedDate.value == ""){
                             Toast.makeText(context, "field empty!", Toast.LENGTH_SHORT).show()
                         }else{
                             if (amountTobePassed != 0.0){
@@ -377,7 +391,8 @@ fun Modify_Payment_Screen(viewModel : Add_Payment_Vm = hiltViewModel()){
                                     expanded.value = false
                                     Toast.makeText(context, "Account selected", Toast.LENGTH_SHORT)
                                         .show()
-                                })
+                                }
+                        )
                     }
                 }
             }

@@ -78,34 +78,44 @@ class Add_Payment_Vm @Inject constructor  (private val paymentRepo: PaymentRepo)
 
     }
 
-    fun getPaymentByID(ID : Int) {
-        try {
-            viewModelScope.launch {
-                oldPayment.value = paymentRepo.getPaymentByID(ID = ID)
-                if (oldPayment.value != Payment(0,"",0.0,0)){
-                    oldLedger.value = paymentRepo.getLedgerByID(oldPayment.value!!.ledgerId)
+    fun validatePaymentAsync(ID: Int, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val payment = paymentRepo.getPaymentByID(ID)
+                if (payment != Payment(0, "", 0.0, 0)) {
+                    val ledger = paymentRepo.getLedgerByID(payment.ledgerId)
+                    oldPayment.value = payment
+                    oldLedger.value = ledger
+                    onResult(true)
+                } else {
+                    onResult(false)
                 }
+            } catch (e: Exception) {
+                onResult(false)
             }
-        }catch (e : Exception) {
-            Log.e("ERROR"," unable to get payment by ID")
         }
     }
 
-    fun getRecentPayment() {
-        try {
-            viewModelScope.launch {
+    fun getRecentPayment(onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
                 val pid = paymentRepo.getLatestPaymentID()
-                if (pid != 0){
-                    oldPayment.value = paymentRepo.getPaymentByID(ID = pid)
-                    if (oldPayment.value != Payment(0,"",0.0,0)){
-                        oldLedger.value = paymentRepo.getLedgerByID(oldPayment.value!!.ledgerId)
+                if (pid != 0) {
+                    val payment = paymentRepo.getPaymentByID(ID = pid)
+                    if (payment != Payment(0, "", 0.0, 0)) {
+                        oldPayment.value = payment
+                        val ledger = paymentRepo.getLedgerByID(payment.ledgerId)
+                        oldLedger.value = ledger
+                        onResult(true)
+                    } else {
+                        onResult(false)
                     }
-                }else{
-                    Log.d("DEBUG", "getRecentPayment: no recent payment found")
+                } else {
+                    onResult(false)
                 }
+            } catch (e: Exception) {
+                onResult(false)
             }
-        }catch (e : Exception) {
-            Log.e("ERROR"," unable to get payment by ID")
         }
     }
 
