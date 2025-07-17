@@ -105,17 +105,6 @@ fun RootScreen(navController: NavHostController = rememberNavController()){
     Scaffold (topBar = { TopAppBar(
         title = { Text("OpenERP") },
         colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = top_app_bar, titleContentColor = title_color, actionIconContentColor = action_icon_color),
-        actions = {
-            IconButton(onClick = {}){
-                Icon(Icons.Default.Notifications, contentDescription = "")
-            }
-            IconButton(onClick = {}){
-                Icon(Icons.Default.DateRange, contentDescription = "")
-            }
-            IconButton(onClick = {}){
-                Icon(Icons.Default.Menu, contentDescription = "")
-            }
-        }
     ) }, containerColor = root_container_color,
 
         bottomBar = { NavigationBar (containerColor = bottom_app_bar, contentColor = bottom_bar_content_color) {

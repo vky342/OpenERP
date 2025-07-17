@@ -17,18 +17,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.outlined.Build
+import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -63,27 +60,16 @@ fun AllTransactionOptionsScreen(
                 .background(color = background_color)
                 .verticalScroll(rememberScrollState())
         ) {
-
             add_sale_button(onClick = {navController.navigate(TransactionScreen.AddSale)})
-
-            add_purchase_button(onClick = {navController.navigate(TransactionScreen.AddPurchase)})
-
             modify_sale_button(onClick = {navController.navigate(TransactionScreen.modifySale)})
-
+            add_purchase_button(onClick = {navController.navigate(TransactionScreen.AddPurchase)})
             modify_purhcase__button(onClick = {navController.navigate(TransactionScreen.modifyPurchase)})
-
-            payment_bill_button(onClick = {navController.navigate(TransactionScreen.addPayment)})
-
-            add_receipt_button(onClick = {navController.navigate(TransactionScreen.addReceipt)})
-
+            add_payment_button(onClick = {navController.navigate(TransactionScreen.addPayment)})
             modifyPayment_button(onClick = {navController.navigate(TransactionScreen.modifyPayment)})
-
+            add_receipt_button(onClick = {navController.navigate(TransactionScreen.addReceipt)})
             ModifyReceipt_button(onClick = {navController.navigate(TransactionScreen.modifyReceipt)})
-
         }
-
     }
-
 }
 
 
@@ -119,7 +105,7 @@ fun modify_sale_button(modifier: Modifier = Modifier, onClick : () -> Unit = {})
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
-                    Icons.Filled.Build,
+                    Icons.Outlined.Refresh,
                     contentDescription = "",
                     modifier = Modifier
                         .size(75.dp)
@@ -187,7 +173,7 @@ fun add_purchase_button(modifier: Modifier = Modifier, onClick : () -> Unit = {}
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
-                    Icons.Default.ShoppingCart,
+                    Icons.Default.AddCircle,
                     contentDescription = "",
                     modifier = Modifier
                         .size(75.dp)
@@ -322,7 +308,7 @@ fun modify_purhcase__button(modifier: Modifier = Modifier, onClick : () -> Unit 
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
-                    Icons.Default.Create,
+                    Icons.Outlined.Refresh,
                     contentDescription = "",
                     modifier = Modifier
                         .size(75.dp)
@@ -362,7 +348,7 @@ fun modify_purhcase__button(modifier: Modifier = Modifier, onClick : () -> Unit 
 
 @Preview
 @Composable
-fun payment_bill_button(modifier: Modifier = Modifier, onClick : () -> Unit = {}){
+fun add_payment_button(modifier: Modifier = Modifier, onClick : () -> Unit = {}){
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -379,7 +365,7 @@ fun payment_bill_button(modifier: Modifier = Modifier, onClick : () -> Unit = {}
                     spotColor = account_add_shadow_color
                 )
                 .background(
-                    color = add_purchase_button_container_color,
+                    color = add_sale_button_background_color,
                     shape = RoundedCornerShape(20f)
                 )
                 .border(1.dp, account_add_border_color, RoundedCornerShape(20f))
@@ -391,7 +377,7 @@ fun payment_bill_button(modifier: Modifier = Modifier, onClick : () -> Unit = {}
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
-                    Icons.Default.Create,
+                    Icons.Default.AddCircle,
                     contentDescription = "",
                     modifier = Modifier
                         .size(75.dp)
@@ -448,7 +434,7 @@ fun add_receipt_button(modifier: Modifier = Modifier, onClick : () -> Unit = {})
                     spotColor = account_add_shadow_color
                 )
                 .background(
-                    color = add_sale_button_background_color,
+                    color = add_purchase_button_container_color,
                     shape = RoundedCornerShape(20f)
                 )
                 .border(1.dp, account_add_border_color, RoundedCornerShape(20f))
@@ -460,7 +446,7 @@ fun add_receipt_button(modifier: Modifier = Modifier, onClick : () -> Unit = {})
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
-                    Icons.Default.Create,
+                    Icons.Default.AddCircle,
                     contentDescription = "",
                     modifier = Modifier
                         .size(75.dp)
@@ -513,7 +499,7 @@ fun modifyPayment_button(modifier: Modifier = Modifier, onClick : () -> Unit = {
                     spotColor = account_add_shadow_color
                 )
                 .background(
-                    color = add_purchase_button_container_color,
+                    color = add_sale_button_background_color,
                     shape = RoundedCornerShape(20f)
                 )
                 .border(1.dp, account_add_border_color, RoundedCornerShape(20f))
@@ -525,7 +511,7 @@ fun modifyPayment_button(modifier: Modifier = Modifier, onClick : () -> Unit = {
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
-                    Icons.Default.Create,
+                    Icons.Outlined.Refresh,
                     contentDescription = "",
                     modifier = Modifier
                         .size(75.dp)
@@ -591,7 +577,7 @@ fun ModifyReceipt_button(modifier: Modifier = Modifier, onClick : () -> Unit = {
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
-                    Icons.Default.Create,
+                    Icons.Outlined.Refresh,
                     contentDescription = "",
                     modifier = Modifier
                         .size(75.dp)

@@ -211,7 +211,7 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                             Icons.Default.Menu,
                             contentDescription = "",
                             modifier = Modifier
-                                .size(30.dp)
+                                .size(40.dp)
                                 .padding(5.dp),
                             tint = edit_item_content_color
                         )
@@ -259,7 +259,7 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                             Icons.Default.Create,
                             contentDescription = "",
                             modifier = Modifier
-                                .size(30.dp)
+                                .size(40.dp)
                                 .padding(5.dp),
                             tint = edit_item_content_color
                         )
@@ -305,7 +305,7 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                             Icons.Outlined.Info,
                             contentDescription = "",
                             modifier = Modifier
-                                .size(30.dp)
+                                .size(40.dp)
                                 .padding(5.dp),
                             tint = edit_item_content_color
                         )
@@ -358,8 +358,8 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                                 Icons.Default.CheckCircle,
                                 contentDescription = "",
                                 modifier = Modifier
-                                    .size(30.dp)
-                                    .padding(5.dp),
+                                    .size(40.dp)
+                                    .padding(start = 7.dp, end = 5.dp),
                                 tint = edit_item_content_color
                             )
                             Text(
@@ -404,8 +404,8 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
                                 Icons.Default.Refresh,
                                 contentDescription = "",
                                 modifier = Modifier
-                                    .size(30.dp)
-                                    .padding(5.dp),
+                                    .size(40.dp)
+                                    .padding(start = 7.dp, end = 5.dp),
                                 tint = edit_item_content_color
                             )
                             Text(
