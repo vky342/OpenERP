@@ -1,5 +1,6 @@
 package com.vky342.openerp.ui.screens.transactions
 
+import android.R
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
@@ -96,6 +97,7 @@ import com.vky342.openerp.ui.screens.HOMES.AmountSection
 import com.vky342.openerp.ui.screens.HOMES.AutoResizeText
 import com.vky342.openerp.ui.screens.HOMES.VariableAmountRow
 import com.vky342.openerp.ui.theme.New_account_title_color
+import com.vky342.openerp.ui.theme.Typography
 import com.vky342.openerp.ui.theme.account_add_title_color
 import com.vky342.openerp.ui.theme.account_list_type_selector_container_color
 import com.vky342.openerp.ui.theme.account_list_type_selector_selected_txt_color
@@ -115,6 +117,7 @@ import com.vky342.openerp.ui.theme.search_account_container_color_for_edit_accou
 import com.vky342.openerp.ui.theme.shadow_color
 import com.vky342.openerp.ui.theme.title_color
 import com.vky342.openerp.ui.theme.var_amount_row_colour
+import java.nio.file.WatchEvent
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -137,10 +140,9 @@ fun add_purchase_screen_prev(){
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 2.dp)
-                .height(50.dp)
+                .height(30.dp)
         ) {
-            Text(text = "New purchase", color = New_account_title_color,fontSize = 32.sp, modifier = Modifier
+            Text(text = "New purchase", color = New_account_title_color, style = Typography.titleLarge, modifier = Modifier
                 .align(
                     Alignment.CenterStart
                 )
@@ -151,7 +153,7 @@ fun add_purchase_screen_prev(){
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp)
-                .height(70.dp)
+                .height(60.dp)
         ) {
             form_fields(icon = Icons.Outlined.Person,label = "Party",modifier = Modifier
                 .padding(horizontal = sidePadding.dp)
@@ -182,16 +184,16 @@ fun add_purchase_screen_prev(){
             .wrapContentHeight()
             .padding(top = 25.dp)){
             Text("P u r c h a s e   S u m m a r y",
-                fontSize = 20.sp,color = title_color,
+                color = title_color, style = Typography.titleMedium,
                 modifier = Modifier
                     .padding(horizontal = sidePadding.dp)
                     .align(Alignment.CenterHorizontally))
 
-            Variable_Amount_Row_2(modifier = Modifier.background(color = var_amount_row_colour))
-
-            checkout_Strip()
-
-            Add_button_Strip()
+            Variable_Amount_Row_2(modifier = Modifier.background(color = var_amount_row_colour).height(60.dp))
+            Row (modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
+                checkout_Strip(modifier = Modifier.weight(1f))
+                Add_button_Strip(modifier = Modifier.weight(1f))
+            }
 
             item_Card(modifier = Modifier.padding(horizontal = (sidePadding/2).dp, vertical = 10.dp))
 
@@ -384,9 +386,9 @@ fun DatePickerComposable(enabled: Boolean = true,modifier : Modifier = Modifier,
 }
 
 
-//@Preview
+@Preview
 @Composable
-fun item_Card(quantity : Int = 0,name : String = "", price : Double = 0.00, discount : Double = 0.00,modifier: Modifier = Modifier,onDelete : () -> Unit = {},onQuantityDecrease : () -> Unit = {}, onQuantityIncrease : () -> Unit = {},onAmountChange : (Double) -> Unit = {}) : Pair<Double, PurchaseEntry> {
+fun item_Card(quantity : Int = 0,name : String = "item name", price : Double = 0.00, discount : Double = 0.00,modifier: Modifier = Modifier,onDelete : () -> Unit = {},onQuantityDecrease : () -> Unit = {}, onQuantityIncrease : () -> Unit = {},onAmountChange : (Double) -> Unit = {}) : Pair<Double, PurchaseEntry> {
 
     val quantity = remember { mutableStateOf(quantity) }
 
@@ -395,7 +397,7 @@ fun item_Card(quantity : Int = 0,name : String = "", price : Double = 0.00, disc
     var totalAmount = remember { derivedStateOf { ( quantity.value.toDouble() *  ( price.toDouble() - ( discount * (price.toDouble() / 100) ) ) ) } }
 
         Box (modifier = modifier
-            .height(200.dp)
+            .height(150.dp)
             .fillMaxWidth()
             .shadow(elevation = 4.dp, shape = RoundedCornerShape(20f))
             .background(
@@ -417,7 +419,7 @@ fun item_Card(quantity : Int = 0,name : String = "", price : Double = 0.00, disc
                             // item details
                             Column (modifier = Modifier
                                 .fillMaxSize()
-                                .padding(start = 10.dp, bottom = 7.dp, top = 14.dp)
+                                .padding(start = 10.dp, bottom = 3.dp, top = 10.dp)
                                 .align(Alignment.Center), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
 
                                 // Item name
@@ -426,16 +428,10 @@ fun item_Card(quantity : Int = 0,name : String = "", price : Double = 0.00, disc
                                     .fillMaxWidth()
                                     .weight(1f)){
                                     Text(item_name.value,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 22.sp,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
                                         color = amount_text_color,
-                                        style = TextStyle(shadow = Shadow(
-                                            color = shadow_color, // Shadow color
-                                            offset = Offset(0f, 4f), // Shadow offset (x, y)
-                                            blurRadius = 4f // Shadow blur radius
-                                        )))
+                                        style = Typography.titleLarge)
                                 }
 
 
@@ -444,18 +440,12 @@ fun item_Card(quantity : Int = 0,name : String = "", price : Double = 0.00, disc
                                     .padding(horizontal = 6.dp)
                                     .fillMaxWidth()
                                     .weight(1f)){
-                                    Text("Price", fontWeight = FontWeight.Light, fontSize = 14.sp, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
+                                    Text("Price", style = Typography.titleMedium, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
                                     Text("₹ " + price.toString(),
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 22.sp,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
                                         color = amount_text_color,
-                                        style = TextStyle(shadow = Shadow(
-                                            color = shadow_color, // Shadow color
-                                            offset = Offset(0f, 4f), // Shadow offset (x, y)
-                                            blurRadius = 4f)
-                                        ), modifier = Modifier.align(Alignment.CenterStart)
+                                        style = Typography.titleMedium, modifier = Modifier.align(Alignment.CenterStart)
                                     )
                                 }
 
@@ -464,18 +454,12 @@ fun item_Card(quantity : Int = 0,name : String = "", price : Double = 0.00, disc
                                     .padding(horizontal = 6.dp)
                                     .fillMaxWidth()
                                     .weight(1f)){
-                                    Text("Discount", fontWeight = FontWeight.Light, fontSize = 14.sp, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
-                                    Text("% " + discount.toString(),
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 22.sp,
+                                    Text("Discount", style = Typography.titleMedium, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
+                                    Text(discount.toString() + " %" ,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
                                         color = amount_text_color,
-                                        style = TextStyle(shadow = Shadow(
-                                            color = shadow_color, // Shadow color
-                                            offset = Offset(0f, 4f), // Shadow offset (x, y)
-                                            blurRadius = 4f)
-                                        ), modifier = Modifier.align(Alignment.CenterStart)
+                                        style = Typography.titleMedium, modifier = Modifier.align(Alignment.CenterStart)
                                     )
                                 }
 
@@ -484,18 +468,12 @@ fun item_Card(quantity : Int = 0,name : String = "", price : Double = 0.00, disc
                                     .padding(horizontal = 6.dp)
                                     .fillMaxWidth()
                                     .weight(1f)){
-                                    Text("Total", fontWeight = FontWeight.Light, fontSize = 14.sp, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
+                                    Text("Total", style = Typography.titleMedium, color = Color.White, modifier = Modifier.align(Alignment.CenterEnd))
                                     Text("₹ " + totalAmount.value,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 22.sp,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
-                                        color = Color.White,
-                                        style = TextStyle(shadow = Shadow(
-                                            color = shadow_color,
-                                            offset = Offset(0f, 4f),
-                                            blurRadius = 4f)
-                                        ),modifier = Modifier.align(Alignment.CenterStart)
+                                        color = amount_text_color,
+                                        style = Typography.titleMedium,modifier = Modifier.align(Alignment.CenterStart)
                                     )
                                 }
                             }
@@ -531,7 +509,7 @@ fun item_Card(quantity : Int = 0,name : String = "", price : Double = 0.00, disc
                                 contentDescription = "",
                                 tint = Color.White,
                                 modifier = Modifier
-                                    .size(50.dp)
+                                    .size(25.dp)
                                     .align(Alignment.Center)
                             )
 
@@ -570,7 +548,7 @@ fun item_Card(quantity : Int = 0,name : String = "", price : Double = 0.00, disc
                                     .weight(2.8f)
                                     .align(Alignment.CenterVertically)) {
 
-                                    BasicTextField(keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),textStyle = TextStyle(fontSize = 25.sp,textAlign = TextAlign.Center),singleLine = true,
+                                    BasicTextField(keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),textStyle = Typography.titleMedium.copy(textAlign = TextAlign.Center),singleLine = true,
                                         value = quantity.value.toString(),
                                         onValueChange = {
                                             try {quantity.value = it.toInt()}
@@ -624,7 +602,7 @@ fun floating_add_button(modifier: Modifier = Modifier,onClick : () -> Unit = {})
 
 @Preview
 @Composable
-fun item_fill_popUp(fieldsEnabled : Boolean = true,name: String = "", price: String = "", discount: String = "", quantity: String = "",
+fun item_fill_popUp(fieldsEnabled : Boolean = true,nameEnabled : Boolean = true,name: String = "", price: String = "", discount: String = "", quantity: String = "",
                     onNameChange : (String) -> Unit = {}, onPriceChange : (String) -> Unit = {}, onDiscountChange : (String) -> Unit = {}, onQuantityChange : (String) -> Unit = {},
                     onVC : (String) -> Unit = {}, modifier: Modifier = Modifier, onCancel : () -> Unit = {}, onDone : () -> Unit = {}){
 
@@ -654,7 +632,8 @@ fun item_fill_popUp(fieldsEnabled : Boolean = true,name: String = "", price: Str
                         .height(60.dp)){
 
 
-                        form_fields(value = name,
+                        form_fields(enabled = nameEnabled,
+                            value = name,
                             onVc = { onNameChange(it) },
                             icon = Icons.Default.Search,label = "item name",modifier = Modifier
                             .padding(horizontal = 10.dp)
@@ -809,7 +788,7 @@ fun item_fill_popUp(fieldsEnabled : Boolean = true,name: String = "", price: Str
 fun Amount_Section_2(title: String = "Total amount", amount: String = "56,900 $", modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .padding(16.dp)
+            .padding(horizontal = 10.dp)
             .wrapContentHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -817,7 +796,7 @@ fun Amount_Section_2(title: String = "Total amount", amount: String = "56,900 $"
         // Title
         Text(
             text = title,
-            style = MaterialTheme.typography.bodyMedium,
+            style = Typography.labelLarge,
             color = Color.Black,
             maxLines = 1 // Prevents multi-line wrapping
         )
@@ -827,18 +806,18 @@ fun Amount_Section_2(title: String = "Total amount", amount: String = "56,900 $"
             modifier = Modifier
                 .widthIn(min = 50.dp, max = 150.dp) // Ensures text has a fixed width range
         ) {
-            AutoResizeText(
+            Text(
                 text = "$amount",
-                style = TextStyle(
+                style = Typography.bodyLarge.copy(
                     shadow = Shadow(
                         color = shadow_color, // Shadow color
                         offset = Offset(0f, 4f), // Shadow offset (x, y)
                         blurRadius = 4f // Shadow blur radius
                     ),
-                    fontWeight = FontWeight.Bold
                 ),
                 color = amount_text_color,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                modifier = Modifier.align(Alignment.Center)
             )
         }
     }
@@ -847,12 +826,11 @@ fun Amount_Section_2(title: String = "Total amount", amount: String = "56,900 $"
 
 @Preview
 @Composable
-fun Variable_Amount_Row_2(totalItems : Int = 0, totalAmount : Double = 0.00,modifier: Modifier = Modifier) {
+fun Variable_Amount_Row_2(totalItems : Int = 0, totalAmount : Double = 1234567.00,modifier: Modifier = Modifier) {
 
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight(), // Fix height issue
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Left section: Today's Sale
@@ -866,11 +844,11 @@ fun Variable_Amount_Row_2(totalItems : Int = 0, totalAmount : Double = 0.00,modi
 
         // Thin vertical line separator
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .width(3.dp)
-                .height(40.dp) // Adjust height for better UI
+                .height(35.dp) // Adjust height for better UI
                 .background(middle_spacer_color)
-                .shadow(elevation = 2.dp)
+                .shadow(elevation = 4.dp)
         )
 
         // Right section: Today's Receipts
@@ -886,10 +864,9 @@ fun Variable_Amount_Row_2(totalItems : Int = 0, totalAmount : Double = 0.00,modi
 
 @Preview
 @Composable
-fun checkout_Strip(enabled: Boolean = true,onClick: () -> Unit = {}){
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .height(60.dp)
+fun checkout_Strip(modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit = {}){
+    Box(modifier = modifier
+        .height(40.dp)
         .background(color = Color.White)){
         Row (horizontalArrangement = Arrangement.Center,modifier = Modifier
             .fillMaxWidth(0.8f)
@@ -899,7 +876,7 @@ fun checkout_Strip(enabled: Boolean = true,onClick: () -> Unit = {}){
                 .size(30.dp)
                 .align(Alignment.CenterVertically)
                 .clickable(enabled = enabled) { onClick() })
-            Text("Save", color = title_color,fontSize = 30.sp,
+            Text("Save", color = title_color,fontSize = 20.sp,
                 style = TextStyle(
                     shadow = Shadow(
                         color = shadow_color,
@@ -917,10 +894,9 @@ fun checkout_Strip(enabled: Boolean = true,onClick: () -> Unit = {}){
 
 @Preview
 @Composable
-fun Add_button_Strip(enabled: Boolean = true,onClick: () -> Unit = {}){
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .height(60.dp)
+fun Add_button_Strip(modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit = {}){
+    Box(modifier = modifier
+        .height(40.dp)
         .background(color = title_color)){
         Row (horizontalArrangement = Arrangement.Center,modifier = Modifier
             .fillMaxWidth(0.8f)
@@ -930,7 +906,7 @@ fun Add_button_Strip(enabled: Boolean = true,onClick: () -> Unit = {}){
                 .size(30.dp)
                 .align(Alignment.CenterVertically)
                 .clickable(enabled = enabled) { onClick() })
-            Text("Item", color = background_color,fontSize = 30.sp,
+            Text("Item", color = background_color,fontSize = 20.sp,
                 style = TextStyle(
                     shadow = Shadow(
                         color = shadow_color,

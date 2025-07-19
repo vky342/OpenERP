@@ -58,6 +58,7 @@ import com.vky342.openerp.data.Entities.SaleEntry
 import com.vky342.openerp.data.ViewModels.transaction.Add_sale_Vm
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.theme.New_account_title_color
+import com.vky342.openerp.ui.theme.Typography
 import com.vky342.openerp.ui.theme.background_color
 import com.vky342.openerp.ui.theme.title_color
 import com.vky342.openerp.ui.theme.var_amount_row_colour
@@ -88,6 +89,7 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
     // itemForm popUP
     val currentItem = remember { mutableStateOf(Item("",0.0,0.0,0)) }
     val fieldsEnabled = remember { mutableStateOf(false) }
+    val itemNameEnabled = remember { mutableStateOf(true) }
     val selectedItemName = remember { mutableStateOf("") }
     val selectedItemPrice = remember { mutableStateOf("") }
     val selectedItemDiscount = remember { mutableStateOf("") }
@@ -152,12 +154,12 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 2.dp)
-                    .height(45.dp)
+                    .height(30.dp)
             ) {
                 Text(
                     text = "New sale : " + if(ID == 0) 1 else ID+ 1,
                     color = New_account_title_color,
-                    fontSize = 24.sp,
+                    style = Typography.titleLarge,
                     modifier = Modifier
                         .align(
                             Alignment.CenterStart
@@ -170,7 +172,7 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp, top = 5.dp)
-                    .height(70.dp)
+                    .height(55.dp)
             ) {
                 form_fields(
                     trailing_icon_enabled = if(selectedAccount == Account(0, "", "", "", "")) false else{true},
@@ -236,48 +238,52 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
 
                 Text(
                     "S u m m a r y",
-                    fontSize = 20.sp, color = title_color,
+                    style = Typography.titleMedium, color = title_color,
                     modifier = Modifier
                         .padding(horizontal = sidePadding.dp)
                         .align(Alignment.CenterHorizontally)
                 )
 
-                Variable_Amount_Row_2(totalAmount = totalAmount.value, totalItems = totalItems,modifier = Modifier.background(color = var_amount_row_colour))
+                Variable_Amount_Row_2(totalAmount = totalAmount.value, totalItems = totalItems,modifier = Modifier.background(color = var_amount_row_colour).height(65.dp))
 
-                checkout_Strip(enabled = checkOutEnabled, onClick = {
+                Row (modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
+                    checkout_Strip(modifier = Modifier.weight(1f),enabled = checkOutEnabled, onClick = {
 
-                    if (selectedDate.value != ""){
-                        viewModel.add_sale(
-                            name = selectedAccount.value.name,
-                            sale = Sale(saleId = 0, saleDate = selectedDate.value, ledgerId = 0, saleAmount = totalAmount.value, saleType = payment_mode.value),
-                            listOfEntry = itemsList.map { item ->
-                                SaleEntry(
-                                    entryId = 0,
-                                    entryQuantity = item.quantity,
-                                    entryPrice = item.price,
-                                    discount = item.disc,
-                                    finalPrice = item.totalAmount.value,
-                                    itemName = item.name,
-                                    saleId = 0
-                                )
-                            }
-                        )
-                        itemsList.clear()
-                        selectedAccountText = ""
-                        selectedAccount.value = Account(0,"","","","")
-                        payment_mode.value = ""
-                        partyEnabled.value = true
-                        currentItem.value = Item("",0.0,0.0,0)
-                        fieldsEnabled.value = false
-                        selectedItemName.value = ""
-                        selectedItemPrice.value = ""
-                        selectedItemDiscount.value = ""
-                        selectedItemQuantity.value = ""
-                    }
+                        if (selectedDate.value != ""){
+                            viewModel.add_sale(
+                                name = selectedAccount.value.name,
+                                sale = Sale(saleId = 0, saleDate = selectedDate.value, ledgerId = 0, saleAmount = totalAmount.value, saleType = payment_mode.value),
+                                listOfEntry = itemsList.map { item ->
+                                    SaleEntry(
+                                        entryId = 0,
+                                        entryQuantity = item.quantity,
+                                        entryPrice = item.price,
+                                        discount = item.disc,
+                                        finalPrice = item.totalAmount.value,
+                                        itemName = item.name,
+                                        saleId = 0
+                                    )
+                                }
+                            )
+                            itemsList.clear()
+                            selectedAccountText = ""
+                            selectedAccount.value = Account(0,"","","","")
+                            payment_mode.value = ""
+                            partyEnabled.value = true
+                            currentItem.value = Item("",0.0,0.0,0)
+                            fieldsEnabled.value = false
+                            itemNameEnabled.value = true
+                            selectedItemName.value = ""
+                            selectedItemPrice.value = ""
+                            selectedItemDiscount.value = ""
+                            selectedItemQuantity.value = ""
+                        }
 
-                })
+                    })
 
-                Add_button_Strip(addItemEnabled.value,onClick = { item_fill_popUp_status.value = true })
+                    Add_button_Strip(modifier = Modifier.weight(1f),enabled =addItemEnabled.value,onClick = { item_fill_popUp_status.value = true })
+                }
+
 
                 // Items List
                 Box(modifier = Modifier
@@ -339,11 +345,12 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                     selectedItemDiscount.value = ""
                     selectedItemQuantity.value = ""
                     currentItem.value = Item("",0.0,0.0,0)
+                    itemNameEnabled.value = true
                 }
 
             }
 
-            item_fill_popUp(fieldsEnabled = fieldsEnabled.value,
+            item_fill_popUp(nameEnabled = itemNameEnabled.value,fieldsEnabled = fieldsEnabled.value,
                 name = selectedItemName.value,
                 price = selectedItemPrice.value,
                 discount = selectedItemDiscount.value,
@@ -357,13 +364,17 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                     .align(Alignment.TopCenter),
                 onCancel = {
                     item_fill_popUp_status.value = false
+                    expanded_item_name_suggestion.value = false
                     selectedItemName.value = ""
                     selectedItemPrice.value = ""
                     selectedItemDiscount.value = ""
                     selectedItemQuantity.value = ""
                     currentItem.value = Item("",0.0,0.0,0)
-                    fieldsEnabled.value =false},
+                    fieldsEnabled.value =false
+                    itemNameEnabled.value = true}
+                ,
                 onDone = {
+                    expanded_item_name_suggestion.value = false
                     val res = viewModel.validateItemPopUPInput(selectedItemName.value,selectedItemPrice.value,selectedItemDiscount.value,selectedItemQuantity.value)
                     if (res && currentItem.value != Item("",0.0,0.0,0)){
                         if (selectedItemQuantity.value.toInt() <= currentItem.value.itemQuantity){
@@ -380,6 +391,7 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                             selectedItemQuantity.value = ""
                             currentItem.value = Item("",0.0,0.0,0)
                             fieldsEnabled.value = false
+                            itemNameEnabled.value = true
                         } else{
                             Toast.makeText(context,"Inventory Shortage!", Toast.LENGTH_SHORT).show()
                             selectedItemQuantity.value = ""
@@ -404,7 +416,7 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(max = 300.dp)
-                    .padding(top = 130.dp)
+                    .padding(top = 100.dp)
                     .padding(horizontal = (sidePadding).dp)
                     .align(Alignment.TopCenter)
                     .shadow(elevation = 4.dp, shape = RoundedCornerShape(10f))
@@ -433,7 +445,7 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
 
         if (expanded_item_name_suggestion.value){
 
-            BackHandler(enabled = expanded_account_suggestion.value) {
+            BackHandler(enabled = expanded_item_name_suggestion.value) {
                 expanded_item_name_suggestion.value = false
             }
 
@@ -462,6 +474,7 @@ fun AddSaleScreen( viewModel: Add_sale_Vm = hiltViewModel()){
                                 } else{
                                     currentItem.value = item
                                     fieldsEnabled.value = true
+                                    itemNameEnabled.value = false
                                     selectedItemName.value = item.itemName
                                     selectedItemPrice.value = item.itemSellingPrice.toString()
                                     expanded_item_name_suggestion.value = false

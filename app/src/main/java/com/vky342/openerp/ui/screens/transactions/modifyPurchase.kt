@@ -60,6 +60,7 @@ import com.vky342.openerp.data.Entities.SaleEntry
 import com.vky342.openerp.data.ViewModels.transaction.modify_purchase_Vm
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.theme.New_account_title_color
+import com.vky342.openerp.ui.theme.Typography
 import com.vky342.openerp.ui.theme.background_color
 import com.vky342.openerp.ui.theme.sale_button_box_color
 import com.vky342.openerp.ui.theme.title_color
@@ -87,6 +88,7 @@ fun modifyPurchaseScreen(viewModel : modify_purchase_Vm = hiltViewModel()){
     // itemForm popUP
     val currentItem = remember { mutableStateOf(Item("",0.0,0.0,0)) }
     val fieldsEnabled = remember { mutableStateOf(false) }
+    val itemNameEnabled = remember { mutableStateOf(true) }
     val selectedItemName = remember { mutableStateOf("") }
     val selectedItemPrice = remember { mutableStateOf("") }
     val selectedItemDiscount = remember { mutableStateOf("") }
@@ -172,7 +174,7 @@ fun modifyPurchaseScreen(viewModel : modify_purchase_Vm = hiltViewModel()){
                     Text(
                         text = "Select bill",
                         color = New_account_title_color,
-                        fontSize = 32.sp,
+                        style = Typography.titleLarge,
                         modifier = Modifier
                             .align(
                                 Alignment.CenterStart
@@ -194,7 +196,7 @@ fun modifyPurchaseScreen(viewModel : modify_purchase_Vm = hiltViewModel()){
                     ) {
                         billSearchbar(
                             modifier = Modifier,
-                            current_value = bill_id.value.toString(),
+                            current_value = bill_id.value,
                             label = "Invoice ID...",
                             onVC =
                                 { newValue ->
@@ -226,7 +228,7 @@ fun modifyPurchaseScreen(viewModel : modify_purchase_Vm = hiltViewModel()){
                 Box(
                     modifier = Modifier
                         .padding(vertical = 150.dp)
-                        .height(60.dp)
+                        .height(40.dp)
                         .fillMaxWidth()
                         .background(color = sale_button_box_color)
                         .align(Alignment.CenterHorizontally),
@@ -248,7 +250,7 @@ fun modifyPurchaseScreen(viewModel : modify_purchase_Vm = hiltViewModel()){
                         Text(
                             "Load recent purchase...",
                             color = Color.White,
-                            fontSize = 22.sp,
+                            style = Typography.titleMedium,
                             modifier = Modifier
                                 .align(
                                     Alignment.CenterVertically
@@ -303,12 +305,12 @@ fun modifyPurchaseScreen(viewModel : modify_purchase_Vm = hiltViewModel()){
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 2.dp)
-                        .height(45.dp)
+                        .height(30.dp)
                 ) {
                     Text(
                         text = "purchase : " + bill_id.value,
                         color = New_account_title_color,
-                        fontSize = 24.sp,
+                        style = Typography.titleLarge,
                         modifier = Modifier
                             .align(
                                 Alignment.CenterStart
@@ -321,7 +323,7 @@ fun modifyPurchaseScreen(viewModel : modify_purchase_Vm = hiltViewModel()){
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 16.dp, top = 5.dp)
-                        .height(70.dp)
+                        .height(55.dp)
                 ) {
                     form_fields(
                         trailing_icon_enabled = selectedAccount.value != "",
@@ -381,47 +383,51 @@ fun modifyPurchaseScreen(viewModel : modify_purchase_Vm = hiltViewModel()){
                     .padding(top = 25.dp)) {
                     Text(
                         "S u m m a r y",
-                        fontSize = 20.sp, color = title_color,
+                        style = Typography.titleMedium, color = title_color,
                         modifier = Modifier
                             .padding(horizontal = sidePadding.dp)
                             .align(Alignment.CenterHorizontally)
                     )
-                    Variable_Amount_Row_2(totalAmount = totalAmount.value, totalItems = totalItems,modifier = Modifier.background(color = var_amount_row_colour))
-                    checkout_Strip(enabled = checkOutEnabled, onClick = {
-                        if (selectedDate.value != ""){
-                            viewModel.update_Purchase(
-                                account_name = selectedAccount.value,
-                                purchase = Purcahase(purchaseId = old_purchase.value.purchaseId, purchaseDate = selectedDate.value, ledgerId = 0, purchaseAmount = totalAmount.value, purchaseType = payment_mode.value),
-                                new_list_of_purchaseEntries = itemsList.map { item ->
-                                    PurchaseEntry(
-                                        entryId = 0,
-                                        entryQuantity = item.quantity,
-                                        entryPrice = item.price,
-                                        discount = item.disc,
-                                        finalPrice = item.totalAmount.value,
-                                        itemName = item.name,
-                                        purchaseId = old_purchase.value.purchaseId
-                                    )
-                                }
-                            )
-                            itemsList.clear()
-                            selectedAccountText = ""
-                            selectedAccount.value = ""
-                            selectedDate.value = ""
-                            payment_mode.value = ""
-                            partyEnabled.value = true
-                            currentItem.value = Item("",0.0,0.0,0)
-                            fieldsEnabled.value = false
-                            old_purchase.value = Purcahase(0, "", 0, 0.0, "")
-                            bill_id.value = ""
-                            is_bill_selected.value = false
-                            selectedItemName.value = ""
-                            selectedItemPrice.value = ""
-                            selectedItemDiscount.value = ""
-                            selectedItemQuantity.value = ""
-                        }
-                    })
-                    Add_button_Strip(addItemEnabled.value,onClick = { item_fill_popUp_status.value = true })
+                    Variable_Amount_Row_2(totalAmount = totalAmount.value, totalItems = totalItems,modifier = Modifier.background(color = var_amount_row_colour).height(65.dp))
+                    Row (modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
+                        checkout_Strip(modifier = Modifier.weight(1f),enabled = checkOutEnabled, onClick = {
+                            if (selectedDate.value != ""){
+                                viewModel.update_Purchase(
+                                    account_name = selectedAccount.value,
+                                    purchase = Purcahase(purchaseId = old_purchase.value.purchaseId, purchaseDate = selectedDate.value, ledgerId = 0, purchaseAmount = totalAmount.value, purchaseType = payment_mode.value),
+                                    new_list_of_purchaseEntries = itemsList.map { item ->
+                                        PurchaseEntry(
+                                            entryId = 0,
+                                            entryQuantity = item.quantity,
+                                            entryPrice = item.price,
+                                            discount = item.disc,
+                                            finalPrice = item.totalAmount.value,
+                                            itemName = item.name,
+                                            purchaseId = old_purchase.value.purchaseId
+                                        )
+                                    }
+                                )
+                                itemsList.clear()
+                                selectedAccountText = ""
+                                selectedAccount.value = ""
+                                selectedDate.value = ""
+                                payment_mode.value = ""
+                                partyEnabled.value = true
+                                currentItem.value = Item("",0.0,0.0,0)
+                                fieldsEnabled.value = false
+                                itemNameEnabled.value = true
+                                old_purchase.value = Purcahase(0, "", 0, 0.0, "")
+                                bill_id.value = ""
+                                is_bill_selected.value = false
+                                selectedItemName.value = ""
+                                selectedItemPrice.value = ""
+                                selectedItemDiscount.value = ""
+                                selectedItemQuantity.value = ""
+                            }
+                        })
+                        Add_button_Strip(modifier = Modifier.weight(1f),enabled =addItemEnabled.value,onClick = { item_fill_popUp_status.value = true })
+                    }
+
                     // Items List
                     Box(modifier = Modifier
                         .fillMaxWidth()
@@ -476,9 +482,10 @@ fun modifyPurchaseScreen(viewModel : modify_purchase_Vm = hiltViewModel()){
                         selectedItemQuantity.value = ""
                         currentItem.value = Item("",0.0,0.0,0)
                         fieldsEnabled.value = false
+                        itemNameEnabled.value = true
                     }
                 }
-                item_fill_popUp(fieldsEnabled = fieldsEnabled.value,
+                item_fill_popUp(fieldsEnabled = fieldsEnabled.value, nameEnabled = itemNameEnabled.value,
                     name = selectedItemName.value,
                     price = selectedItemPrice.value,
                     discount = selectedItemDiscount.value,
@@ -493,12 +500,15 @@ fun modifyPurchaseScreen(viewModel : modify_purchase_Vm = hiltViewModel()){
                     onCancel = {
                         item_fill_popUp_status.value = false
                         selectedItemName.value = ""
+                        expanded_item_name_suggestion.value = false
                         selectedItemPrice.value = ""
                         selectedItemDiscount.value = ""
                         selectedItemQuantity.value = ""
                         currentItem.value = Item("",0.0,0.0,0)
-                        fieldsEnabled.value = false},
+                        fieldsEnabled.value = false
+                        itemNameEnabled.value = true},
                     onDone = {
+                        expanded_item_name_suggestion.value = false
                         val res = viewModel.validateItemPopUPInput(selectedItemName.value,selectedItemPrice.value,selectedItemDiscount.value,selectedItemQuantity.value)
                         if(res){
                             itemsList.add(item_popup(
@@ -514,6 +524,7 @@ fun modifyPurchaseScreen(viewModel : modify_purchase_Vm = hiltViewModel()){
                             selectedItemPrice.value = ""
                             selectedItemDiscount.value = ""
                             selectedItemQuantity.value = ""
+                            itemNameEnabled.value = true
                         }else{
                             Toast.makeText(context,"Invalid Input", Toast.LENGTH_SHORT).show()
                         }
@@ -529,7 +540,7 @@ fun modifyPurchaseScreen(viewModel : modify_purchase_Vm = hiltViewModel()){
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(max = 300.dp)
-                        .padding(top = 130.dp)
+                        .padding(top = 100.dp)
                         .padding(horizontal = (sidePadding).dp)
                         .align(Alignment.TopCenter)
                         .shadow(elevation = 4.dp, shape = RoundedCornerShape(10f))
@@ -581,6 +592,7 @@ fun modifyPurchaseScreen(viewModel : modify_purchase_Vm = hiltViewModel()){
                                 .clickable {
                                     currentItem.value = item
                                     fieldsEnabled.value = true
+                                    itemNameEnabled.value = false
                                     selectedItemName.value = item.itemName
                                     selectedItemPrice.value = item.itemSellingPrice.toString()
                                     expanded_item_name_suggestion.value = false

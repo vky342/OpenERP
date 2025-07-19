@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.screens.HOMES.Searchbar
 import com.vky342.openerp.ui.theme.New_account_title_color
+import com.vky342.openerp.ui.theme.Typography
 import com.vky342.openerp.ui.theme.account_list_type_selector_container_color
 import com.vky342.openerp.ui.theme.account_list_type_selector_selected_txt_color
 import com.vky342.openerp.ui.theme.account_list_type_selector_shadow_color
@@ -188,9 +189,10 @@ fun modify_sale_screen_prev(){
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 2.dp)
-                    .height(50.dp)
+                    .height(30.dp)
             ) {
-                Text(text = "Select Bill", color = New_account_title_color,fontSize = 32.sp, modifier = Modifier
+                Text(text = "Select Bill", color = New_account_title_color,
+                    style = Typography.titleLarge, modifier = Modifier
                     .align(
                         Alignment.CenterStart
                     )
@@ -220,7 +222,7 @@ fun modify_sale_screen_prev(){
             Box(
                 modifier = Modifier
                     .padding(vertical = 150.dp)
-                    .height(60.dp)
+                    .height(40.dp)
                     .fillMaxWidth()
                     .background(color = sale_button_box_color)
                     .align(Alignment.CenterHorizontally),
@@ -238,7 +240,7 @@ fun modify_sale_screen_prev(){
                     )
                     Text("Load recent bill...",
                         color = Color.White,
-                        fontSize = 22.sp,
+                        style = Typography.titleMedium,
                         modifier = Modifier.align(
                             Alignment.CenterVertically)
                             .clickable {

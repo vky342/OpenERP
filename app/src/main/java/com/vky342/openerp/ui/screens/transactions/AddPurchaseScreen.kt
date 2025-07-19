@@ -58,8 +58,10 @@ import com.vky342.openerp.data.Entities.Item
 import com.vky342.openerp.data.Entities.Purcahase
 import com.vky342.openerp.data.Entities.PurchaseEntry
 import com.vky342.openerp.data.ViewModels.transaction.Add_purchase_VM
+import com.vky342.openerp.ui.screens.ACCOUNTS.ModifyAccountScreen
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.theme.New_account_title_color
+import com.vky342.openerp.ui.theme.Typography
 import com.vky342.openerp.ui.theme.background_color
 import com.vky342.openerp.ui.theme.title_color
 import com.vky342.openerp.ui.theme.var_amount_row_colour
@@ -99,6 +101,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
     // itemForm popUP
     val currentItem = remember { mutableStateOf(Item("",0.0,0.0,0)) }
     val fieldsEnabled = remember { mutableStateOf(false) }
+    val itemNameEnabled = remember { mutableStateOf(true) }
     val selectedItemName = remember { mutableStateOf("") }
     val selectedItemPrice = remember { mutableStateOf("") }
     val selectedItemDiscount = remember { mutableStateOf("") }
@@ -162,13 +165,12 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 2.dp)
-                    .height(45.dp)
+                    .height(30.dp)
             ) {
                 Text(
                     text = "New purchase : " + if(ID == 0) 1 else ID+ 1,
                     color = New_account_title_color,
-                    fontSize = 24.sp,
+                    style = Typography.titleLarge,
                     modifier = Modifier
                         .align(
                             Alignment.CenterStart
@@ -181,7 +183,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp, top = 5.dp)
-                    .height(70.dp)
+                    .height(55.dp)
             ) {
                 form_fields(
                     trailing_icon_enabled = if(selectedAccount == Account(0, "", "", "", "")) false else{true},
@@ -247,50 +249,51 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
 
                 Text(
                     "S u m m a r y",
-                    fontSize = 20.sp, color = title_color,
+                    style = Typography.titleMedium, color = title_color,
                     modifier = Modifier
                         .padding(horizontal = sidePadding.dp)
                         .align(Alignment.CenterHorizontally)
                 )
+                Variable_Amount_Row_2(totalAmount = totalAmount.value, totalItems = totalItems,modifier = Modifier.background(color = var_amount_row_colour).height(65.dp))
 
-                Variable_Amount_Row_2(totalAmount = totalAmount.value, totalItems = totalItems,modifier = Modifier.background(color = var_amount_row_colour))
+                Row (modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
+                    checkout_Strip(modifier = Modifier.weight(1f),enabled = checkOutEnabled, onClick = {
 
-                checkout_Strip(enabled = checkOutEnabled, onClick = {
+                        if (selectedDate.value != ""){
+                            viewModel.add_purchase(
+                                name = selectedAccount.value.name,
+                                purchase = Purcahase(purchaseId = 0, purchaseDate = selectedDate.value, ledgerId = 0, purchaseAmount = totalAmount.value, purchaseType = payment_mode.value),
+                                listOfEntry = itemsList.map { item ->
+                                    PurchaseEntry(
+                                        entryId = 0,
+                                        entryQuantity = item.quantity,
+                                        entryPrice = item.price,
+                                        discount = item.disc,
+                                        finalPrice = item.totalAmount.value,
+                                        itemName = item.name,
+                                        purchaseId = 0
+                                    )
+                                }
+                            )
+                            itemsList.clear()
+                            selectedAccountText = ""
+                            selectedAccount.value = Account(0,"","","","")
+                            selectedDate.value = ""
+                            payment_mode.value = ""
+                            partyEnabled.value = true
+                            currentItem.value = Item("",0.0,0.0,0)
+                            fieldsEnabled.value = false
+                            itemNameEnabled.value = true
+                            selectedItemName.value = ""
+                            selectedItemPrice.value = ""
+                            selectedItemDiscount.value = ""
+                            selectedItemQuantity.value = ""
+                        }
 
-                    if (selectedDate.value != ""){
-                        viewModel.add_purchase(
-                            name = selectedAccount.value.name,
-                            purchase = Purcahase(purchaseId = 0, purchaseDate = selectedDate.value, ledgerId = 0, purchaseAmount = totalAmount.value, purchaseType = payment_mode.value),
-                            listOfEntry = itemsList.map { item ->
-                                PurchaseEntry(
-                                    entryId = 0,
-                                    entryQuantity = item.quantity,
-                                    entryPrice = item.price,
-                                    discount = item.disc,
-                                    finalPrice = item.totalAmount.value,
-                                    itemName = item.name,
-                                    purchaseId = 0
-                                )
-                            }
-                        )
-                        itemsList.clear()
-                        selectedAccountText = ""
-                        selectedAccount.value = Account(0,"","","","")
-                        selectedDate.value = ""
-                        payment_mode.value = ""
-                        partyEnabled.value = true
-                        currentItem.value = Item("",0.0,0.0,0)
-                        fieldsEnabled.value = false
-                        selectedItemName.value = ""
-                        selectedItemPrice.value = ""
-                        selectedItemDiscount.value = ""
-                        selectedItemQuantity.value = ""
-                    }
 
-
-                })
-
-                Add_button_Strip(addItemEnabled.value,onClick = { item_fill_popUp_status.value = true })
+                    })
+                    Add_button_Strip( modifier = Modifier.weight(1f),enabled = addItemEnabled.value,onClick = { item_fill_popUp_status.value = true })
+                }
 
                 // Items List
                 Box(modifier = Modifier
@@ -350,11 +353,12 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                     selectedItemQuantity.value = ""
                     currentItem.value = Item("",0.0,0.0,0)
                     fieldsEnabled.value = false
+                    itemNameEnabled.value = true
                 }
 
             }
 
-            item_fill_popUp(fieldsEnabled = fieldsEnabled.value,
+            item_fill_popUp(fieldsEnabled = fieldsEnabled.value, nameEnabled = itemNameEnabled.value,
                 name = selectedItemName.value,
                 price = selectedItemPrice.value,
                 discount = selectedItemDiscount.value,
@@ -368,13 +372,16 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                     .align(Alignment.TopCenter),
                 onCancel = {
                     item_fill_popUp_status.value = false
+                    expanded_item_name_suggestion.value = false
                     selectedItemName.value = ""
                     selectedItemPrice.value = ""
                     selectedItemDiscount.value = ""
                     selectedItemQuantity.value = ""
+                    itemNameEnabled.value = true
                     currentItem.value = Item("",0.0,0.0,0)
                     fieldsEnabled.value = false},
                 onDone = {
+                    expanded_item_name_suggestion.value = false
                     val res = viewModel.validateItemPopUPInput(selectedItemName.value,selectedItemPrice.value,selectedItemDiscount.value,selectedItemQuantity.value)
                     if (res && currentItem.value != Item("",0.0,0.0,0)){
                         itemsList.add(item_popup(
@@ -390,6 +397,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                         selectedItemQuantity.value = ""
                         currentItem.value = Item("",0.0,0.0,0)
                         fieldsEnabled.value = false
+                        itemNameEnabled.value = true
                     } else{
                         Toast.makeText(context, "Invalid Input", Toast.LENGTH_SHORT).show()
                     }
@@ -409,7 +417,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(max = 300.dp)
-                    .padding(top = 130.dp)
+                    .padding(top = 100.dp)
                     .padding(horizontal = (sidePadding).dp)
                     .align(Alignment.TopCenter)
                     .shadow(elevation = 4.dp, shape = RoundedCornerShape(10f))
@@ -438,7 +446,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
 
         if (expanded_item_name_suggestion.value){
 
-            BackHandler(enabled = expanded_account_suggestion.value) {
+            BackHandler(enabled = expanded_item_name_suggestion.value) {
                 expanded_item_name_suggestion.value = false
             }
 
@@ -464,6 +472,7 @@ fun AddPurchaseScreen(viewModel: Add_purchase_VM = hiltViewModel()) {
                             .clickable {
                                 currentItem.value = item
                                 fieldsEnabled.value = true
+                                itemNameEnabled.value = false
                                 selectedItemName.value = item.itemName
                                 selectedItemPrice.value = item.itemSellingPrice.toString()
                                 expanded_item_name_suggestion.value = false }

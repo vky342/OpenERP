@@ -68,6 +68,7 @@ import com.vky342.openerp.ui.Graphs.Graph
 import com.vky342.openerp.ui.Graphs.InventoryScreens
 import com.vky342.openerp.ui.Graphs.LedgerScreens
 import com.vky342.openerp.ui.Graphs.TransactionScreen
+import com.vky342.openerp.ui.theme.Typography
 import com.vky342.openerp.ui.theme.amount_stat_border_color
 import com.vky342.openerp.ui.theme.amount_text_color
 import com.vky342.openerp.ui.theme.background_color
@@ -515,7 +516,7 @@ fun Searchbar(modifier: Modifier,current_value : String,label : String,onVC : (S
 fun AmountSection(title: String, amount: String, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .padding(16.dp)
+            .padding(horizontal = 10.dp)
             .wrapContentHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -523,7 +524,47 @@ fun AmountSection(title: String, amount: String, modifier: Modifier = Modifier) 
         // Title
         Text(
             text = title,
-            style = MaterialTheme.typography.bodyMedium,
+            style = Typography.labelLarge,
+            color = Color.Black,
+            maxLines = 1 // Prevents multi-line wrapping
+        )
+
+        // Auto-adjusting font size for amount
+        Box(
+            modifier = Modifier
+                .fillMaxWidth() // Ensures text has a fixed width range
+        ) {
+            Text(
+                text = "₹$amount",
+                style = Typography.bodyLarge.copy(
+                    shadow = Shadow(
+                        color = shadow_color, // Shadow color
+                        offset = Offset(0f, 4f), // Shadow offset (x, y)
+                        blurRadius = 4f // Shadow blur radius
+                    ),
+                ),
+                color = amount_text_color,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
+    }
+}
+
+
+@Composable
+fun AmountSectionHome(title: String, amount: String, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .padding(horizontal = 10.dp)
+            .wrapContentHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        // Title
+        Text(
+            text = title,
+            style = Typography.labelLarge,
             color = Color.Black,
             maxLines = 1 // Prevents multi-line wrapping
         )
@@ -535,13 +576,12 @@ fun AmountSection(title: String, amount: String, modifier: Modifier = Modifier) 
         ) {
             AutoResizeText(
                 text = "₹$amount",
-                style = TextStyle(
+                style = Typography.bodyMedium.copy(
                     shadow = Shadow(
                         color = shadow_color, // Shadow color
                         offset = Offset(0f, 4f), // Shadow offset (x, y)
                         blurRadius = 4f // Shadow blur radius
                     ),
-                    fontWeight = FontWeight.Bold
                 ),
                 color = amount_text_color,
                 textAlign = TextAlign.Center
@@ -549,6 +589,7 @@ fun AmountSection(title: String, amount: String, modifier: Modifier = Modifier) 
         }
     }
 }
+
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -592,7 +633,7 @@ fun VariableAmountRow(modifier: Modifier = Modifier, sale : Double, receipt : Do
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Left section: Today's Sale
-        AmountSection(
+        AmountSectionHome(
             title = "Today's Sale",
             amount = sale.toString(),
             modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
@@ -608,7 +649,7 @@ fun VariableAmountRow(modifier: Modifier = Modifier, sale : Double, receipt : Do
         )
 
         // Right section: Today's Receipts
-        AmountSection(
+        AmountSectionHome(
             title = "Today's Receipts",
             amount = receipt.toString(),
             modifier = Modifier.weight(1f).align(Alignment.CenterVertically)

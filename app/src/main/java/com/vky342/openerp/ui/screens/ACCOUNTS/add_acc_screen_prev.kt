@@ -48,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vky342.openerp.ui.theme.New_account_title_color
+import com.vky342.openerp.ui.theme.Typography
 import com.vky342.openerp.ui.theme.account_list_type_selector_container_color
 import com.vky342.openerp.ui.theme.account_list_type_selector_selected_txt_color
 import com.vky342.openerp.ui.theme.account_list_type_selector_shadow_color
@@ -108,7 +109,7 @@ fun add_acc_screen_prev(){
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp)
-                .height(70.dp)
+                .height(50.dp)
         ) {
             form_fields(icon = Icons.Outlined.Person,label = "Name",modifier = Modifier
                 .padding(horizontal = sidePadding.dp)
@@ -160,7 +161,8 @@ fun form_fields(suffix : String = "", prefix : String = "",keyboardActions: Keyb
         modifier = modifier
             .fillMaxWidth(),
         value = value,
-        label = { Text(text = label)},
+        textStyle = Typography.bodyLarge,
+        label = { Text(text = label, style = Typography.labelLarge)},
         onValueChange = {onVc(it)},
         colors = TextFieldDefaults.colors().copy(
             unfocusedContainerColor = form_unfocused_container_color,

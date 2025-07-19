@@ -45,6 +45,7 @@ import androidx.navigation.compose.rememberNavController
 import com.vky342.openerp.ui.Graphs.Graph
 import com.vky342.openerp.ui.Graphs.RootNavigationGraph
 import com.vky342.openerp.ui.screens.ACCOUNTS.ModifyAccountScreen
+import com.vky342.openerp.ui.theme.Typography
 import com.vky342.openerp.ui.theme.action_icon_color
 import com.vky342.openerp.ui.theme.bottom_app_bar
 import com.vky342.openerp.ui.theme.bottom_bar_content_color
@@ -103,7 +104,7 @@ fun RootScreen(navController: NavHostController = rememberNavController()){
     var selectedIcon by rememberSaveable { mutableStateOf(0) }
 
     Scaffold (topBar = { TopAppBar(
-        title = { Text("OpenERP") },
+        title = { Text("OpenERP", style = Typography.titleLarge) },
         colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = top_app_bar, titleContentColor = title_color, actionIconContentColor = action_icon_color),
     ) }, containerColor = root_container_color,
 
@@ -121,7 +122,7 @@ fun RootScreen(navController: NavHostController = rememberNavController()){
                         }
                     },
                     label = {
-                        Text(text = item.title, fontSize = 10.sp)
+                        Text(text = item.title, style = Typography.labelSmall)
                     },
                     icon = {
                         Icon(imageVector = if (index == selectedIcon){item.selectedIcon} else{item.unSelectedIcon}, contentDescription = "", modifier = Modifier.size(25.dp))

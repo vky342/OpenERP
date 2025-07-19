@@ -57,6 +57,7 @@ import com.vky342.openerp.ui.screens.ACCOUNTS.Save_button
 import com.vky342.openerp.ui.screens.ACCOUNTS.account_search_bar_for_edit_account
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.theme.New_account_title_color
+import com.vky342.openerp.ui.theme.Typography
 import com.vky342.openerp.ui.theme.background_color
 import com.vky342.openerp.ui.theme.sale_button_box_color
 import com.vky342.openerp.utility.parseStrictDouble
@@ -132,12 +133,12 @@ fun ModifyReceiptScreen(viewModel : Add_Receipt_Vm = hiltViewModel()){
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 2.dp)
-                        .height(50.dp)
+                        .height(30.dp)
                 ) {
                     Text(
                         text = "Select bill",
                         color = New_account_title_color,
-                        fontSize = 32.sp,
+                        style = Typography.titleLarge,
                         modifier = Modifier
                             .align(
                                 Alignment.CenterStart
@@ -189,7 +190,7 @@ fun ModifyReceiptScreen(viewModel : Add_Receipt_Vm = hiltViewModel()){
                 Box(
                     modifier = Modifier
                         .padding(vertical = 150.dp)
-                        .height(60.dp)
+                        .height(40.dp)
                         .fillMaxWidth()
                         .background(color = sale_button_box_color)
                         .align(Alignment.CenterHorizontally),
@@ -211,7 +212,7 @@ fun ModifyReceiptScreen(viewModel : Add_Receipt_Vm = hiltViewModel()){
                         Text(
                             "Load recent receipt...",
                             color = Color.White,
-                            fontSize = 22.sp,
+                            style = Typography.titleMedium,
                             modifier = Modifier
                                 .align(
                                     Alignment.CenterVertically
@@ -263,7 +264,7 @@ fun ModifyReceiptScreen(viewModel : Add_Receipt_Vm = hiltViewModel()){
                 ) {
                     Text(text = "Receipt : " + ID.value,
                         color = New_account_title_color,
-                        fontSize = 29.sp,
+                        style = Typography.titleLarge,
                         modifier = Modifier
                             .align(Alignment.CenterStart)
                             .padding(horizontal = sidePadding.dp))

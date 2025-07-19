@@ -70,6 +70,7 @@ import com.vky342.openerp.data.ViewModels.transaction.Add_sale_Vm
 import com.vky342.openerp.data.ViewModels.transaction.Modify_Sale_Vm
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.theme.New_account_title_color
+import com.vky342.openerp.ui.theme.Typography
 import com.vky342.openerp.ui.theme.background_color
 import com.vky342.openerp.ui.theme.sale_button_box_color
 import com.vky342.openerp.ui.theme.search_item_border_color
@@ -114,6 +115,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
     // itemForm popUP
     val currentItem = remember { mutableStateOf(Item("",0.0,0.0,0)) }
     val fieldsEnabled = remember { mutableStateOf(false) }
+    val itemNameEnabled = remember { mutableStateOf(true) }
     val selectedItemName = remember { mutableStateOf("") }
     val selectedItemPrice = remember { mutableStateOf("") }
     val selectedItemDiscount = remember { mutableStateOf("") }
@@ -202,9 +204,9 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                         .height(50.dp)
                 ) {
                     Text(
-                        text = "Select bill",
+                        text = "Select sale to modify",
                         color = New_account_title_color,
-                        fontSize = 32.sp,
+                        style = Typography.titleLarge,
                         modifier = Modifier
                             .align(
                                 Alignment.CenterStart
@@ -227,7 +229,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                     ) {
                         billSearchbar(
                             modifier = Modifier,
-                            current_value = bill_id.value.toString(),
+                            current_value = bill_id.value,
                             label = "Invoice ID...",
                             onVC =
                                 { newValue ->
@@ -266,7 +268,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                 Box(
                     modifier = Modifier
                         .padding(vertical = 150.dp)
-                        .height(60.dp)
+                        .height(40.dp)
                         .fillMaxWidth()
                         .background(color = sale_button_box_color)
                         .align(Alignment.CenterHorizontally),
@@ -288,7 +290,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                         Text(
                             "Load recent sale...",
                             color = Color.White,
-                            fontSize = 22.sp,
+                            style = Typography.titleMedium,
                             modifier = Modifier
                                 .align(
                                     Alignment.CenterVertically
@@ -346,12 +348,12 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 2.dp)
-                        .height(45.dp)
+                        .height(30.dp)
                 ) {
                     Text(
                         text = "sale : " + bill_id.value.toString(),
                         color = New_account_title_color,
-                        fontSize = 24.sp,
+                        style = Typography.titleLarge,
                         modifier = Modifier
                             .align(
                                 Alignment.CenterStart
@@ -364,7 +366,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 16.dp, top = 5.dp)
-                        .height(70.dp)
+                        .height(55.dp)
                 ) {
                     form_fields(
                         trailing_icon_enabled = selectedAccount.value != "",
@@ -426,56 +428,58 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                 Column(modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(top = 25.dp)) {
+                    .padding(top = 20.dp)) {
 
                     Text(
                         "S u m m a r y",
-                        fontSize = 20.sp, color = title_color,
+                        style = Typography.titleMedium, color = title_color,
                         modifier = Modifier
                             .padding(horizontal = sidePadding.dp)
                             .align(Alignment.CenterHorizontally)
                     )
 
-                    Variable_Amount_Row_2(totalAmount = totalAmount.value, totalItems = totalItems,modifier = Modifier.background(color = var_amount_row_colour))
+                    Variable_Amount_Row_2(totalAmount = totalAmount.value, totalItems = totalItems,modifier = Modifier.background(color = var_amount_row_colour).height(65.dp))
+                    Row (modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
+                        checkout_Strip(modifier = Modifier.weight(1f),enabled = checkOutEnabled, onClick = {
 
-                    checkout_Strip(enabled = checkOutEnabled, onClick = {
+                            if (selectedDate.value != ""){
+                                viewModel.update_Sale(
+                                    account_name = selectedAccount.value,
+                                    sale = Sale(saleId = old_sale.value.saleId, saleDate = selectedDate.value, ledgerId = 0, saleAmount = totalAmount.value, saleType = payment_mode.value),
+                                    new_list_of_saleEntries = itemsList.map { item ->
+                                        SaleEntry(
+                                            entryId = 0,
+                                            entryQuantity = item.quantity,
+                                            entryPrice = item.price,
+                                            discount = item.disc,
+                                            finalPrice = item.totalAmount.value,
+                                            itemName = item.name,
+                                            saleId = old_sale.value.saleId
+                                        )
+                                    }
+                                )
+                                itemsList.clear()
+                                selectedAccountText = ""
+                                selectedAccount.value = ""
+                                selectedDate.value = ""
+                                payment_mode.value = ""
+                                partyEnabled.value = true
+                                currentItem.value = Item("",0.0,0.0,0)
+                                fieldsEnabled.value = false
+                                itemNameEnabled.value = true
+                                old_sale.value = Sale(0, "", 0, 0.0, "")
+                                bill_id.value = ""
+                                is_bill_selected.value = false
+                                selectedItemName.value = ""
+                                selectedItemPrice.value = ""
+                                selectedItemDiscount.value = ""
+                                selectedItemQuantity.value = ""
+                            }
 
-                        if (selectedDate.value != ""){
-                            viewModel.update_Sale(
-                                account_name = selectedAccount.value,
-                                sale = Sale(saleId = old_sale.value.saleId, saleDate = selectedDate.value, ledgerId = 0, saleAmount = totalAmount.value, saleType = payment_mode.value),
-                                new_list_of_saleEntries = itemsList.map { item ->
-                                    SaleEntry(
-                                        entryId = 0,
-                                        entryQuantity = item.quantity,
-                                        entryPrice = item.price,
-                                        discount = item.disc,
-                                        finalPrice = item.totalAmount.value,
-                                        itemName = item.name,
-                                        saleId = old_sale.value.saleId
-                                    )
-                                }
-                            )
-                            itemsList.clear()
-                            selectedAccountText = ""
-                            selectedAccount.value = ""
-                            selectedDate.value = ""
-                            payment_mode.value = ""
-                            partyEnabled.value = true
-                            currentItem.value = Item("",0.0,0.0,0)
-                            fieldsEnabled.value = false
-                            old_sale.value = Sale(0, "", 0, 0.0, "")
-                            bill_id.value = ""
-                            is_bill_selected.value = false
-                            selectedItemName.value = ""
-                            selectedItemPrice.value = ""
-                            selectedItemDiscount.value = ""
-                            selectedItemQuantity.value = ""
-                        }
+                        })
 
-                    })
-
-                    Add_button_Strip(addItemEnabled.value,onClick = { item_fill_popUp_status.value = true })
+                        Add_button_Strip(modifier = Modifier.weight(1f),enabled =addItemEnabled.value,onClick = { item_fill_popUp_status.value = true })
+                    }
 
                     // Items List
                     Box(modifier = Modifier
@@ -535,6 +539,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                         selectedItemQuantity.value = ""
                         currentItem.value = Item("",0.0,0.0,0)
                         fieldsEnabled.value = false
+                        itemNameEnabled.value = true
                     }
 
 
@@ -554,6 +559,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                         .align(Alignment.TopCenter),
                     onCancel = {
                         item_fill_popUp_status.value = false
+                        expanded_item_name_suggestion.value = false
                         selectedItemName.value = ""
                         selectedItemPrice.value = ""
                         selectedItemDiscount.value = ""
@@ -561,6 +567,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                         currentItem.value = Item("",0.0,0.0,0)
                         fieldsEnabled.value =false},
                     onDone = {
+                        expanded_item_name_suggestion.value = false
                         val res = viewModel.validateItemPopUPInput(selectedItemName.value,selectedItemPrice.value,selectedItemDiscount.value,selectedItemQuantity.value)
                         if (res && currentItem.value != Item("",0.0,0.0,0)){
                             if (selectedItemQuantity.value.toInt() <= currentItem.value.itemQuantity){
@@ -576,6 +583,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                                 selectedItemDiscount.value = ""
                                 selectedItemQuantity.value = ""
                                 fieldsEnabled.value = false
+                                itemNameEnabled.value = true
                                 currentItem.value = Item("",0.0,0.0,0)
                             }else{
                                 Toast.makeText(context,"Inventory Shortage!", Toast.LENGTH_SHORT).show()
@@ -597,7 +605,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(max = 300.dp)
-                        .padding(top = 130.dp)
+                        .padding(top = 100.dp)
                         .padding(horizontal = (sidePadding).dp)
                         .align(Alignment.TopCenter)
                         .shadow(elevation = 4.dp, shape = RoundedCornerShape(10f))
@@ -656,6 +664,7 @@ fun modifySaleScreen(viewModel: Modify_Sale_Vm = hiltViewModel()) {
                                     } else {
                                         currentItem.value = item
                                         fieldsEnabled.value = true
+                                        itemNameEnabled.value = false
                                         selectedItemName.value = item.itemName
                                         selectedItemPrice.value = item.itemSellingPrice.toString()
                                         expanded_item_name_suggestion.value = false

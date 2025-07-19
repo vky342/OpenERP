@@ -47,6 +47,7 @@ import com.vky342.openerp.ui.screens.ACCOUNTS.Save_button
 import com.vky342.openerp.ui.screens.ACCOUNTS.account_search_bar_for_edit_account
 import com.vky342.openerp.ui.screens.ACCOUNTS.form_fields
 import com.vky342.openerp.ui.theme.New_account_title_color
+import com.vky342.openerp.ui.theme.Typography
 import com.vky342.openerp.ui.theme.background_color
 import com.vky342.openerp.utility.getTodayDate
 import com.vky342.openerp.utility.parseStrictDouble
@@ -102,11 +103,11 @@ fun AddPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 2.dp)
-                    .height(50.dp)
+                    .height(30.dp)
             ) {
                 Text(text = "Payment : " + if(ID == 0) 1 else ID+ 1,
                     color = New_account_title_color,
-                    fontSize = 29.sp,
+                    style = Typography.titleLarge,
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .padding(horizontal = sidePadding.dp))
@@ -162,7 +163,7 @@ fun AddPayment(viewModel : Add_Payment_Vm = hiltViewModel()){
                     .padding(vertical = 2.dp)
                     .height(50.dp)
             ) {
-                Text(text = "balance : ₹ "+ kotlin.math.abs(viewModel.balance.value) + if (viewModel.balance.value < 0.0) " Dr" else " Cr", color = New_account_title_color,fontSize = 24.sp, modifier = Modifier
+                Text(text = "balance : ₹ "+ kotlin.math.abs(viewModel.balance.value) + if (viewModel.balance.value < 0.0) " Dr" else " Cr", color = New_account_title_color,style = Typography.titleLarge, modifier = Modifier
                     .align(Alignment.CenterStart)
                     .padding(horizontal = sidePadding.dp))
             }
