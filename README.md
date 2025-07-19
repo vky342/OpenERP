@@ -1,6 +1,6 @@
-# 📱 OpenERP - Free & Open Source ERP for MSMEs
+# 📱 OpenERP - Free & Open Source ERP for micro and small enterprises
 
-OpenERP is an **Android-native application** designed to empower **Micro, Small, and Medium Enterprises (MSMEs)** with an easy-to-use **Enterprise Resource Planning (ERP)** solution. This app is completely **free** and **open-source**, built for businesses that lack the budget or technical expertise for traditional PC-based ERP software.
+OpenERP is an **Android-native application** designed to empower **Micro and Small Enterprises (MSMEs)** with an easy-to-use **Enterprise Resource Planning (ERP)** solution. This app is completely **free** and **open-source**, built for businesses that lack the budget or technical expertise for traditional PC-based ERP software.
 
 With OpenERP, businesses can efficiently **manage sales, purchases, accounting, and more**—all from their smartphones or tablets. 🚀
 
