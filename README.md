@@ -86,7 +86,7 @@ object DatabaseModule {
 
 🚀 **Phase 3: Business Logic & Optimization**
 - [x] Set up Dependency Injection for better modularity 🏗️
-- [ ] Implement business logic in Repositories 📊
+- [x] Implement business logic in Repositories 📊
 - [ ] Optimize performance & fix bugs 🛠️
 
 🚀 **Phase 4: Beta Testing & Release**
